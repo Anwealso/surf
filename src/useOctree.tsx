@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
-import { Octree } from 'three/examples/jsm/math/Octree.d.ts'
-// import { type ObjectMap } from '@react-three/fiber';
+import { Octree } from 'three/examples/jsm/math/Octree'
 import { Object3D } from 'three';
 
 

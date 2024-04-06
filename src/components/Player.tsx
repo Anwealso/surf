@@ -85,6 +85,7 @@ export default function Player({ octree, colliders, ballCount }) {
   }
 
   function playerCollisions(capsule, octree, playerVelocity) {
+    // Check whether the player capsule instersects with the octree made from the static scene (defined in glb file)
     const result = octree.capsuleIntersect(capsule)
     let playerOnFloor = false
     if (result) {

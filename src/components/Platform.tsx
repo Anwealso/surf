@@ -17,7 +17,8 @@ function Platform(props: R3F.ThreeElements['mesh']) {
         >
             <planeGeometry
                 args={[lengthX, lengthY, segmentDensity*lengthX, segmentDensity*lengthY]} attach="geometry" />
-            <meshBasicMaterial wireframe color={'lime'} />
+            {/* <meshBasicMaterial wireframe color={'lime'} /> */}
+            <meshStandardMaterial color={'green'} side={THREE.DoubleSide} />
         </mesh>
     )
 }

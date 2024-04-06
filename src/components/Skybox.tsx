@@ -15,7 +15,7 @@ function Skybox(props: R3F.ThreeElements['mesh']) {
             // onPointerOut={() => setHover(false)}
             rotation={[0, 0, 0]}
         >
-            <boxGeometry args={[8, 3, 16]} attach="geometry" />
+            <boxGeometry args={[24, 9, 48]} attach="geometry" />
             <meshStandardMaterial
                 color={'white'}
                 attach="material"

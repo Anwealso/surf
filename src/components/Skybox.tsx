@@ -9,10 +9,6 @@ function Skybox(props: R3F.ThreeElements['mesh']) {
         <mesh
             {...props}
             ref={meshRef}
-            // scale={active ? 1.2 : 1}
-            // onClick={() => setControls({ playAudio: !playAudio })}
-            // onPointerOver={() => setHover(true)}
-            // onPointerOut={() => setHover(false)}
             rotation={[0, 0, 0]}
         >
             <boxGeometry args={[24, 9, 48]} attach="geometry" />

@@ -1,18 +1,18 @@
 import { useGLTF } from "@react-three/drei";
-import useOctree from "./useOctree";
+import useOctree from "../useOctree";
 // import useOctreeHelper from "../useOctreeHelper";
 import { useRef } from "react";
 // import SphereCollider from "./SphereCollider";
 // import Ball from "./Ball";
-import * as Constants from "./Constants";
+import * as Constants from "../Constants";
 
 
-import Ramp from './components/Ramp'
-import Skybox from './components/Skybox'
-import Background from './components/Background'
-import Box from './components/Box'
-import Player from './components/Player'
-import Platform from './components/Platform'
+import Ramp from './Ramp'
+import Skybox from './Skybox'
+import Background from './Background'
+import Box from './Box'
+import Player from './Player'
+import Platform from './Platform'
 
 
 export default function Physics() {
@@ -95,7 +95,6 @@ export default function Physics() {
         colliders={colliders.current}
       />
 
-      <Ramp position={[0, 3, 0]} />
       <Background position={[0, 3, -7.99]} />
       <Box position={[0, 3, -3]} />
       <Skybox position={[0, 3, 0]} />

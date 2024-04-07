@@ -6,6 +6,9 @@ import useKeyboard from '../useKeyboard'
 
 const GRAVITY = 30
 const STEPS_PER_FRAME = 5
+const BOUNCINESS = 1
+const AIR_RESISTANCE = 0.1
+const FRICTION = 1
 
 export default function Player({ octree, colliders, ballCount }) {
   const playerOnFloor = useRef(false)
@@ -60,15 +63,28 @@ export default function Player({ octree, colliders, ballCount }) {
   }
 
   function updatePlayer(camera, delta, octree, capsule, playerVelocity, playerOnFloor) {
-    let damping = Math.exp(-4 * delta) - 1
-    if (!playerOnFloor) {
+
+
+
+    // Updated the velocity vector
+    if (playerOnFloor) {
+      // If on floor, add friction
+      let frictionalDamping = (Math.exp(-4 * delta) - 1) * FRICTION
+      playerVelocity.addScaledVector(playerVelocity, frictionalDamping)
+    } else {
+      // If in air, add gravity
       playerVelocity.y -= GRAVITY * delta
-      damping *= 0.1 // small air resistance
     }
-    playerVelocity.addScaledVector(playerVelocity, damping)
+    // Add air resistance
+    let airDamping = (Math.exp(-4 * delta) - 1) * AIR_RESISTANCE
+    playerVelocity.addScaledVector(playerVelocity, airDamping)
+
+    // Move the player based on their velocity vector
     const deltaPosition = playerVelocity.clone().multiplyScalar(delta)
     capsule.translate(deltaPosition)
+    // Handle player collisions
     playerOnFloor = playerCollisions(capsule, octree, playerVelocity)
+    // Keep the camera stuck to the player (move the camera to the new player position)
     camera.position.copy(capsule.end)
     return playerOnFloor
   }
@@ -85,13 +101,17 @@ export default function Player({ octree, colliders, ballCount }) {
   }
 
   function playerCollisions(capsule, octree, playerVelocity) {
-    // Check whether the player capsule instersects with the octree made from the static scene (defined in glb file)
+    // Check whether the player capsule instersects with the octree made from the world platform model (defined in glb file)
     const result = octree.capsuleIntersect(capsule)
     let playerOnFloor = false
+
+    // If the player does intersect the world platform
     if (result) {
       playerOnFloor = result.normal.y > 0
       if (!playerOnFloor) {
-        playerVelocity.addScaledVector(result.normal, -result.normal.dot(playerVelocity))
+        // If the player is not standing on the world plarform (i.e. we are hitting into the side of world platform cones, balls, etc.)
+        // Then bang deflect the player off the object towards the direction of the object surface normal
+        playerVelocity.addScaledVector(result.normal, -result.normal.dot(playerVelocity)*BOUNCINESS)
       }
       capsule.translate(result.normal.multiplyScalar(result.depth))
     }

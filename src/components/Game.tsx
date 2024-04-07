@@ -18,7 +18,7 @@ import Platform from './Platform'
 export default function Physics() {
   const { nodes, scene } = useGLTF("/models/scene-transformed.glb");
   const octree = useOctree(scene);
-  useOctreeHelper(octree);
+  // useOctreeHelper(octree);
 
   const colliders = useRef([]);
 
@@ -97,7 +97,7 @@ export default function Physics() {
 
       <Background position={[0, 3, -7.99]} />
       <Box position={[0, 3, -3]} />
-      <Skybox position={[0, 3, 0]} />
+      {/* <Skybox position={[0, 3, 0]} /> */}
       <Platform position={[0, 3, 0]} />
     </>
   );

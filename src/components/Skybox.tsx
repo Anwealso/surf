@@ -15,7 +15,7 @@ function Skybox(props: R3F.ThreeElements['mesh']) {
             <meshStandardMaterial
                 color={'white'}
                 attach="material"
-                side={THREE.BackSide}
+                side={THREE.DoubleSide}
             />
         </mesh>
     )

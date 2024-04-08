@@ -12,7 +12,7 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import type { Group, Mesh } from "three";
 
-import { useToggledControl } from "./use-toggled-control";
+import { useToggledControl } from "../useToggledControl";
 import Vehicle from "./Vehicle";
 
 function Plane(props: PlaneProps) {
@@ -56,7 +56,7 @@ const style = {
   top: 20,
 } as const;
 
-const VehicleScene = () => {
+const VehicleDemo = () => {
   const ToggledDebug = useToggledControl(Debug, "?");
 
   return (
@@ -109,4 +109,4 @@ const VehicleScene = () => {
   );
 };
 
-export default VehicleScene;
+export default VehicleDemo;

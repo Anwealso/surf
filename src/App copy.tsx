@@ -10,13 +10,20 @@ import {
 } from "@react-three/drei";
 import Lighting from "./components/Lighting";
 import Game from "./components/Game";
-import FrictionDemo from "./components/demo-Friction";
-import VehicleDemo from "./components/demo-Vehicle";
 
 function App() {
   return (
     <>
-      <VehicleDemo />
+      <CustomNavbar></CustomNavbar>
+
+      <Canvas shadows camera={{ position: [0, 0, 4], fov: 60 }}>
+        <Lighting />
+        <PointerLockControls />
+        <Game />
+        <Stats />
+      </Canvas>
+
+      <Overlay />
     </>
   );
 }

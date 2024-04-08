@@ -3,17 +3,12 @@ import { Capsule } from "three/examples/jsm/math/Capsule.js";
 import { Vector3 } from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import useKeyboard from "../useKeyboard";
-import { AsyncDecompress } from "three/examples/jsm/libs/fflate.module.js";
 
-const GRAVITY: number = 30;
-const STEPS_PER_FRAME: number = 5;
-const BOUNCINESS: number = 1;
-const AIR_RESISTANCE: number = 0.1;
-const FRICTION: number = 0.5;
-const MULTI_JUMP_ENABLED: boolean = true;
-
-const MOVESPEED_GROUND: number = 25;
-const MOVESPEED_AIR: number = 8;
+const GRAVITY = 30;
+const STEPS_PER_FRAME = 5;
+const BOUNCINESS = 1;
+const AIR_RESISTANCE = 0.1;
+const FRICTION = 1;
 
 export default function Player({ octree, colliders, ballCount }) {
   const playerOnFloor = useRef(false);
@@ -64,8 +59,7 @@ export default function Player({ octree, colliders, ballCount }) {
     playerOnFloor,
     playerDirection
   ) {
-    const speedDelta =
-      delta * (playerOnFloor ? MOVESPEED_GROUND : MOVESPEED_AIR);
+    const speedDelta = delta * (playerOnFloor ? 25 : 8);
     keyboard["KeyA"] &&
       playerVelocity.add(
         getSideVector(camera, playerDirection).multiplyScalar(-speedDelta)
@@ -82,8 +76,7 @@ export default function Player({ octree, colliders, ballCount }) {
       playerVelocity.add(
         getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta)
       );
-    if (playerOnFloor || MULTI_JUMP_ENABLED) {
-      // Add vertical velocity if the player presses space
+    if (playerOnFloor) {
       if (keyboard["Space"]) {
         playerVelocity.y = 15;
       }
@@ -141,7 +134,6 @@ export default function Player({ octree, colliders, ballCount }) {
 
     // If the player does intersect the world platform
     if (result) {
-      // If the player is standing directly on top of the nearest object
       playerOnFloor = result.normal.y > 0;
       if (!playerOnFloor) {
         // If the player is not standing on the world plarform (i.e. we are hitting into the side of world platform cones, balls, etc.)

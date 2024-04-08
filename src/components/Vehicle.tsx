@@ -7,6 +7,7 @@ import type { Group, Mesh } from "three";
 import { Chassis } from "./Chassis";
 import { useControls } from "../useControls";
 import { Wheel } from "./Wheel";
+import { PerspectiveCamera } from "@react-three/drei";
 
 export type VehicleProps = Required<
   Pick<BoxProps, "angularVelocity" | "position" | "rotation">
@@ -92,39 +93,72 @@ function Vehicle({
     useRef<Mesh>(null)
   );
 
-  const [vehicle, vehicleApi] = useRaycastVehicle(
-    () => ({
-      chassisBody,
-      wheelInfos: [wheelInfo1, wheelInfo2, wheelInfo3, wheelInfo4],
-      wheels,
-    }),
-    useRef<Group>(null)
-  );
+  // const [vehicle, vehicleApi] = useRaycastVehicle(
+  //   () => ({
+  //     chassisBody,
+  //     wheelInfos: [wheelInfo1, wheelInfo2, wheelInfo3, wheelInfo4],
+  //     wheels,
+  //   }),
+  //   useRef<Group>(null)
+  // );
 
-  useEffect(
-    () => vehicleApi.sliding.subscribe((v) => console.log("sliding", v)),
-    []
-  );
+  // useEffect(
+  //   () => vehicleApi.sliding.subscribe((v) => console.log("sliding", v)),
+  //   []
+  // );
 
-  useFrame(() => {
-    const { backward, brake, forward, left, reset, right } = controls.current;
+  const chassisVelocity = useRef([0, 0, 0]);
+  useEffect(() => {
+    const chassisVelocityUnsubscribe = chassisApi.velocity.subscribe(
+      (vel) => (chassisVelocity.current = vel)
+    );
+    return chassisVelocityUnsubscribe;
+  }, []);
+  const chassisPosition = useRef([0, 0, 0]);
+  useEffect(() => {
+    const chassisPositionUnsubscribe = chassisApi.position.subscribe(
+      (pos) => (chassisPosition.current = pos)
+    );
+    return chassisPositionUnsubscribe;
+  }, []);
+  const chassisAngularVelocity = useRef([0, 0, 0]);
+  useEffect(() => {
+    const chassisAngularVelocityUnsubscribe = chassisApi.position.subscribe(
+      (angVel) => (chassisAngularVelocity.current = angVel)
+    );
+    return chassisAngularVelocityUnsubscribe;
+  }, []);
 
-    for (let e = 2; e < 4; e++) {
-      vehicleApi.applyEngineForce(
-        forward || backward ? force * (forward && !backward ? -1 : 1) : 0,
-        2
+  useFrame((state, delta) => {
+    const { backward, jump, forward, left, reset, right } = controls.current;
+
+    // for (let e = 2; e < 4; e++) {
+    //   // rear wheel drive
+    //   vehicleApi.applyEngineForce(
+    //     forward || backward ? force * (forward && !backward ? -1 : 1) : 0,
+    //     2
+    //   );
+    // }
+
+    // for (let s = 0; s < 2; s++) {
+    //   // front wheel steer
+    //   vehicleApi.setSteeringValue(
+    //     left || right ? steer * (left && !right ? 1 : -1) : 0,
+    //     s
+    //   );
+    // }
+
+    // for (let b = 2; b < 4; b++) {
+    //   // rear wheel brake
+    //   vehicleApi.setBrake(jump ? maxBrake : 0, b);
+    // }
+
+    if (right || left || forward || backward) {
+      chassisApi.position.set(
+        chassisPosition.current[0] + (right ? 0.2 : left ? -0.2 : 0),
+        chassisPosition.current[1],
+        chassisPosition.current[2] + (forward ? -0.2 : backward ? +0.2 : 0)
       );
-    }
-
-    for (let s = 0; s < 2; s++) {
-      vehicleApi.setSteeringValue(
-        left || right ? steer * (left && !right ? 1 : -1) : 0,
-        s
-      );
-    }
-
-    for (let b = 2; b < 4; b++) {
-      vehicleApi.setBrake(brake ? maxBrake : 0, b);
     }
 
     if (reset) {
@@ -132,16 +166,20 @@ function Vehicle({
       chassisApi.velocity.set(0, 0, 0);
       chassisApi.angularVelocity.set(...angularVelocity);
       chassisApi.rotation.set(...rotation);
+
+      // state.camera.lookAt(targetRef.current.position);
+      state.camera.updateProjectionMatrix();
     }
   });
 
   return (
-    <group ref={vehicle} position={[0, -0.4, 0]}>
+    <group position={[0, -0.4, 0]}>
+      <PerspectiveCamera makeDefault position={[0, 5, 15]} fov={60} />
       <Chassis ref={chassisBody} />
-      <Wheel ref={wheels[0]} radius={radius} leftSide />
+      {/* <Wheel ref={wheels[0]} radius={radius} leftSide />
       <Wheel ref={wheels[1]} radius={radius} />
       <Wheel ref={wheels[2]} radius={radius} leftSide />
-      <Wheel ref={wheels[3]} radius={radius} />
+      <Wheel ref={wheels[3]} radius={radius} /> */}
     </group>
   );
 }

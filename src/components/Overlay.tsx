@@ -6,6 +6,10 @@ export default function Overlay() {
       Space to jump.
       <br />
       Mouse click to shoot.
+      <br />
+      Press r to reset
+      <br />
+      Press ? to debug
     </div>
-  )
+  );
 }

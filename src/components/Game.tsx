@@ -1,22 +1,24 @@
 import { useGLTF } from "@react-three/drei";
+
 import useOctree from "../useOctree";
 import useOctreeHelper from "../useOctreeHelper";
 import { useRef } from "react";
 // import SphereCollider from "./SphereCollider";
 // import Ball from "./Ball";
-import * as Constants from '../Constants'
-
+import * as Constants from "../Constants";
+import { Physics, useBox } from "@react-three/cannon";
 
 // import Ramp from './Ramp'
-import Skybox from './Skybox'
-import Background from './Background'
-import Box from './Box'
-import Player from './Player'
-import Platform from './Platform'
+import Skybox from "./Skybox";
+import Background from "./Background";
+import Box from "./Box";
+import Player from "./Player";
+import Platform from "./Platform";
+import Test from "./Test";
 
-
-export default function Physics() {
+export default function CustomPhysics() {
   const { nodes, scene } = useGLTF("/models/scene-transformed.glb");
+
   const octree = useOctree(scene);
   // useOctreeHelper(octree);
 
@@ -65,18 +67,18 @@ export default function Physics() {
 
   return (
     <>
-      <group dispose={null}>
-        <mesh
-          castShadow
-          receiveShadow
-          geometry={nodes.Suzanne007.geometry}
-          material={nodes.Suzanne007.material}
-          position={[1.74, 1.04, 24.97]}
-        />
-      </group>
-
-      {/* {Constants.balls.map(({ position }, i) => (
-        <SphereCollider
+      <Physics>
+        <group dispose={null}>
+          <mesh
+            castShadow
+            receiveShadow
+            geometry={nodes.Suzanne007.geometry}
+            material={nodes.Suzanne007.material}
+            position={[1.74, 1.04, 24.97]}
+          />
+        </group>
+        {/* {Constants.balls.map(({ position }, i) => (
+          <SphereCollider
           key={i}
           id={i}
           radius={Constants.radius}
@@ -84,21 +86,21 @@ export default function Physics() {
           position={position}
           colliders={colliders.current}
           checkSphereCollisions={checkSphereCollisions}
-        >
+          >
           <Ball radius={Constants.radius} />
-        </SphereCollider>
-      ))} */}
-
-      <Player
-        ballCount={Constants.ballCount}
-        octree={octree}
-        colliders={colliders.current}
-      />
-
-      <Background position={[0, 3, -7.99]} />
-      <Box position={[0, 3, -3]} />
-      {/* <Skybox position={[0, 3, 0]} /> */}
-      <Platform position={[0, 3, 0]} />
+          </SphereCollider>
+        ))} */}
+        <Player
+          ballCount={Constants.ballCount}
+          octree={octree}
+          colliders={colliders.current}
+        />
+        <Test />
+        <Background position={[0, 3, -7.99]} />
+        <Box position={[0, 3, -3]} />
+        {/* <Skybox position={[0, 3, 0]} /> */}
+        <Platform position={[0, 3, 0]} />
+      </Physics>
     </>
   );
 }

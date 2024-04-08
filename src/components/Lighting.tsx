@@ -13,7 +13,7 @@ function Lighting() {
       {/* Back Light */}
       {/* <directionalLight position={[2, 0, 2]} intensity={0.2} /> */}
 
-      {/* Pro Lighting Setup */}
+      {/* Pro Lighting Setup (lighting chained to camera) */}
       <Environment files="/images/rustig_koppie_puresky_1k.hdr" background />
       <directionalLight
         intensity={1}

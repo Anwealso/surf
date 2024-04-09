@@ -6,7 +6,6 @@ import type { Group, Mesh } from "three";
 
 import { Chassis } from "./Chassis";
 import { useControls } from "../useControls";
-import { Wheel } from "./Wheel";
 import { PerspectiveCamera } from "@react-three/drei";
 
 export type VehicleProps = Required<
@@ -24,61 +23,33 @@ export type VehicleProps = Required<
 
 function Vehicle({
   angularVelocity,
-  back = -1.15,
-  force = 1500,
-  front = 1.3,
-  height = -0.04,
-  maxBrake = 50,
+  // back = -1.15,
+  // force = 1500,
+  // front = 1.3,
+  // height = -0.04,
+  // maxBrake = 50,
   position,
-  radius = 0.7,
+  // radius = 0.7,
   rotation,
-  steer = 0.5,
-  width = 1.2,
-}: VehicleProps) {
-  const wheels = [
-    useRef<Group>(null),
-    useRef<Group>(null),
-    useRef<Group>(null),
-    useRef<Group>(null),
-  ];
-
+}: // steer = 0.5,
+// width = 1.2,
+VehicleProps) {
   const controls = useControls();
 
-  const wheelInfo: WheelInfoOptions = {
-    axleLocal: [-1, 0, 0], // This is inverted for asymmetrical wheel models (left v. right sided)
-    customSlidingRotationalSpeed: -30,
-    dampingCompression: 4.4,
-    dampingRelaxation: 10,
-    directionLocal: [0, -1, 0], // set to same as Physics Gravity
-    frictionSlip: 2,
-    maxSuspensionForce: 1e4,
-    maxSuspensionTravel: 0.3,
-    radius,
-    suspensionRestLength: 0.3,
-    suspensionStiffness: 30,
-    useCustomSlidingRotationalSpeed: true,
-  };
-
-  const wheelInfo1: WheelInfoOptions = {
-    ...wheelInfo,
-    chassisConnectionPointLocal: [-width / 2, height, front],
-    isFrontWheel: true,
-  };
-  const wheelInfo2: WheelInfoOptions = {
-    ...wheelInfo,
-    chassisConnectionPointLocal: [width / 2, height, front],
-    isFrontWheel: true,
-  };
-  const wheelInfo3: WheelInfoOptions = {
-    ...wheelInfo,
-    chassisConnectionPointLocal: [-width / 2, height, back],
-    isFrontWheel: false,
-  };
-  const wheelInfo4: WheelInfoOptions = {
-    ...wheelInfo,
-    chassisConnectionPointLocal: [width / 2, height, back],
-    isFrontWheel: false,
-  };
+  // const wheelInfo: WheelInfoOptions = {
+  //   axleLocal: [-1, 0, 0], // This is inverted for asymmetrical wheel models (left v. right sided)
+  //   customSlidingRotationalSpeed: -30,
+  //   dampingCompression: 4.4,
+  //   dampingRelaxation: 10,
+  //   directionLocal: [0, -1, 0], // set to same as Physics Gravity
+  //   frictionSlip: 2,
+  //   maxSuspensionForce: 1e4,
+  //   maxSuspensionTravel: 0.3,
+  //   radius,
+  //   suspensionRestLength: 0.3,
+  //   suspensionStiffness: 30,
+  //   useCustomSlidingRotationalSpeed: true,
+  // };
 
   const [chassisBody, chassisApi] = useBox(
     () => ({
@@ -153,11 +124,16 @@ function Vehicle({
     //   vehicleApi.setBrake(jump ? maxBrake : 0, b);
     // }
 
+    const playerOnFloor = false;
+    const speedDelta = delta * (playerOnFloor ? 25 : 8);
+
     if (right || left || forward || backward) {
-      chassisApi.position.set(
-        chassisPosition.current[0] + (right ? 0.2 : left ? -0.2 : 0),
-        chassisPosition.current[1],
-        chassisPosition.current[2] + (forward ? -0.2 : backward ? +0.2 : 0)
+      chassisApi.velocity.set(
+        chassisVelocity.current[0] +
+          (right ? +speedDelta : left ? -speedDelta : 0),
+        jump ? 5 : chassisVelocity.current[1],
+        chassisVelocity.current[2] +
+          (forward ? -speedDelta : backward ? +speedDelta : 0)
       );
     }
 
@@ -166,10 +142,10 @@ function Vehicle({
       chassisApi.velocity.set(0, 0, 0);
       chassisApi.angularVelocity.set(...angularVelocity);
       chassisApi.rotation.set(...rotation);
-
-      // state.camera.lookAt(targetRef.current.position);
-      state.camera.updateProjectionMatrix();
     }
+
+    // state.camera.lookAt(targetRef.current.position);
+    state.camera.updateProjectionMatrix();
   });
 
   return (

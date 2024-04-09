@@ -11,7 +11,7 @@ function Plane(props: PlaneProps) {
     <group ref={ref}>
       <mesh receiveShadow>
         <planeGeometry args={[100, 100]} />
-        <meshStandardMaterial color="#303030" />
+        <meshStandardMaterial color="#909090" />
       </mesh>
     </group>
   );

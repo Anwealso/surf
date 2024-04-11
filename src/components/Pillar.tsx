@@ -5,6 +5,7 @@ import type { Mesh } from "three";
 
 function Pillar(props: CylinderProps) {
   const args: CylinderArgs = [0.7, 0.7, 5, 16];
+
   const [ref] = useCylinder(
     () => ({
       args,

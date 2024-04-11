@@ -1,26 +1,26 @@
-import * as THREE from 'three'
-import { useRef } from 'react'
-import * as R3F from '@react-three/fiber'
+import * as THREE from "three";
+import { useRef } from "react";
+import type { BoxProps, Triplet } from "@react-three/cannon";
+import { useBox } from "@react-three/cannon";
 
-function Platform(props: R3F.ThreeElements['mesh']) {
-    const meshRef = useRef<THREE.Mesh>(null!)
+function Platform({ ...props }: BoxProps) {
+  const [ref] = useBox(
+    () => ({
+      material: "ground",
+      type: "Static",
+      ...props,
+    }),
+    useRef<Group>(null)
+  );
 
-    const lengthX = 10;
-    const lengthY = 10;
-    const segmentDensity = 10;
-
-    return (
-        <mesh
-            {...props}
-            ref={meshRef}
-            rotation={[0.5*Math.PI, 0, 0]}
-        >
-            <planeGeometry
-                args={[lengthX, lengthY, segmentDensity*lengthX, segmentDensity*lengthY]} attach="geometry" />
-            {/* <meshBasicMaterial wireframe color={'lime'} /> */}
-            <meshStandardMaterial color={'green'} side={THREE.DoubleSide} />
-        </mesh>
-    )
+  return (
+    <group ref={ref}>
+      <mesh receiveShadow>
+        <boxGeometry {...props} />
+        <meshStandardMaterial color="#909090" side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
 }
 
-export default Platform
+export default Platform;

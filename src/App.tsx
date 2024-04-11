@@ -15,6 +15,7 @@ import type { Group, Mesh } from "three";
 import { useToggledControl } from "./useToggledControl";
 import Vehicle from "./components/Vehicle";
 import Plane from "./components/Plane";
+import Platform from "./components/Platform";
 import Pillar from "./components/Pillar";
 import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
@@ -39,12 +40,20 @@ function App() {
           allowSleep
         >
           <ToggledDebug>
-            <Plane
-              position={[20, -2, 0]}
-              rotation={[-Math.PI / 2, (Math.PI / 180) * 20, 0]}
-              size={[10, 10]}
+            <Platform
+              position={[-2.5, -1, 0]}
+              rotation={[0, 0, -(Math.PI / 180) * 20]}
               userData={{ id: "floor" }}
+              args={[4, 0.1, 10]}
             />
+
+            <Plane
+              position={[0, -4, 0]}
+              rotation={[-Math.PI / 2, 0, 0]}
+              userData={{ id: "floor" }}
+              args={[100, 100]}
+            />
+
             <Vehicle
               position={[0, 2, 0]}
               rotation={[0, -Math.PI / 4, 0]}

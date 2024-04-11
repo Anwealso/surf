@@ -102,32 +102,10 @@ VehicleProps) {
 
   useFrame((state, delta) => {
     const { backward, jump, forward, left, reset, right } = controls.current;
-
-    // for (let e = 2; e < 4; e++) {
-    //   // rear wheel drive
-    //   vehicleApi.applyEngineForce(
-    //     forward || backward ? force * (forward && !backward ? -1 : 1) : 0,
-    //     2
-    //   );
-    // }
-
-    // for (let s = 0; s < 2; s++) {
-    //   // front wheel steer
-    //   vehicleApi.setSteeringValue(
-    //     left || right ? steer * (left && !right ? 1 : -1) : 0,
-    //     s
-    //   );
-    // }
-
-    // for (let b = 2; b < 4; b++) {
-    //   // rear wheel brake
-    //   vehicleApi.setBrake(jump ? maxBrake : 0, b);
-    // }
-
     const playerOnFloor = false;
     const speedDelta = delta * (playerOnFloor ? 25 : 8);
 
-    if (right || left || forward || backward) {
+    if (right || left || forward || backward || jump) {
       chassisApi.velocity.set(
         chassisVelocity.current[0] +
           (right ? +speedDelta : left ? -speedDelta : 0),

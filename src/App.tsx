@@ -39,7 +39,12 @@ function App() {
           allowSleep
         >
           <ToggledDebug>
-            <Plane rotation={[-Math.PI / 2, 0, 0]} userData={{ id: "floor" }} />
+            <Plane
+              position={[0, -2, 0]}
+              rotation={[0, (Math.PI / 180) * 20, 0]}
+              size={[10, 10]}
+              userData={{ id: "floor" }}
+            />
             <Vehicle
               position={[0, 2, 0]}
               rotation={[0, -Math.PI / 4, 0]}

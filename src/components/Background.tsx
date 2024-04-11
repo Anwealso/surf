@@ -1,14 +1,7 @@
 import * as THREE from "three";
-import { useRef, useState, useEffect } from "react";
-// import { Canvas, useFrame, ThreeElements } from '@react-three/fiber'
+import { useRef } from "react";
 import * as R3F from "@react-three/fiber";
-import {
-  // Stats,
-  OrbitControls,
-  Environment,
-  useTexture,
-  // useMask,
-} from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 
 function Background(props: R3F.ThreeElements["mesh"]) {
   const meshRef = useRef<THREE.Mesh>(null!);

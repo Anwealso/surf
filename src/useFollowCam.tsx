@@ -22,15 +22,15 @@ export default function useFollowCam(ref, offset) {
     }
   }
 
-  function onDocumentMouseWheel(e) {
-    if (document.pointerLockElement) {
-      e.preventDefault();
-      const v = camera.position.z + e.deltaY * 0.005;
-      if (v >= 0.5 && v <= 5) {
-        camera.position.z = v;
-      }
-    }
-  }
+  // function onDocumentMouseWheel(e) {
+  //   if (document.pointerLockElement) {
+  //     e.preventDefault();
+  //     const v = camera.position.z + e.deltaY * 0.005;
+  //     if (v >= 0.5 && v <= 5) {
+  //       camera.position.z = v;
+  //     }
+  //   }
+  // }
 
   useEffect(() => {
     scene.add(pivot);
@@ -42,18 +42,19 @@ export default function useFollowCam(ref, offset) {
     camera.position.set(offset[0], 0, offset[2]);
 
     document.addEventListener("mousemove", onDocumentMouseMove);
-    document.addEventListener("mousewheel", onDocumentMouseWheel, {
-      passive: false,
-    });
+    // document.addEventListener("mousewheel", onDocumentMouseWheel, {
+    //   passive: false,
+    // });
     return () => {
       document.removeEventListener("mousemove", onDocumentMouseMove);
-      document.removeEventListener("mousewheel", onDocumentMouseWheel);
+      // document.removeEventListener("mousewheel", onDocumentMouseWheel);
     };
   }, [camera]);
 
   useFrame((_, delta) => {
     ref.current.getWorldPosition(worldPosition);
-    pivot.position.lerp(worldPosition, delta * 5);
+    pivot.position.lerp(worldPosition, 1);
+    pivot.position.lerp(worldPosition, 1);
   });
 
   return { pivot, alt, yaw, pitch };

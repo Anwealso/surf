@@ -64,7 +64,7 @@ VehicleProps) {
     }),
     useRef<Mesh>(null)
   );
-  const { yaw } = useFollowCam(chassisBody, [0, 1, 1.5]);
+  const { yaw } = useFollowCam(chassisBody, [0, 0.5, -1.5]);
 
   // const [vehicle, vehicleApi] = useRaycastVehicle(
   //   () => ({

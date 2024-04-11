@@ -1,26 +1,20 @@
-import CustomNavbar from './components/CustomNavbar'
-import Overlay from './components/Overlay'
-
+import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import {Stats, Environment, OrbitControls, PointerLockControls} from "@react-three/drei";
-import Lighting from "./components/Lighting";
 import Game from "./components/Game";
+import Overlay from "./components/Overlay";
+import Lighting from "./components/Lighting";
 
-function App() {
+export default function App() {
   return (
     <>
-      <CustomNavbar></CustomNavbar>
-
-      <Canvas shadows camera={{ position: [0, 0, 4], fov: 60 }}>
+      <Canvas shadows>
         <Lighting />
-        <PointerLockControls />
+
         <Game />
+        <PointerLockControls />
         <Stats />
       </Canvas>
-
       <Overlay />
     </>
-  )
+  );
 }
-
-export default App

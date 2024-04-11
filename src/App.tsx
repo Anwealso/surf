@@ -40,8 +40,8 @@ function App() {
         >
           <ToggledDebug>
             <Plane
-              position={[0, -2, 0]}
-              rotation={[0, (Math.PI / 180) * 20, 0]}
+              position={[20, -2, 0]}
+              rotation={[-Math.PI / 2, (Math.PI / 180) * 20, 0]}
               size={[10, 10]}
               userData={{ id: "floor" }}
             />

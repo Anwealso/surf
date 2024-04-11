@@ -15,10 +15,10 @@ export default function useFollowCam(ref, offset) {
     if (document.pointerLockElement) {
       e.preventDefault();
       yaw.rotation.y -= e.movementX * 0.002;
-      const v = pitch.rotation.x - e.movementY * 0.002;
-      if (v > -1 && v < 0.1) {
-        pitch.rotation.x = v;
-      }
+      // const v = pitch.rotation.x - e.movementY * 0.002;
+      // if (v > -1 && v < 0.1) {
+      //   pitch.rotation.x = v;
+      // }
     }
   }
 
@@ -53,7 +53,6 @@ export default function useFollowCam(ref, offset) {
 
   useFrame((_, delta) => {
     ref.current.getWorldPosition(worldPosition);
-    pivot.position.lerp(worldPosition, 1);
     pivot.position.lerp(worldPosition, 1);
   });
 

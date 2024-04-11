@@ -1,6 +1,7 @@
-import * as THREE from "three";
+import type { Mesh } from "three";
+import { DoubleSide } from "three";
 import { useRef } from "react";
-import type { BoxProps, Triplet } from "@react-three/cannon";
+import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
 
 function Platform({ ...props }: BoxProps) {
@@ -10,16 +11,14 @@ function Platform({ ...props }: BoxProps) {
       type: "Static",
       ...props,
     }),
-    useRef<Group>(null)
+    useRef<Mesh>(null)
   );
 
   return (
-    <group ref={ref}>
-      <mesh receiveShadow>
-        <boxGeometry {...props} />
-        <meshStandardMaterial color="#909090" side={THREE.DoubleSide} />
-      </mesh>
-    </group>
+    <mesh ref={ref} receiveShadow>
+      <boxGeometry {...props} />
+      <meshStandardMaterial color="#3333FF" side={DoubleSide} />
+    </mesh>
   );
 }
 

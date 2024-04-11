@@ -2,11 +2,12 @@ import type { BoxProps, WheelInfoOptions } from "@react-three/cannon";
 import { useBox, useRaycastVehicle } from "@react-three/cannon";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import type { Group, Mesh } from "three";
+import type { Mesh } from "three";
 
 import { Chassis } from "./Chassis";
 import { useControls } from "../useControls";
 import { PerspectiveCamera } from "@react-three/drei";
+import useFollowCam from "../useFollowCam";
 
 export type VehicleProps = Required<
   Pick<BoxProps, "angularVelocity" | "position" | "rotation">
@@ -63,6 +64,7 @@ VehicleProps) {
     }),
     useRef<Mesh>(null)
   );
+  const { yaw } = useFollowCam(chassisBody, [0, 1, 1.5]);
 
   // const [vehicle, vehicleApi] = useRaycastVehicle(
   //   () => ({
@@ -128,7 +130,7 @@ VehicleProps) {
 
   return (
     <group position={[0, -0.4, 0]}>
-      <PerspectiveCamera makeDefault position={[0, 5, 15]} fov={60} />
+      <PerspectiveCamera makeDefault fov={60} />
       <Chassis ref={chassisBody} />
       {/* <Wheel ref={wheels[0]} radius={radius} leftSide />
       <Wheel ref={wheels[1]} radius={radius} />

@@ -11,16 +11,16 @@ export default function useFollowCam(ref, offset) {
   const pitch = useMemo(() => new Object3D(), []);
   const worldPosition = useMemo(() => new Vector3(), []);
 
-  function onDocumentMouseMove(e) {
-    if (document.pointerLockElement) {
-      e.preventDefault();
-      yaw.rotation.y -= e.movementX * 0.002;
-      // const v = pitch.rotation.x - e.movementY * 0.002;
-      // if (v > -1 && v < 0.1) {
-      //   pitch.rotation.x = v;
-      // }
-    }
-  }
+  // function onDocumentMouseMove(e) {
+  //   if (document.pointerLockElement) {
+  //     e.preventDefault();
+  //     yaw.rotation.y -= e.movementX * 0.002;
+  //     // const v = pitch.rotation.x - e.movementY * 0.002;
+  //     // if (v > -1 && v < 0.1) {
+  //     //   pitch.rotation.x = v;
+  //     // }
+  //   }
+  // }
 
   // function onDocumentMouseWheel(e) {
   //   if (document.pointerLockElement) {
@@ -35,20 +35,10 @@ export default function useFollowCam(ref, offset) {
   useEffect(() => {
     scene.add(pivot);
     pivot.add(alt);
-    alt.position.y = offset[1];
     alt.add(yaw);
     yaw.add(pitch);
     pitch.add(camera);
-    camera.position.set(offset[0], 0, offset[2]);
-
-    document.addEventListener("mousemove", onDocumentMouseMove);
-    // document.addEventListener("mousewheel", onDocumentMouseWheel, {
-    //   passive: false,
-    // });
-    return () => {
-      document.removeEventListener("mousemove", onDocumentMouseMove);
-      // document.removeEventListener("mousewheel", onDocumentMouseWheel);
-    };
+    camera.position.set(0, 0, 0);
   }, [camera]);
 
   useFrame((_, delta) => {
@@ -56,5 +46,5 @@ export default function useFollowCam(ref, offset) {
     pivot.position.lerp(worldPosition, 1);
   });
 
-  return { pivot, alt, yaw, pitch };
+  return { camera, pivot, alt, yaw, pitch };
 }

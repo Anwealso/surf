@@ -12,8 +12,9 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense, useRef } from "react";
 import type { Group, Mesh } from "three";
 
-import { useToggledControl } from "./use-toggled-control";
+import { useToggledControl } from "../useToggledControl";
 import Vehicle from "./Vehicle";
+import Player from "./Player";
 
 function Plane(props: PlaneProps) {
   const [ref] = usePlane(

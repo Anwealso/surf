@@ -1,50 +1,98 @@
-import { useRef, useEffect, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import { Capsule } from "three/examples/jsm/math/Capsule.js";
-import { Vector3 } from "three";
-import { useFrame, useThree } from "@react-three/fiber";
-import useKeyboard from "../useKeyboard";
+import type { Mesh } from "three";
+import { DoubleSide, Vector3 } from "three";
+import { useThree, useFrame, Camera } from "@react-three/fiber";
+import type { BoxProps } from "@react-three/cannon";
+import { useBox } from "@react-three/cannon";
+import { useControls } from "../useControls";
+import useFollowCam from "../useFollowCam";
 
-const GRAVITY = 30;
-const STEPS_PER_FRAME = 5;
-const BOUNCINESS = 1;
-const AIR_RESISTANCE = 0.1;
-const FRICTION = 1;
+// const STEPS_PER_FRAME = 5;
+const GROUND_SPEED = 50;
+const AIR_SPEED = GROUND_SPEED / 3;
+const MAX_SPEED = 15;
+const JUMP_SPEED = 17;
+const SPEED_RAMP = 4;
 
-export default function Player({ octree, colliders, ballCount }) {
-  const playerOnFloor = useRef(false);
-  const playerVelocity = useMemo(() => new Vector3(), []);
-  const playerDirection = useMemo(() => new Vector3(), []);
-  const capsule = useMemo(
-    () => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5),
-    []
+function Platform({ ...props }: BoxProps) {
+  const controls = useControls();
+  // const playerOnFloor = useRef(true);
+  const playerPosition: Vector3 = useMemo(() => new Vector3(), []);
+  const playerVelocity: Vector3 = useMemo(() => new Vector3(), []);
+  const playerDirection: Vector3 = useMemo(() => new Vector3(), []);
+  const playerAngularVelocity: Vector3 = useMemo(() => new Vector3(), []);
+  // const capsule = useMemo(
+  //   () => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5),
+  //   []
+  // );
+
+  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(false);
+
+  const [ref, api] = useBox(
+    () => ({
+      allowSleep: false,
+      args: [1.7, 1, 4],
+      mass: 60,
+      onCollide: (e) => {
+        console.log("bonk", e.body.userData, playerOnFloor);
+        // setPlayerOnFloor(!playerOnFloor);
+      },
+      onCollideBegin: () => {
+        setPlayerOnFloor(true);
+      },
+      onCollideEnd: () => {
+        setPlayerOnFloor(false);
+      },
+      ...props,
+    }),
+    useRef<Mesh>(null)
   );
-  const { camera } = useThree();
-  let clicked = 0;
 
-  const onPointerDown = () => {
-    throwBall(camera, capsule, playerDirection, playerVelocity, clicked++);
-  };
+  const { camera } = useFollowCam(ref, [0, 2, -1.5]);
+
+  // // function teleportPlayerIfOob(camera, capsule, playerVelocity: Vector3) {
+  // function teleportPlayerIfOob(capsule, playerVelocity: Vector3) {
+  //   // if (camera.position.y <= -100) {
+  //   if (playerPosition.y <= -100) {
+  //     playerVelocity.set(0, 0, 0);
+  //     capsule.start.set(0, 10, 0);
+  //     capsule.end.set(0, 11, 0);
+  //     // camera.position.copy(capsule.end);
+  //     // camera.rotation.set(0, 0, 0);
+  //   }
+  // }
+
+  // const playerVelocity = useRef([0, 0, 0]);
   useEffect(() => {
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-    };
-  });
-
+    const playerVelocityUnsubscribe = api.velocity.subscribe((vel) =>
+      playerVelocity.set(...vel)
+    );
+    return playerVelocityUnsubscribe;
+  }, []);
+  // const playerPosition = useRef([0, 0, 0]);
   useEffect(() => {
-    colliders[ballCount] = { capsule: capsule, velocity: playerVelocity };
-  }, [colliders, ballCount, capsule, playerVelocity]);
+    const playerPositionUnsubscribe = api.position.subscribe((pos) =>
+      playerPosition.set(...pos)
+    );
+    return playerPositionUnsubscribe;
+  }, []);
+  // const playerAngularVelocity = useRef([0, 0, 0]);
+  useEffect(() => {
+    const playerAngularVelocityUnsubscribe = api.position.subscribe((angVel) =>
+      playerAngularVelocity.set(...angVel)
+    );
+    return playerAngularVelocityUnsubscribe;
+  }, []);
 
-  const keyboard = useKeyboard();
-
-  function getForwardVector(camera, playerDirection) {
+  function getForwardVector(camera: Camera, playerDirection: Vector3): Vector3 {
     camera.getWorldDirection(playerDirection);
     playerDirection.y = 0;
     playerDirection.normalize();
     return playerDirection;
   }
 
-  function getSideVector(camera, playerDirection) {
+  function getSideVector(camera: Camera, playerDirection: Vector3): Vector3 {
     camera.getWorldDirection(playerDirection);
     playerDirection.y = 0;
     playerDirection.normalize();
@@ -52,131 +100,74 @@ export default function Player({ octree, colliders, ballCount }) {
     return playerDirection;
   }
 
-  function controls(
-    camera,
-    delta,
-    playerVelocity,
-    playerOnFloor,
-    playerDirection
+  function handleControls(
+    camera: Camera,
+    delta: number,
+    playerVelocity: Vector3,
+    playerOnFloor: boolean,
+    playerDirection: Vector3
   ) {
-    const speedDelta = delta * (playerOnFloor ? 25 : 8);
-    keyboard["KeyA"] &&
+    const { backward, jump, forward, left, reset, right } = controls.current;
+    const speedDelta =
+      SPEED_RAMP * delta * (playerOnFloor ? GROUND_SPEED : AIR_SPEED);
+
+    console.log(playerVelocity.length());
+
+    left &&
       playerVelocity.add(
         getSideVector(camera, playerDirection).multiplyScalar(-speedDelta)
       );
-    keyboard["KeyD"] &&
+    right &&
       playerVelocity.add(
         getSideVector(camera, playerDirection).multiplyScalar(speedDelta)
       );
-    keyboard["KeyW"] &&
+    forward &&
       playerVelocity.add(
         getForwardVector(camera, playerDirection).multiplyScalar(speedDelta)
       );
-    keyboard["KeyS"] &&
+    backward &&
       playerVelocity.add(
         getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta)
       );
+    playerVelocity.clamp(
+      new Vector3(-MAX_SPEED, -Number.MAX_VALUE, -MAX_SPEED),
+      new Vector3(MAX_SPEED, Number.MAX_VALUE, MAX_SPEED)
+    );
+
     if (playerOnFloor) {
-      if (keyboard["Space"]) {
-        playerVelocity.y = 15;
+      if (jump) {
+        playerVelocity.y = JUMP_SPEED;
       }
     }
-  }
+    api.velocity.set(playerVelocity.x, playerVelocity.y, playerVelocity.z);
 
-  function updatePlayer(
-    camera,
-    delta,
-    octree,
-    capsule,
-    playerVelocity,
-    playerOnFloor
-  ) {
-    // Updated the velocity vector
-    if (playerOnFloor) {
-      // If on floor, add friction
-      let frictionalDamping = (Math.exp(-4 * delta) - 1) * FRICTION;
-      playerVelocity.addScaledVector(playerVelocity, frictionalDamping);
-    } else {
-      // If in air, add gravity
-      playerVelocity.y -= GRAVITY * delta;
-    }
-    // Add air resistance
-    let airDamping = (Math.exp(-4 * delta) - 1) * AIR_RESISTANCE;
-    playerVelocity.addScaledVector(playerVelocity, airDamping);
-
-    // Move the player based on their velocity vector
-    const deltaPosition = playerVelocity.clone().multiplyScalar(delta);
-    capsule.translate(deltaPosition);
-    // Handle player collisions
-    playerOnFloor = playerCollisions(capsule, octree, playerVelocity);
-    // Keep the camera stuck to the player (move the camera to the new player position)
-    camera.position.copy(capsule.end);
-    return playerOnFloor;
-  }
-
-  function throwBall(camera, capsule, playerDirection, playerVelocity, count) {
-    const { sphere, velocity } = colliders[count % ballCount];
-
-    camera.getWorldDirection(playerDirection);
-
-    sphere.center
-      .copy(capsule.end)
-      .addScaledVector(playerDirection, capsule.radius * 1.5);
-
-    velocity.copy(playerDirection).multiplyScalar(50);
-    velocity.addScaledVector(playerVelocity, 2);
-  }
-
-  function playerCollisions(capsule, octree, playerVelocity) {
-    // Check whether the player capsule instersects with the octree made from the world platform model (defined in glb file)
-    const result = octree.capsuleIntersect(capsule);
-    let playerOnFloor = false;
-
-    // If the player does intersect the world platform
-    if (result) {
-      playerOnFloor = result.normal.y > 0;
-      if (!playerOnFloor) {
-        // If the player is not standing on the world plarform (i.e. we are hitting into the side of world platform cones, balls, etc.)
-        // Then bang deflect the player off the object towards the direction of the object surface normal
-        playerVelocity.addScaledVector(
-          result.normal,
-          -result.normal.dot(playerVelocity) * BOUNCINESS
-        );
-      }
-      capsule.translate(result.normal.multiplyScalar(result.depth));
-    }
-    return playerOnFloor;
-  }
-
-  function teleportPlayerIfOob(camera, capsule, playerVelocity) {
-    if (camera.position.y <= -100) {
-      playerVelocity.set(0, 0, 0);
-      capsule.start.set(0, 10, 0);
-      capsule.end.set(0, 11, 0);
-      camera.position.copy(capsule.end);
-      camera.rotation.set(0, 0, 0);
+    if (reset) {
+      api.position.set(0, 0, 0);
+      api.rotation.set(0, 0, 0);
+      api.velocity.set(0, 0, 0);
+      api.angularVelocity.set(0, 0, 0);
     }
   }
 
-  useFrame(({ camera }, delta) => {
-    controls(
+  useFrame((state, delta) => {
+    handleControls(
       camera,
       delta,
       playerVelocity,
-      playerOnFloor.current,
+      playerOnFloor,
       playerDirection
     );
-    const deltaSteps = Math.min(0.05, delta) / STEPS_PER_FRAME;
-    for (let i = 0; i < STEPS_PER_FRAME; i++) {
-      playerOnFloor.current = updatePlayer(
-        camera,
-        deltaSteps,
-        octree,
-        capsule,
-        playerVelocity,
-        playerOnFloor.current
-      );
-    }
-    teleportPlayerIfOob(camera, capsule, playerVelocity);
+    // handleControls(camera, delta, playerVelocity, playerOnFloor.current);
+    // teleportPlayerIfOob(capsule, playerVelocity)
   });
+
+  return (
+    <mesh ref={ref} receiveShadow>
+      <boxGeometry {...props} />
+      {/* <meshStandardMaterial color="#3333FF" side={DoubleSide} /> */}
+      <meshStandardMaterial color="#3333FF" />
+    </mesh>
+  );
 }
+
+export default Platform;

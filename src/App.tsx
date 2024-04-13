@@ -1,9 +1,24 @@
-import { Debug, Physics } from "@react-three/cannon";
-import { Stats, Environment, PointerLockControls } from "@react-three/drei";
+import {
+  Debug,
+  Physics,
+  SphereProps,
+  TrimeshProps,
+  useSphere,
+  useTrimesh,
+} from "@react-three/cannon";
+import {
+  Stats,
+  Environment,
+  PointerLockControls,
+  OrbitControls,
+  TorusKnot,
+  Tube,
+  useGLTF,
+} from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useRef, useState } from "react";
 
-import { useToggledControl } from "./useToggledControl";
+import { useToggledControl } from "./components/useToggledControl";
 // import Vehicle from "./components/Vehicle";
 import Plane from "./components/Plane";
 import Platform from "./components/Platform";
@@ -12,6 +27,113 @@ import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
+import Composite from "./components/Composite";
+import { BufferGeometry, Curve, Mesh, Vector3 } from "three";
+
+const SCALE_FACTOR: number = 1;
+
+type BowlGLTF = GLTF & {
+  materials: {};
+  nodes: {
+    bowl: Mesh & {
+      geometry: BufferGeometry & { index: ArrayLike<number> };
+    };
+  };
+};
+
+// class CustomSinCurve extends Curve {
+//   constructor(scale = 1) {
+//     super();
+//     this.scale = scale;
+//   }
+
+//   getPoint(t, optionalTarget = new Vector3()) {
+//     const tx = t * 3 - 1.5;
+//     const ty = Math.sin(2 * Math.PI * t);
+//     const tz = 0;
+
+//     return optionalTarget.set(tx, ty, tz).multiplyScalar(this.scale);
+//   }
+// }
+
+// const Rail = ({
+//   args = [0.1],
+//   position,
+// }: Pick<SphereProps, "args" | "position">) => {
+//   const [ref] = useSphere(
+//     () => ({ args, mass: 1, position }),
+//     useRef<Mesh>(null)
+//   );
+//   const [radius] = args;
+//   const path = new CustomSinCurve(10);
+
+//   return (
+//     <Tube ref={ref} args={[path, 60, 2, 3, false]}>
+//       <meshNormalMaterial />
+//     </Tube>
+//   );
+// };
+
+const WeirdCheerio = ({
+  args = [0.1],
+  position,
+}: Pick<SphereProps, "args" | "position">) => {
+  const [ref] = useSphere(
+    () => ({ args, mass: 1, position }),
+    useRef<Mesh>(null)
+  );
+  const [radius] = args;
+
+  return (
+    <TorusKnot
+      ref={ref}
+      args={[radius, radius / 2]}
+      // scale={[10, 10, 10]}
+    >
+      <meshNormalMaterial />
+    </TorusKnot>
+  );
+};
+
+const Bowl = ({ rotation }: Pick<TrimeshProps, "rotation">) => {
+  const {
+    nodes: {
+      bowl: { geometry },
+    },
+  } = useGLTF("/models/bowl.glb") as BowlGLTF;
+
+  // Scale up the geometry
+  geometry.scale(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+
+  const {
+    attributes: {
+      position: { array: vertices },
+    },
+    index: { array: indices },
+  } = geometry;
+
+  const [hovered, setHover] = useState(false);
+
+  const [ref] = useTrimesh(
+    () => ({
+      args: [vertices, indices],
+      mass: 0,
+      rotation,
+    }),
+    useRef<Mesh>(null)
+  );
+
+  return (
+    <mesh
+      ref={ref}
+      geometry={geometry}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+    >
+      <meshStandardMaterial color={"lightgreen"} wireframe={true} />
+    </mesh>
+  );
+};
 
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
@@ -20,7 +142,7 @@ function App() {
   const SPACING_SIDE = 5;
   const PLATFORM_LENGTH = 20;
   const PLATFORM_HEIGHT_OFFSET = 2;
-  const PLATFORM_TILT_DEG = 30;
+  const PLATFORM_TILT_DEG = 45;
   const ROTATION_RIGHT = (Math.PI / 180) * PLATFORM_TILT_DEG;
   const ROTATION_LEFT = -(Math.PI / 180) * PLATFORM_TILT_DEG;
   const POSITION_RIGHT = SPACING_SIDE;
@@ -39,11 +161,12 @@ function App() {
             contactEquationRelaxation: 4,
             friction: 1e-3,
           }}
-          gravity={[0, -50, 0]}
+          // gravity={[0, -60, 0]}
           allowSleep
         >
+          {/* <Physics shouldInvalidate={false}> */}
           <ToggledDebug>
-            <Platform
+            {/* <Platform
               position={[POSITION_LEFT, PLATFORM_HEIGHT_OFFSET, 0]}
               rotation={[0, 0, ROTATION_LEFT]}
               userData={{ id: "floor" }}
@@ -73,6 +196,7 @@ function App() {
               userData={{ id: "floor" }}
               args={[6, 0.1, PLATFORM_LENGTH]}
             />
+            */}
 
             <Plane
               position={[0, 0, 16]}
@@ -81,22 +205,30 @@ function App() {
               args={[500, 500]}
             />
 
-            {/* <Vehicle
-              position={[0, 2, 0]}
-              rotation={[0, -Math.PI / 4, 0]}
-              angularVelocity={[0, 0.5, 0]}
+            <Bowl rotation={[0, 2, 0]} />
+            {/* <WeirdCheerio position={[0.3, 11 - 5, 0]} /> */}
+            {/* <WeirdCheerio position={[0, 10 - 5, 0]} /> */}
+            <WeirdCheerio position={[0.4, 9 - 5, 0.7]} />
+            {/* <WeirdCheerio position={[0.2, 13 - 5, 1]} /> */}
+
+            {/* <Composite
+              position={[0, 1, 0]}
+              rotation={[0, 0, 0]}
+              userData={{ id: "compositeBody" }}
+              args={[3, 3, 3]}
             /> */}
 
             <Player
-              position={[0, 10, 10]}
+              // position={[0, 10, 10]}
+              position={[0, 3, 2]}
               rotation={[0, -Math.PI / 4, 0]}
               angularVelocity={[0, 0.5, 0]}
               args={[1, 2, 1]}
             />
-
+            {/* 
             <Pillar position={[-5, 5, -5]} userData={{ id: "pillar-1" }} />
             <Pillar position={[0, 5, -5]} userData={{ id: "pillar-2" }} />
-            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} />
+            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} /> */}
           </ToggledDebug>
         </Physics>
         <Suspense fallback={null}>

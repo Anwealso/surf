@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import type { Mesh } from "three";
 
 import { Chassis } from "./Chassis";
-import { useControls } from "../useControls";
+import { useControls } from "./useControls";
 import { PerspectiveCamera } from "@react-three/drei";
-import useFollowCam from "../useFollowCam";
+import useFollowCam from "./useFollowCam";
 
 export type VehicleProps = Required<
   Pick<BoxProps, "angularVelocity" | "position" | "rotation">

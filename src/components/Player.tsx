@@ -5,8 +5,8 @@ import { DoubleSide, Vector3 } from "three";
 import { useThree, useFrame, Camera } from "@react-three/fiber";
 import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
-import { useControls } from "../useControls";
-import useFollowCam from "../useFollowCam";
+import { useControls } from "./useControls";
+import useFollowCam from "./useFollowCam";
 
 // const STEPS_PER_FRAME = 5;
 const GROUND_SPEED = 50;
@@ -27,7 +27,7 @@ function Platform({ ...props }: BoxProps) {
   //   []
   // );
 
-  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(false);
+  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(true);
 
   const [ref, api] = useBox(
     () => ({
@@ -42,7 +42,7 @@ function Platform({ ...props }: BoxProps) {
         setPlayerOnFloor(true);
       },
       onCollideEnd: () => {
-        setPlayerOnFloor(false);
+        // setPlayerOnFloor(false);
       },
       ...props,
     }),

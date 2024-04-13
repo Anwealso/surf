@@ -3,9 +3,8 @@ import { DoubleSide } from "three";
 import { useRef } from "react";
 import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
-import { useTexture } from "@react-three/drei";
 
-function Platform({ ...props }: BoxProps) {
+function Triramp({ ...props }: BoxProps) {
   const [ref] = useBox(
     () => ({
       material: "ground",
@@ -15,15 +14,12 @@ function Platform({ ...props }: BoxProps) {
     useRef<Mesh>(null)
   );
 
-  // const texture = useTexture("textures/bg.jpeg");
-
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref} receiveShadow>
       <boxGeometry {...props} />
-      <meshStandardMaterial color="#FFFFFF" side={DoubleSide} />
-      {/* <meshBasicMaterial map={texture} /> */}
+      <meshStandardMaterial color="#3333FF" side={DoubleSide} />
     </mesh>
   );
 }
 
-export default Platform;
+export default Triramp;

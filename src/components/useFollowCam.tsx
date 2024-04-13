@@ -2,7 +2,7 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
 import { Object3D, Vector3 } from "three";
 
-export default function useFollowCam(ref, offset) {
+export default function useFollowCam(ref, fov) {
   const { scene, camera } = useThree();
 
   const pivot = useMemo(() => new Object3D(), []);

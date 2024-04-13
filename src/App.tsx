@@ -3,6 +3,7 @@ import {
   Physics,
   SphereProps,
   TrimeshProps,
+  Triplet,
   useSphere,
   useTrimesh,
 } from "@react-three/cannon";
@@ -93,8 +94,12 @@ const WeirdCheerio = ({
 
 const Bowl = ({
   rotation,
+  position,
   scaleFactor,
-}: Pick<TrimeshProps, "rotation"> & { scaleFactor: number }) => {
+}: Pick<TrimeshProps, "rotation"> &
+  Pick<SphereProps, "args" | "position"> & {
+    scaleFactor: number;
+  }) => {
   const {
     nodes: {
       bowl: { geometry },
@@ -103,7 +108,7 @@ const Bowl = ({
 
   useEffect(() => {
     // Scale up the geometry
-    geometry.scale(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+    geometry.scale(scaleFactor, scaleFactor, scaleFactor);
   }, []);
 
   const {
@@ -122,8 +127,9 @@ const Bowl = ({
     useRef<Mesh>(null)
   );
 
+  //wrapping this mesh in another mesh/group also didint work (moved rendered position but not physics position)
   return (
-    <mesh ref={ref} geometry={geometry}>
+    <mesh ref={ref} geometry={geometry} position={position}>
       <meshStandardMaterial color={"lightgreen"} wireframe={true} />
     </mesh>
   );
@@ -198,14 +204,18 @@ function App() {
               args={[500, 500]}
             />
 
-            <Bowl rotation={[0, 2, 0]} scaleFactor={SCALE_FACTOR} />
-            {/* <WeirdCheerio position={[0.3, 11 - 5, 0]} /> */}
-            {/* <WeirdCheerio position={[0, 10 - 5, 0]} /> */}
+            <Bowl
+              rotation={[0, 2, 0]}
+              position={[10, 10, 10]}
+              scaleFactor={SCALE_FACTOR}
+            />
+            <WeirdCheerio position={[0.3, 11 - 5, 0]} />
+            <WeirdCheerio position={[0, 10 - 5, 0]} />
+            <WeirdCheerio position={[0.2, 13 - 5, 1]} />
             <WeirdCheerio
-              position={[0.4, 9 - 5, 0.7]}
+              position={[0.4 * SCALE_FACTOR, 4, 0.7 * SCALE_FACTOR]}
               args={[0.1 * SCALE_FACTOR]}
             />
-            {/* <WeirdCheerio position={[0.2, 13 - 5, 1]} /> */}
 
             {/* <Composite
               position={[0, 1, 0]}
@@ -216,7 +226,7 @@ function App() {
 
             <Player
               // position={[0, 10, 10]}
-              position={[0, 3, 2]}
+              position={[0, 3, 6]}
               rotation={[0, -Math.PI / 4, 0]}
               angularVelocity={[0, 0.5, 0]}
               args={[1, 2, 1]}

@@ -9,10 +9,10 @@ import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 
 // const STEPS_PER_FRAME = 5;
-const GROUND_SPEED = 50;
+const GROUND_SPEED = 10;
 const AIR_SPEED = GROUND_SPEED / 3;
 const MAX_SPEED = 15;
-const JUMP_SPEED = 17;
+const JUMP_SPEED = 5;
 const SPEED_RAMP = 4;
 
 function Platform({ ...props }: BoxProps) {
@@ -110,8 +110,6 @@ function Platform({ ...props }: BoxProps) {
     const { backward, jump, forward, left, reset, right } = controls.current;
     const speedDelta =
       SPEED_RAMP * delta * (playerOnFloor ? GROUND_SPEED : AIR_SPEED);
-
-    console.log(playerVelocity.length());
 
     left &&
       playerVelocity.add(

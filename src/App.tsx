@@ -16,7 +16,7 @@ import {
   useGLTF,
 } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 import { useToggledControl } from "./components/useToggledControl";
 // import Vehicle from "./components/Vehicle";
@@ -30,7 +30,7 @@ import Player from "./components/Player";
 import Composite from "./components/Composite";
 import { BufferGeometry, Curve, Mesh, Vector3 } from "three";
 
-const SCALE_FACTOR: number = 1;
+const SCALE_FACTOR: number = 5;
 
 type BowlGLTF = GLTF & {
   materials: {};
@@ -85,25 +85,26 @@ const WeirdCheerio = ({
   const [radius] = args;
 
   return (
-    <TorusKnot
-      ref={ref}
-      args={[radius, radius / 2]}
-      // scale={[10, 10, 10]}
-    >
+    <TorusKnot ref={ref} args={[radius, radius / 2]}>
       <meshNormalMaterial />
     </TorusKnot>
   );
 };
 
-const Bowl = ({ rotation }: Pick<TrimeshProps, "rotation">) => {
+const Bowl = ({
+  rotation,
+  scaleFactor,
+}: Pick<TrimeshProps, "rotation"> & { scaleFactor: number }) => {
   const {
     nodes: {
       bowl: { geometry },
     },
   } = useGLTF("/models/bowl.glb") as BowlGLTF;
 
-  // Scale up the geometry
-  geometry.scale(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+  useEffect(() => {
+    // Scale up the geometry
+    geometry.scale(SCALE_FACTOR, SCALE_FACTOR, SCALE_FACTOR);
+  }, []);
 
   const {
     attributes: {
@@ -111,8 +112,6 @@ const Bowl = ({ rotation }: Pick<TrimeshProps, "rotation">) => {
     },
     index: { array: indices },
   } = geometry;
-
-  const [hovered, setHover] = useState(false);
 
   const [ref] = useTrimesh(
     () => ({
@@ -124,12 +123,7 @@ const Bowl = ({ rotation }: Pick<TrimeshProps, "rotation">) => {
   );
 
   return (
-    <mesh
-      ref={ref}
-      geometry={geometry}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-    >
+    <mesh ref={ref} geometry={geometry}>
       <meshStandardMaterial color={"lightgreen"} wireframe={true} />
     </mesh>
   );
@@ -166,7 +160,7 @@ function App() {
         >
           {/* <Physics shouldInvalidate={false}> */}
           <ToggledDebug>
-            {/* <Platform
+            <Platform
               position={[POSITION_LEFT, PLATFORM_HEIGHT_OFFSET, 0]}
               rotation={[0, 0, ROTATION_LEFT]}
               userData={{ id: "floor" }}
@@ -196,7 +190,6 @@ function App() {
               userData={{ id: "floor" }}
               args={[6, 0.1, PLATFORM_LENGTH]}
             />
-            */}
 
             <Plane
               position={[0, 0, 16]}
@@ -205,10 +198,13 @@ function App() {
               args={[500, 500]}
             />
 
-            <Bowl rotation={[0, 2, 0]} />
+            <Bowl rotation={[0, 2, 0]} scaleFactor={SCALE_FACTOR} />
             {/* <WeirdCheerio position={[0.3, 11 - 5, 0]} /> */}
             {/* <WeirdCheerio position={[0, 10 - 5, 0]} /> */}
-            <WeirdCheerio position={[0.4, 9 - 5, 0.7]} />
+            <WeirdCheerio
+              position={[0.4, 9 - 5, 0.7]}
+              args={[0.1 * SCALE_FACTOR]}
+            />
             {/* <WeirdCheerio position={[0.2, 13 - 5, 1]} /> */}
 
             {/* <Composite
@@ -225,10 +221,10 @@ function App() {
               angularVelocity={[0, 0.5, 0]}
               args={[1, 2, 1]}
             />
-            {/* 
+
             <Pillar position={[-5, 5, -5]} userData={{ id: "pillar-1" }} />
             <Pillar position={[0, 5, -5]} userData={{ id: "pillar-2" }} />
-            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} /> */}
+            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} />
           </ToggledDebug>
         </Physics>
         <Suspense fallback={null}>

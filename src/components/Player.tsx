@@ -9,7 +9,7 @@ import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 
 // const STEPS_PER_FRAME = 5;
-const GROUND_SPEED = 10;
+const GROUND_SPEED = 5;
 const AIR_SPEED = GROUND_SPEED / 3;
 const MAX_SPEED = 15;
 const JUMP_SPEED = 5;

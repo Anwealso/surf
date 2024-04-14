@@ -23,7 +23,7 @@ import { useToggledControl } from "./components/useToggledControl";
 import Plane from "./components/Plane";
 import Platform from "./components/Platform";
 import Pillar from "./components/Pillar";
-import CustomNavbar from "./components/CustomNavbar";
+import CustomNavbar from "../archive/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";

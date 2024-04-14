@@ -25,4 +25,4 @@ dist-ssr
 
 # Assets
 public/models
-src/archive
+archive

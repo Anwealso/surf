@@ -1,35 +1,14 @@
-import {
-  Debug,
-  Physics,
-  SphereProps,
-  TrimeshProps,
-  Triplet,
-  useSphere,
-  useTrimesh,
-} from "@react-three/cannon";
-import {
-  Stats,
-  Environment,
-  PointerLockControls,
-  OrbitControls,
-  TorusKnot,
-  Tube,
-  useGLTF,
-} from "@react-three/drei";
+import { Debug, Physics } from "@react-three/cannon";
+import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect, useRef, useState } from "react";
-
+import { Suspense } from "react";
 import { useToggledControl } from "./components/useToggledControl";
-// import Vehicle from "./components/Vehicle";
 import Plane from "./components/Plane";
-import Platform from "./components/Platform";
 import Pillar from "./components/Pillar";
 import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
-import Composite from "./components/Composite";
-import { BufferGeometry, Curve, Mesh, Vector3 } from "three";
 import Cheerio from "./components/Cheerio";
 import Bowl from "./components/Bowl";
 
@@ -58,7 +37,7 @@ const SCALE_FACTOR: number = 5;
 //     () => ({ args, mass: 1, position }),
 //     useRef<Mesh>(null)
 //   );
-//   const [radius] = args;
+
 //   const path = new CustomSinCurve(10);
 
 //   return (
@@ -71,15 +50,15 @@ const SCALE_FACTOR: number = 5;
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
 
-  const SPACING = 15;
-  const SPACING_SIDE = 5;
-  const PLATFORM_LENGTH = 20;
-  const PLATFORM_HEIGHT_OFFSET = 2;
-  const PLATFORM_TILT_DEG = 45;
-  const ROTATION_RIGHT = (Math.PI / 180) * PLATFORM_TILT_DEG;
-  const ROTATION_LEFT = -(Math.PI / 180) * PLATFORM_TILT_DEG;
-  const POSITION_RIGHT = SPACING_SIDE;
-  const POSITION_LEFT = -SPACING_SIDE;
+  // const SPACING = 15;
+  // const SPACING_SIDE = 5;
+  // const PLATFORM_LENGTH = 20;
+  // const PLATFORM_HEIGHT_OFFSET = 2;
+  // const PLATFORM_TILT_DEG = 45;
+  // const ROTATION_RIGHT = (Math.PI / 180) * PLATFORM_TILT_DEG;
+  // const ROTATION_LEFT = -(Math.PI / 180) * PLATFORM_TILT_DEG;
+  // const POSITION_RIGHT = SPACING_SIDE;
+  // const POSITION_LEFT = -SPACING_SIDE;
 
   return (
     <>
@@ -150,6 +129,8 @@ function App() {
               position={[0.4 * SCALE_FACTOR, 4, 0.7 * SCALE_FACTOR]}
               args={[0.1 * SCALE_FACTOR]}
             />
+
+            {/* <Rail position={[0.2, 13 - 5, 1]} /> */}
 
             {/* <Composite
               position={[0, 1, 0]}

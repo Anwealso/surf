@@ -1,7 +1,7 @@
-import * as THREE from "three";
 import { useRef } from "react";
 import type { PlaneProps } from "@react-three/cannon";
 import { usePlane } from "@react-three/cannon";
+import { DoubleSide, Group } from "three";
 
 function Plane({
   args,
@@ -21,9 +21,9 @@ function Plane({
   // Allows us to dictate the plane rotation from the horizontal rather than the vertical in the parent
   return (
     <group ref={ref}>
-      <mesh ref={ref} receiveShadow>
+      <mesh receiveShadow>
         <planeGeometry args={args} />
-        <meshStandardMaterial color="#909090" side={THREE.DoubleSide} />
+        <meshStandardMaterial color="#909090" side={DoubleSide} />
       </mesh>
     </group>
   );

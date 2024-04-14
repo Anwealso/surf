@@ -2,7 +2,7 @@ import { useThree, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo } from "react";
 import { Object3D, Vector3 } from "three";
 
-export default function useFollowCam(ref, fov) {
+export default function useFollowCam(ref: any) {
   const { scene, camera } = useThree();
 
   const pivot = useMemo(() => new Object3D(), []);
@@ -41,7 +41,7 @@ export default function useFollowCam(ref, fov) {
     camera.position.set(0, 0, 0);
   }, [camera]);
 
-  useFrame((_, delta) => {
+  useFrame(() => {
     ref.current.getWorldPosition(worldPosition);
     pivot.position.lerp(worldPosition, 1);
   });

@@ -3,7 +3,6 @@ import { DoubleSide } from "three";
 import { useRef } from "react";
 import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
-import { useTexture } from "@react-three/drei";
 
 function Platform({ ...props }: BoxProps) {
   const [ref] = useBox(

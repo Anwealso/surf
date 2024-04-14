@@ -1,10 +1,20 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-import { Capsule } from "three/examples/jsm/math/Capsule.js";
+// import { Capsule } from "three/examples/jsm/math/Capsule.js";
 import type { Mesh } from "three";
-import { DoubleSide, Vector3 } from "three";
-import { useThree, useFrame, Camera } from "@react-three/fiber";
+import {
+  // DoubleSide,
+  Vector3,
+} from "three";
+import {
+  // useThree,
+  useFrame,
+  Camera,
+} from "@react-three/fiber";
 import type { BoxProps } from "@react-three/cannon";
-import { useBox } from "@react-three/cannon";
+import {
+  // useBox,
+  useSphere,
+} from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 
@@ -27,29 +37,34 @@ function Platform({ ...props }: BoxProps) {
   //   []
   // );
 
-  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(true);
+  const [playerOnFloor, _]: [boolean, any] = useState(true);
 
-  const [ref, api] = useBox(
-    () => ({
-      allowSleep: false,
-      args: [1.7, 1, 4],
-      mass: 60,
-      onCollide: (e) => {
-        console.log("bonk", e.body.userData, playerOnFloor);
-        // setPlayerOnFloor(!playerOnFloor);
-      },
-      onCollideBegin: () => {
-        setPlayerOnFloor(true);
-      },
-      onCollideEnd: () => {
-        // setPlayerOnFloor(false);
-      },
-      ...props,
-    }),
+  // const [ref, api] = useBox(
+  //   () => ({
+  //     allowSleep: false,
+  //     args: [1.7, 1, 4],
+  //     mass: 60,
+  //     onCollide: (e) => {
+  //       console.log("bonk", e.body.userData, playerOnFloor);
+  //       // setPlayerOnFloor(!playerOnFloor);
+  //     },
+  //     onCollideBegin: () => {
+  //       setPlayerOnFloor(true);
+  //     },
+  //     onCollideEnd: () => {
+  //       // setPlayerOnFloor(false);
+  //     },
+  //     ...props,
+  //   }),
+  //   useRef<Mesh>(null)
+  // );
+
+  const [ref, api] = useSphere(
+    () => ({ args: [0.1], mass: 1, position: [2, 2, 2] }),
     useRef<Mesh>(null)
   );
 
-  const { camera } = useFollowCam(ref, [0, 2, -1.5]);
+  const { camera } = useFollowCam(ref);
 
   // // function teleportPlayerIfOob(camera, capsule, playerVelocity: Vector3) {
   // function teleportPlayerIfOob(capsule, playerVelocity: Vector3) {
@@ -147,7 +162,7 @@ function Platform({ ...props }: BoxProps) {
     }
   }
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     handleControls(
       camera,
       delta,

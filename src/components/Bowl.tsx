@@ -1,7 +1,8 @@
-import { useTrimesh } from "@react-three/cannon";
+import { SphereProps, TrimeshProps, useTrimesh } from "@react-three/cannon";
 import { useGLTF } from "@react-three/drei";
 import { useEffect, useRef } from "react";
-import { Mesh } from "three";
+import { BufferGeometry, Mesh } from "three";
+import { GLTF } from "three/examples/jsm/loaders/GLTFLoader.js";
 
 type BowlGLTF = GLTF & {
   materials: {};
@@ -24,24 +25,25 @@ const Bowl = ({
     nodes: {
       bowl: { geometry },
     },
-  } = useGLTF("/models/bowl.glb") as BowlGLTF;
+  } = useGLTF("/models/bowl.glb") as unknown as BowlGLTF;
 
   useEffect(() => {
     // Scale up the geometry
     geometry.scale(scaleFactor, scaleFactor, scaleFactor);
   }, []);
 
-  const {
-    attributes: {
-      position: { array: vertices },
-    },
-    index: { array: indices },
-  } = geometry;
+  // const {
+  //   attributes: {
+  //     position: { array: vertices },
+  //   },
+  //   index: { array: indices },
+  // } = geometry;
 
   const [ref] = useTrimesh(
     () => ({
-      args: [vertices, indices],
-      mass: 0,
+      // args: [vertices, indices],
+      args: [geometry.attributes.position.array, geometry.index.array],
+      mass: 10,
       rotation,
     }),
     useRef<Mesh>(null)

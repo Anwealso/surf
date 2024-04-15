@@ -49,7 +49,7 @@ function App() {
             contactEquationRelaxation: 4,
             friction: 1e-3,
           }}
-          // gravity={[0, -60, 0]}
+          gravity={[0, -30, 0]}
           allowSleep
         >
           {/* <Physics shouldInvalidate={false}> */}
@@ -61,7 +61,7 @@ function App() {
               args={[500, 500]}
             />
 
-            <Ramp position={[0, 2, 0]} rotation={[1.25, 0, 0]} length={10} />
+            <Ramp position={[0, 0, 0]} rotation={[0, 0, 0]} length={10} />
 
             <Player
               position={[0, 2, 8]}

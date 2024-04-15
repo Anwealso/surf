@@ -18,25 +18,37 @@ function Ramp({
 }: RampProps): JSX.Element {
   const ref = useRef<THREE.Mesh>(null!);
 
+  const dtheta: number = 0.1;
+  const dy: number = 0.635;
+  const dz: number = 4;
+
   const sections: ConvexPolyRampProps[] = [
     {
-      position: [position![0] + 0, position![1], position![2]],
-      rotation: [rotation![0] + 0.1, rotation![1], rotation![2]],
+      position: [position![0], position![1], position![2]],
+      rotation: [rotation![0], rotation![1], rotation![2]],
     },
     {
-      position: [position![0] + 5, position![1], position![2]],
-      rotation: [
-        rotation![0] + 0.1,
-        rotation![1] + 0.2,
-        rotation![2] + Math.PI,
-      ],
+      position: [position![0], position![1] + dy * 1, position![2] - dz * 1],
+      rotation: [rotation![0] + dtheta * 1, rotation![1], rotation![2]],
+    },
+    {
+      position: [position![0], position![1] + dy * 2, position![2] - dz * 2],
+      rotation: [rotation![0] + dtheta * 2, rotation![1], rotation![2]],
+    },
+    {
+      position: [position![0], position![1] + dy * 3, position![2] - dz * 3],
+      rotation: [rotation![0] + dtheta * 3, rotation![1], rotation![2]],
     },
   ];
 
   return (
     <group ref={ref}>
-      {sections.map((args: ConvexPolyRampProps) => (
-        <ConvexPolyRamp position={args.position} rotation={args.rotation} />
+      {sections.map((args: ConvexPolyRampProps, i) => (
+        <ConvexPolyRamp
+          position={args.position}
+          rotation={args.rotation}
+          key={i}
+        />
       ))}
     </group>
   );

@@ -1,4 +1,5 @@
 # surf
+
 Surf Browser Game
 
 ---
@@ -6,7 +7,6 @@ Surf Browser Game
 ## About
 
 - A web-based CS surf clone
-
 
 ## Installation
 
@@ -16,6 +16,9 @@ Surf Browser Game
 
 - Run dev server with `yarn run dev`
 
+## Other Resources
+
+- [polyhaven textures](https://polyhaven.com/textures)
 
 ---
 

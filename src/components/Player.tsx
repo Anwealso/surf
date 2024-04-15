@@ -60,7 +60,7 @@ function Platform({ ...props }: BoxProps) {
   // );
 
   const [ref, api] = useSphere(
-    () => ({ args: [0.1], mass: 1, position: [2, 2, 2] }),
+    () => ({ args: [0.1], mass: 1, ...props }),
     useRef<Mesh>(null)
   );
 

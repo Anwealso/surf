@@ -1,18 +1,7 @@
-import {
-  BoxProps,
-  Debug,
-  Physics,
-  SphereProps,
-  useBox,
-} from "@react-three/cannon";
-import {
-  Stats,
-  Environment,
-  PointerLockControls,
-  Tube,
-} from "@react-three/drei";
+import { Debug, Physics } from "@react-three/cannon";
+import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef } from "react";
+import { Suspense } from "react";
 import { useToggledControl } from "./components/useToggledControl";
 import Plane from "./components/Plane";
 import Pillar from "./components/Pillar";
@@ -21,7 +10,6 @@ import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
-import { Curve, DoubleSide, Vector3 } from "three";
 
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
@@ -47,9 +35,9 @@ function App() {
           broadphase="SAP"
           defaultContactMaterial={{
             contactEquationRelaxation: 4,
-            friction: 1e-3,
+            friction: 2e-3,
           }}
-          gravity={[0, -30, 0]}
+          gravity={[0, -20, 0]}
           allowSleep
         >
           {/* <Physics shouldInvalidate={false}> */}

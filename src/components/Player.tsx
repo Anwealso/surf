@@ -1,26 +1,18 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-// import { Capsule } from "three/examples/jsm/math/Capsule.js";
 import type { Mesh } from "three";
-import {
-  // DoubleSide,
-  Vector3,
-} from "three";
-import {
-  // useThree,
-  useFrame,
-  Camera,
-} from "@react-three/fiber";
+import { Vector3 } from "three";
+import { useFrame, Camera } from "@react-three/fiber";
 import type { BoxProps } from "@react-three/cannon";
 import {
-  // useBox,
-  useSphere,
+  useBox,
+  // useSphere
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 
 // const STEPS_PER_FRAME = 5;
 const GROUND_SPEED = 5;
-const AIR_SPEED = GROUND_SPEED / 3;
+const AIR_SPEED = GROUND_SPEED / 10;
 const MAX_SPEED = 15;
 const JUMP_SPEED = 5;
 const SPEED_RAMP = 4;
@@ -39,30 +31,30 @@ function Platform({ ...props }: BoxProps) {
 
   const [playerOnFloor, _]: [boolean, any] = useState(true);
 
-  // const [ref, api] = useBox(
-  //   () => ({
-  //     allowSleep: false,
-  //     args: [1.7, 1, 4],
-  //     mass: 60,
-  //     onCollide: (e) => {
-  //       console.log("bonk", e.body.userData, playerOnFloor);
-  //       // setPlayerOnFloor(!playerOnFloor);
-  //     },
-  //     onCollideBegin: () => {
-  //       setPlayerOnFloor(true);
-  //     },
-  //     onCollideEnd: () => {
-  //       // setPlayerOnFloor(false);
-  //     },
-  //     ...props,
-  //   }),
-  //   useRef<Mesh>(null)
-  // );
-
-  const [ref, api] = useSphere(
-    () => ({ args: [0.1], mass: 1, ...props }),
+  const [ref, api] = useBox(
+    () => ({
+      allowSleep: false,
+      args: [1.7, 1, 4],
+      mass: 60,
+      onCollide: (e) => {
+        console.log("bonk", e.body.userData, playerOnFloor);
+        // setPlayerOnFloor(!playerOnFloor);
+      },
+      onCollideBegin: () => {
+        // setPlayerOnFloor(true);
+      },
+      onCollideEnd: () => {
+        // setPlayerOnFloor(false);
+      },
+      ...props,
+    }),
     useRef<Mesh>(null)
   );
+
+  // const [ref, api] = useSphere(
+  //   () => ({ args: [0.1], mass: 1, ...props }),
+  //   useRef<Mesh>(null)
+  // );
 
   const { camera } = useFollowCam(ref);
 
@@ -153,6 +145,7 @@ function Platform({ ...props }: BoxProps) {
       }
     }
     api.velocity.set(playerVelocity.x, playerVelocity.y, playerVelocity.z);
+    api.rotation.set(0, 0, 0);
 
     if (reset) {
       api.position.set(0, 0, 0);

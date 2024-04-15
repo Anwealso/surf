@@ -23,7 +23,7 @@ function Plane({
     <group ref={ref}>
       <mesh receiveShadow>
         <planeGeometry args={args} />
-        <meshStandardMaterial color="#909090" side={DoubleSide} />
+        <meshStandardMaterial color="white" side={DoubleSide} />
       </mesh>
     </group>
   );

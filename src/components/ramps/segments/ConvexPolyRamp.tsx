@@ -1,13 +1,13 @@
 import type { ConvexPolyhedronProps, Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
-import { useTexture } from "@react-three/drei";
+// import { useTexture } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import {
-  BoxGeometry,
+  // BoxGeometry,
   BufferAttribute,
   BufferGeometry,
   DoubleSide,
-  Vector3,
+  // Vector3,
   type Mesh,
 } from "three";
 import { Geometry } from "three-stdlib";
@@ -92,20 +92,23 @@ function getRampGeometry(size: Triplet): BufferGeometry {
   return geometry;
 }
 
-type CustomGLTF = GLTF & {
-  materials: {};
-  nodes: { Cylinder: Mesh };
-};
+// type CustomGLTF = GLTF & {
+//   materials: {};
+//   nodes: { Cylinder: Mesh };
+// };
 
-export type ConvexPolyRampProps = ConvexPolyhedronProps & {};
+export type ConvexPolyRampProps = ConvexPolyhedronProps & { scale?: number };
 
-function ConvexPolyRamp({ position, rotation, scale }: ConvexPolyRampProps) {
-  const scaleFactor = (1 / 750) * 4;
-
+// function ConvexPolyRamp({ position, rotation, scale }: ConvexPolyRampProps) {
+function ConvexPolyRamp({
+  position,
+  rotation,
+  scale = (1 / 750) * 4,
+}: ConvexPolyRampProps) {
   // const texture = useTexture("textures/bg.jpeg");
 
   // const geometry = new BoxGeometry(2, 2, 2);
-  const geometry = getRampGeometry([750 * scaleFactor, 450 * scaleFactor, 5]);
+  const geometry = getRampGeometry([750 * scale, 450 * scale, 5]);
 
   // console.log(geometry);
 
@@ -125,7 +128,7 @@ function ConvexPolyRamp({ position, rotation, scale }: ConvexPolyRampProps) {
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
       {/* <meshStandardMaterial wireframe color="white" /> */}
-      <meshStandardMaterial color={"hotpink"} side={DoubleSide} />
+      <meshStandardMaterial color={"blue"} side={DoubleSide} />
       {/* <meshBasicMaterial map={texture} /> */}
     </mesh>
   );

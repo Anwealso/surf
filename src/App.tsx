@@ -57,7 +57,7 @@ function App() {
               position={[0, 10, 8]}
               rotation={[0, 0, 0]}
               mass={60}
-              args={[0.5, PLAYER_HEIGHT, 4, 8]}
+              args={[0.5, PLAYER_HEIGHT, 8, 8]}
             />
 
             <Pillar position={[3, 8, 0]} userData={{ id: "pillar-1" }} />

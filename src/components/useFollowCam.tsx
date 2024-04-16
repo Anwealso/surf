@@ -41,7 +41,7 @@ export default function useFollowCam(
     alt.add(yaw);
     yaw.add(pitch);
     pitch.add(camera);
-    camera.position.set(4, heightOffset, 0);
+    camera.position.set(0, heightOffset, 0);
   }, [camera]);
 
   useFrame(() => {

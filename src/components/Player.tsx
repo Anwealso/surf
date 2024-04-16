@@ -20,7 +20,12 @@ const SPEED_RAMP = 4;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
   mass: number; // mass of player
-  args: [number, number, number, number]; // shape of the capsule
+  args: [
+    radius: number,
+    length: number,
+    capSegments: number,
+    radialSegments: number
+  ]; // shape of the capsule
 };
 
 function Player({
@@ -55,6 +60,12 @@ function Player({
           position: [0, -args[1] / 2, 0],
           rotation: [0, 0, 0],
           type: "Sphere",
+        },
+        {
+          args: [args[0], args[0], args[1], args[3]],
+          position: [0, +args[1] / 2, 0],
+          rotation: [0, 0, 0],
+          type: "Cylinder",
         },
         {
           args: [args[0]],
@@ -179,18 +190,10 @@ function Player({
 
   return (
     <group ref={ref}>
-      <mesh receiveShadow castShadow>
+      {/* <mesh receiveShadow castShadow>
         <capsuleGeometry args={args} />
         <meshStandardMaterial wireframe color="green" />
-      </mesh>
-      <mesh receiveShadow castShadow position={[0, -args[1] / 2, 0]}>
-        <sphereGeometry args={[args[0]]} />
-        <meshStandardMaterial color="white" />
-      </mesh>
-      <mesh receiveShadow castShadow position={[0, +args[1] / 2, 0]}>
-        <sphereGeometry args={[args[0]]} />
-        <meshStandardMaterial color="white" />
-      </mesh>
+      </mesh> */}
     </group>
   );
 }

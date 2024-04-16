@@ -1,7 +1,7 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
 import { useRef } from "react";
-import ConvexPolyRamp from "./segments/ConvexPolyRamp";
-import type { ConvexPolyRampProps } from "./segments/ConvexPolyRamp";
+import ConvexPolyRamp from "./segments/PerfectTriangle";
+import type { ConvexPolyRampProps } from "./segments/PerfectTriangle";
 import { Group } from "three";
 
 type RampProps = Pick<BodyProps, "position" | "rotation"> & {

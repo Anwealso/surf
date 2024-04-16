@@ -1,8 +1,10 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
 import { useRef } from "react";
-import ConvexPolyRamp from "./segments/PerfectTriangle";
-import type { ConvexPolyRampProps } from "./segments/PerfectTriangle";
+import PerfectTriangle from "./segments/PerfectTriangle";
 import { Group } from "three";
+import { RampSectionProps } from "./segments/SegmentHelpers";
+import FlatSideTriangle from "./segments/FlatSideTriangle";
+import FlatTopTriangle from "./segments/FlatTopTriangle";
 
 type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   length: number;
@@ -23,7 +25,7 @@ RampProps): JSX.Element {
   const dy: number = 0.635;
   const dz: number = 4;
 
-  const sections: ConvexPolyRampProps[] = [
+  const sections: RampSectionProps[] = [
     {
       position: [position![0], position![1], position![2]],
       rotation: [rotation![0], rotation![1], rotation![2]],
@@ -44,8 +46,18 @@ RampProps): JSX.Element {
 
   return (
     <group ref={ref}>
-      {sections.map((args: ConvexPolyRampProps, i) => (
-        <ConvexPolyRamp
+      {sections.map((args: RampSectionProps, i) => (
+        // <PerfectTriangle
+        //   position={args.position}
+        //   rotation={args.rotation}
+        //   key={i}
+        // />
+        // <FlatSideTriangle
+        //   position={args.position}
+        //   rotation={args.rotation}
+        //   key={i}
+        // />
+        <FlatTopTriangle
           position={args.position}
           rotation={args.rotation}
           key={i}

@@ -2,15 +2,10 @@ import type { Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
 // import { useTexture } from "@react-three/drei";
 import { useMemo, useRef } from "react";
-import {
-  BufferAttribute,
-  BufferGeometry,
-  // DoubleSide,
-  type Mesh,
-} from "three";
+import { BufferAttribute, BufferGeometry, DoubleSide, type Mesh } from "three";
 import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
 
-function PerfectTriangle({
+function FlatSideTriangle({
   position,
   rotation,
   scale = (1 / 1024) * 4,
@@ -32,18 +27,24 @@ function PerfectTriangle({
   function getGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
+    const baseHeight: number = 0.2;
     const rampRatio: number = 544 / 512;
     // Width of the sloped section of the ramp
-    const slopeWidth: number = 1 / rampRatio / 2;
+    const slopeWidth: number = (1 - baseHeight) / rampRatio / 2;
 
     const vertices = new Float32Array([
       // Front face points
-      ...[-slopeWidth, 0, 0],
+      ...[-slopeWidth, baseHeight, 0],
       ...[0, 1, 0],
-      ...[+slopeWidth, 0, 0],
+      ...[+slopeWidth, baseHeight, 0],
       // Back face points
-      ...[-slopeWidth, 0, 1],
+      ...[-slopeWidth, baseHeight, 1],
       ...[0, 1, 1],
+      ...[+slopeWidth, baseHeight, 1],
+      // Extra bottom points for base
+      ...[-slopeWidth, 0, 0],
+      ...[+slopeWidth, 0, 0],
+      ...[-slopeWidth, 0, 1],
       ...[+slopeWidth, 0, 1],
     ]);
 
@@ -58,9 +59,23 @@ function PerfectTriangle({
       // Right face
       ...[2, 4, 5],
       ...[2, 1, 4],
+
+      // Base front
+      ...[0, 7, 6],
+      ...[0, 2, 7],
+      // Base back
+      ...[3, 9, 5],
+      ...[3, 8, 9],
+      // Base left
+      ...[6, 3, 0],
+      ...[6, 8, 3],
+      // Base right
+      ...[7, 5, 9],
+      ...[7, 2, 5],
+
       // Bottom face
-      ...[0, 2, 5],
-      ...[0, 5, 3],
+      ...[6, 9, 8],
+      ...[6, 7, 9],
     ];
 
     // Add the indices and vertices
@@ -79,11 +94,12 @@ function PerfectTriangle({
 
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
-      <meshStandardMaterial wireframe color="blue" />
+      {/* <meshStandardMaterial wireframe color="blue" /> */}
       {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
       {/* <meshBasicMaterial map={texture} /> */}
+      <meshNormalMaterial />
     </mesh>
   );
 }
 
-export default PerfectTriangle;
+export default FlatSideTriangle;

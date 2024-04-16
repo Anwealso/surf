@@ -5,6 +5,7 @@ import { useFrame, Camera } from "@react-three/fiber";
 import type { BoxProps } from "@react-three/cannon";
 import {
   useBox,
+  useSphere,
   // useSphere
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
@@ -17,44 +18,27 @@ const MAX_SPEED = 15;
 const JUMP_SPEED = 5;
 const SPEED_RAMP = 4;
 
-function Platform({ ...props }: BoxProps) {
+type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
+  isTrigger?: boolean;
+  mass?: number;
+  setPosition?: (position: Triplet) => void;
+  setRotation?: (rotation: Triplet) => void;
+};
+
+function Player({ ...props }: BoxProps) {
   const controls = useControls();
   // const playerOnFloor = useRef(true);
   const playerPosition: Vector3 = useMemo(() => new Vector3(), []);
   const playerVelocity: Vector3 = useMemo(() => new Vector3(), []);
   const playerDirection: Vector3 = useMemo(() => new Vector3(), []);
   const playerAngularVelocity: Vector3 = useMemo(() => new Vector3(), []);
-  // const capsule = useMemo(
-  //   () => new Capsule(new Vector3(0, 10, 0), new Vector3(0, 11, 0), 0.5),
-  //   []
-  // );
 
   const [playerOnFloor, _]: [boolean, any] = useState(true);
 
-  const [ref, api] = useBox(
-    () => ({
-      allowSleep: false,
-      args: [1.7, 1, 4],
-      mass: 60,
-      onCollide: (e) => {
-        console.log("bonk", e.body.userData, playerOnFloor);
-        // setPlayerOnFloor(!playerOnFloor);
-      },
-      onCollideBegin: () => {
-        // setPlayerOnFloor(true);
-      },
-      onCollideEnd: () => {
-        // setPlayerOnFloor(false);
-      },
-      ...props,
-    }),
+  const [ref, api] = useSphere(
+    () => ({ args: [1], mass: 1, position: [2, 2, 2] }),
     useRef<Mesh>(null)
   );
-
-  // const [ref, api] = useSphere(
-  //   () => ({ args: [0.1], mass: 1, ...props }),
-  //   useRef<Mesh>(null)
-  // );
 
   const { camera } = useFollowCam(ref);
 
@@ -163,7 +147,6 @@ function Platform({ ...props }: BoxProps) {
       playerOnFloor,
       playerDirection
     );
-    // handleControls(camera, delta, playerVelocity, playerOnFloor.current);
     // teleportPlayerIfOob(capsule, playerVelocity)
   });
 
@@ -176,4 +159,4 @@ function Platform({ ...props }: BoxProps) {
   );
 }
 
-export default Platform;
+export default Player;

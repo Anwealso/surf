@@ -11,8 +11,6 @@ function Plane({
 }) {
   const [ref] = usePlane(
     () => ({
-      material: "ground",
-      type: "Static",
       ...props,
     }),
     useRef<Group>(null)

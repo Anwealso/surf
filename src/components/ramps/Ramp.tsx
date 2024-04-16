@@ -47,17 +47,7 @@ RampProps): JSX.Element {
   return (
     <group ref={ref}>
       {sections.map((args: RampSectionProps, i) => (
-        // <PerfectTriangle
-        //   position={args.position}
-        //   rotation={args.rotation}
-        //   key={i}
-        // />
-        // <FlatSideTriangle
-        //   position={args.position}
-        //   rotation={args.rotation}
-        //   key={i}
-        // />
-        <FlatTopTriangle
+        <FlatSideTriangle
           position={args.position}
           rotation={args.rotation}
           key={i}

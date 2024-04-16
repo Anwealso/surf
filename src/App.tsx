@@ -11,6 +11,8 @@ import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
 
+const PLAYER_HEIGHT: number = 2;
+
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
 
@@ -52,10 +54,10 @@ function App() {
             <Ramp position={[0, 0, 0]} rotation={[0, 0, 0]} length={10} />
 
             <Player
-              position={[0, 2, 8]}
-              rotation={[0, -Math.PI / 4, 0]}
-              angularVelocity={[0, 0.5, 0]}
-              args={[1, 2, 1]}
+              position={[0, 10, 8]}
+              rotation={[0, 0, 0]}
+              mass={60}
+              args={[0.5, PLAYER_HEIGHT, 4, 8]}
             />
 
             <Pillar position={[3, 8, 0]} userData={{ id: "pillar-1" }} />

@@ -1,15 +1,15 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-import type { Mesh } from "three";
-import { Vector3 } from "three";
+import { CapsuleGeometry, DoubleSide, Group, Vector3 } from "three";
 import { useFrame, Camera } from "@react-three/fiber";
-import type { BoxProps } from "@react-three/cannon";
 import {
-  useBox,
+  CompoundBodyProps,
+  Triplet,
+  useCompoundBody,
   useSphere,
-  // useSphere
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
+import { Capsule } from "@react-three/drei";
 
 // const STEPS_PER_FRAME = 5;
 const GROUND_SPEED = 5;
@@ -19,13 +19,16 @@ const JUMP_SPEED = 5;
 const SPEED_RAMP = 4;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
-  isTrigger?: boolean;
-  mass?: number;
-  setPosition?: (position: Triplet) => void;
-  setRotation?: (rotation: Triplet) => void;
+  mass: number; // mass of player
+  args: [number, number, number, number]; // shape of the capsule
 };
 
-function Player({ ...props }: BoxProps) {
+function Player({
+  mass,
+  args,
+  position,
+  ...props
+}: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
   // const playerOnFloor = useRef(true);
   const playerPosition: Vector3 = useMemo(() => new Vector3(), []);
@@ -35,12 +38,36 @@ function Player({ ...props }: BoxProps) {
 
   const [playerOnFloor, _]: [boolean, any] = useState(true);
 
-  const [ref, api] = useSphere(
-    () => ({ args: [1], mass: 1, position: [2, 2, 2] }),
-    useRef<Mesh>(null)
+  // const [ref, api] = useSphere(
+  //   () => ({ args: [1], mass: 1, position: [2, 2, 2] }),
+  //   useRef<Mesh>(null)
+  // );
+
+  const [ref, api] = useCompoundBody(
+    () => ({
+      mass: 60,
+      position: position,
+      fixedRotation: true,
+      ...props,
+      shapes: [
+        {
+          args: [args[0]],
+          position: [0, -args[1] / 2, 0],
+          rotation: [0, 0, 0],
+          type: "Sphere",
+        },
+        {
+          args: [args[0]],
+          position: [0, +args[1] / 2, 0],
+          rotation: [0, 0, 0],
+          type: "Sphere",
+        },
+      ],
+    }),
+    useRef<Group>(null)
   );
 
-  const { camera } = useFollowCam(ref);
+  const { camera } = useFollowCam(ref, args[1] / 2);
 
   // // function teleportPlayerIfOob(camera, capsule, playerVelocity: Vector3) {
   // function teleportPlayerIfOob(capsule, playerVelocity: Vector3) {
@@ -129,13 +156,13 @@ function Player({ ...props }: BoxProps) {
       }
     }
     api.velocity.set(playerVelocity.x, playerVelocity.y, playerVelocity.z);
-    api.rotation.set(0, 0, 0);
+
+    // api.rotation.set(0, 0, 0);
 
     if (reset) {
-      api.position.set(0, 0, 0);
+      api.position.set(...position!);
       api.rotation.set(0, 0, 0);
       api.velocity.set(0, 0, 0);
-      api.angularVelocity.set(0, 0, 0);
     }
   }
 
@@ -151,11 +178,20 @@ function Player({ ...props }: BoxProps) {
   });
 
   return (
-    <mesh ref={ref} receiveShadow>
-      <boxGeometry {...props} />
-      {/* <meshStandardMaterial color="#3333FF" side={DoubleSide} /> */}
-      <meshStandardMaterial color="#3333FF" />
-    </mesh>
+    <group ref={ref}>
+      <mesh receiveShadow castShadow>
+        <capsuleGeometry args={args} />
+        <meshStandardMaterial wireframe color="green" />
+      </mesh>
+      <mesh receiveShadow castShadow position={[0, -args[1] / 2, 0]}>
+        <sphereGeometry args={[args[0]]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+      <mesh receiveShadow castShadow position={[0, +args[1] / 2, 0]}>
+        <sphereGeometry args={[args[0]]} />
+        <meshStandardMaterial color="white" />
+      </mesh>
+    </group>
   );
 }
 

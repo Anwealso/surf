@@ -1,6 +1,6 @@
 import type { Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
-// import { useTexture } from "@react-three/drei";
+import { useTexture } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import { BufferAttribute, BufferGeometry, DoubleSide, type Mesh } from "three";
 import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
@@ -10,7 +10,7 @@ function FlatSideTriangle({
   rotation,
   scale = (1 / 1024) * 4,
 }: RampSectionProps) {
-  // const texture = useTexture("textures/bg.jpeg");
+  const texture = useTexture("./textures/bg.jpeg");
   const geometry = getGeometry([1024 * scale, 544 * scale, 5]);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(

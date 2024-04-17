@@ -1,7 +1,7 @@
 import type { Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
 import { useMemo, useRef } from "react";
-import { BufferAttribute, BufferGeometry, DoubleSide, type Mesh } from "three";
+import { BufferAttribute, BufferGeometry, type Mesh } from "three";
 import {
   type RampSectionProps,
   toConvexProps,

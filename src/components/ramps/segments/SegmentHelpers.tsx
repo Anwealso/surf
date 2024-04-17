@@ -1,12 +1,10 @@
 import type { ConvexPolyhedronProps, Triplet } from "@react-three/cannon";
-import { Ref } from "react";
-import { BufferGeometry, Group, Mesh } from "three";
+import { BufferGeometry } from "three";
 import { Geometry } from "three-stdlib";
 
 export const RAMP_RATIO: number = 544 / 512;
 
 export type RampSectionProps = ConvexPolyhedronProps & {
-  // parentRef: Ref<Group>;
   size?: Triplet;
 };
 

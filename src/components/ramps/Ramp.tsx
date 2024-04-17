@@ -1,11 +1,13 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
-import { useMemo, useRef } from "react";
+import {
+  // useMemo,
+  useRef,
+} from "react";
 import { Group } from "three";
 import { RampSectionProps } from "./segments/SegmentHelpers";
-import PerfectTriangle from "./segments/PerfectTriangle";
+// import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
-import FlatTopTriangle from "./segments/FlatTopTriangle";
-import { RollerCoasterLiftersGeometry } from "three/examples/jsm/Addons.js";
+// import FlatTopTriangle from "./segments/FlatTopTriangle";
 
 export enum TwistAxis {
   x,
@@ -22,9 +24,9 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
 function Ramp({
   position,
   rotation,
-  twist,
-  rampDensity,
-}: RampProps): JSX.Element {
+}: // twist,
+// rampDensity,
+RampProps): JSX.Element {
   const ref = useRef<Group>(null!);
 
   const dtheta: number = 0.1;

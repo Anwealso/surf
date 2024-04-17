@@ -1,15 +1,20 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-import { CapsuleGeometry, DoubleSide, Group, Vector3 } from "three";
+import {
+  // CapsuleGeometry,
+  // DoubleSide,
+  Group,
+  Vector3,
+} from "three";
 import { useFrame, Camera } from "@react-three/fiber";
 import {
   CompoundBodyProps,
-  Triplet,
+  // Triplet,
   useCompoundBody,
-  useSphere,
+  // useSphere,
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
-import { Capsule } from "@react-three/drei";
+// import { Capsule } from "@react-three/drei";
 
 // const STEPS_PER_FRAME = 5;
 const GROUND_SPEED = 5;

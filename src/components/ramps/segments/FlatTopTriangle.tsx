@@ -13,10 +13,10 @@ import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
 function FlatTopTriangle({
   position,
   rotation,
-  scale = (1 / 1024) * 4,
+  size = [1, 1, 1],
 }: RampSectionProps) {
   // const texture = useTexture("textures/bg.jpeg");
-  const geometry = getGeometry([1024 * scale, 544 * scale, 5]);
+  const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
     () => ({

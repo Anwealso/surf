@@ -8,10 +8,10 @@ import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
 function FlatSideTriangle({
   position,
   rotation,
-  scale = (1 / 1024) * 4,
+  size = [1, 1, 1],
 }: RampSectionProps) {
-  const texture = useTexture("./textures/bg.jpeg");
-  const geometry = getGeometry([1024 * scale, 544 * scale, 5]);
+  // const texture = useTexture("./textures/bg.jpeg");
+  const geometry = getScaledGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
     () => ({
@@ -24,7 +24,7 @@ function FlatSideTriangle({
     useRef<Mesh>(null)
   );
 
-  function getGeometry(size: Triplet): BufferGeometry {
+  function getScaledGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
     const baseHeight: number = 0.2;

@@ -50,6 +50,7 @@ RampProps): JSX.Element {
         <FlatSideTriangle
           position={args.position}
           rotation={args.rotation}
+          size={[dz, dz, dz]}
           key={i}
         />
       ))}

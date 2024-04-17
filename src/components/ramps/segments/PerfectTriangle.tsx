@@ -13,10 +13,10 @@ import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
 function PerfectTriangle({
   position,
   rotation,
-  scale = (1 / 1024) * 4,
+  size = [1, 1, 1],
 }: RampSectionProps) {
   // const texture = useTexture("textures/bg.jpeg");
-  const geometry = getGeometry([1024 * scale, 544 * scale, 5]);
+  const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
     () => ({
@@ -32,7 +32,7 @@ function PerfectTriangle({
   function getGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
-    const rampRatio: number = 544 / 512;
+    const rampRatio: number = 544 / 512; // height / width
     // Width of the sloped section of the ramp
     const slopeWidth: number = 1 / rampRatio / 2;
 
@@ -82,6 +82,7 @@ function PerfectTriangle({
       <meshStandardMaterial wireframe color="blue" />
       {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
       {/* <meshBasicMaterial map={texture} /> */}
+      <meshNormalMaterial />
     </mesh>
   );
 }

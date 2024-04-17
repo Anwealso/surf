@@ -2,7 +2,7 @@ import type { ConvexPolyhedronProps, Triplet } from "@react-three/cannon";
 import { BufferGeometry } from "three";
 import { Geometry } from "three-stdlib";
 
-export type RampSectionProps = ConvexPolyhedronProps & { scale?: number };
+export type RampSectionProps = ConvexPolyhedronProps & { size?: Triplet };
 
 export function toConvexProps(
   bufferGeometry: BufferGeometry

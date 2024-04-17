@@ -10,21 +10,12 @@ import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
+import { TwistAxis } from "./components/ramps/Ramp";
 
 const PLAYER_HEIGHT: number = 2;
 
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
-
-  // const SPACING = 15;
-  // const SPACING_SIDE = 5;
-  // const PLATFORM_LENGTH = 20;
-  // const PLATFORM_HEIGHT_OFFSET = 2;
-  // const PLATFORM_TILT_DEG = 45;
-  // const ROTATION_RIGHT = (Math.PI / 180) * PLATFORM_TILT_DEG;
-  // const ROTATION_LEFT = -(Math.PI / 180) * PLATFORM_TILT_DEG;
-  // const POSITION_RIGHT = SPACING_SIDE;
-  // const POSITION_LEFT = -SPACING_SIDE;
 
   return (
     <>
@@ -42,7 +33,6 @@ function App() {
           gravity={[0, -20, 0]}
           allowSleep
         >
-          {/* <Physics shouldInvalidate={false}> */}
           <ToggledDebug>
             <Plane
               position={[0, 0, 16]}
@@ -51,7 +41,19 @@ function App() {
               args={[500, 500]}
             />
 
-            <Ramp position={[0, 0, 0]} rotation={[0, 0, 0]} length={10} />
+            <Ramp
+              position={[0, 0, 0]}
+              rotation={[0, 0, 0]}
+              twist={{ axis: TwistAxis.x, w: 0, v: 2 }}
+              rampDensity={0.5}
+            />
+
+            {/* <Ramp
+              position={[0, 0, 0]}
+              rotation={[0, Math.PI / 4, 0]}
+              twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 10 }}
+              rampDensity={0.5}
+            /> */}
 
             <Player
               position={[0, 10, 8]}
@@ -61,9 +63,9 @@ function App() {
             />
 
             <Pillar position={[3, 8, 0]} userData={{ id: "pillar-1" }} />
-            {/* <Pillar position={[-5, 5, -5]} userData={{ id: "pillar-1" }} /> */}
-            {/* <Pillar position={[0, 5, -5]} userData={{ id: "pillar-2" }} /> */}
-            {/* <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} /> */}
+            <Pillar position={[-5, 5, -5]} userData={{ id: "pillar-1" }} />
+            <Pillar position={[0, 5, -5]} userData={{ id: "pillar-2" }} />
+            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} />
           </ToggledDebug>
         </Physics>
         <Suspense fallback={null}>

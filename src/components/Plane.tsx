@@ -16,7 +16,6 @@ function Plane({
     useRef<Group>(null)
   );
 
-  // Allows us to dictate the plane rotation from the horizontal rather than the vertical in the parent
   return (
     <group ref={ref}>
       <mesh receiveShadow>

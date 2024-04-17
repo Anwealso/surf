@@ -1,21 +1,18 @@
 import type { Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
-// import { useTexture } from "@react-three/drei";
 import { useMemo, useRef } from "react";
+import { BufferAttribute, BufferGeometry, DoubleSide, type Mesh } from "three";
 import {
-  BufferAttribute,
-  BufferGeometry,
-  // DoubleSide,
-  type Mesh,
-} from "three";
-import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
+  type RampSectionProps,
+  toConvexProps,
+  RAMP_RATIO,
+} from "./SegmentHelpers";
 
 function PerfectTriangle({
   position,
   rotation,
   size = [1, 1, 1],
 }: RampSectionProps) {
-  // const texture = useTexture("textures/bg.jpeg");
   const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
@@ -32,9 +29,8 @@ function PerfectTriangle({
   function getGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
-    const rampRatio: number = 544 / 512; // height / width
     // Width of the sloped section of the ramp
-    const slopeWidth: number = 1 / rampRatio / 2;
+    const slopeWidth: number = 1 / RAMP_RATIO / 2;
 
     const vertices = new Float32Array([
       // Front face points
@@ -81,8 +77,7 @@ function PerfectTriangle({
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
       <meshStandardMaterial wireframe color="blue" />
       {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
-      {/* <meshBasicMaterial map={texture} /> */}
-      <meshNormalMaterial />
+      {/* <meshNormalMaterial side={DoubleSide} /> */}
     </mesh>
   );
 }

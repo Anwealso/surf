@@ -14,26 +14,15 @@ export default function useFollowCam(
   const pitch = useMemo(() => new Object3D(), []);
   const worldPosition = useMemo(() => new Vector3(), []);
 
-  // function onDocumentMouseMove(e) {
-  //   if (document.pointerLockElement) {
-  //     e.preventDefault();
-  //     yaw.rotation.y -= e.movementX * 0.002;
-  //     // const v = pitch.rotation.x - e.movementY * 0.002;
-  //     // if (v > -1 && v < 0.1) {
-  //     //   pitch.rotation.x = v;
-  //     // }
-  //   }
-  // }
-
-  // function onDocumentMouseWheel(e) {
-  //   if (document.pointerLockElement) {
-  //     e.preventDefault();
-  //     const v = camera.position.z + e.deltaY * 0.005;
-  //     if (v >= 0.5 && v <= 5) {
-  //       camera.position.z = v;
-  //     }
-  //   }
-  // }
+  function onDocumentMouseWheel(e) {
+    if (document.pointerLockElement) {
+      e.preventDefault();
+      const v = camera.position.z + e.deltaY * 0.005;
+      if (v >= 0.5 && v <= 5) {
+        camera.position.z = v;
+      }
+    }
+  }
 
   useEffect(() => {
     scene.add(pivot);
@@ -42,6 +31,14 @@ export default function useFollowCam(
     yaw.add(pitch);
     pitch.add(camera);
     camera.position.set(0, heightOffset, 0);
+
+    // scene.add(camera);
+    // document.addEventListener("mousewheel", onDocumentMouseWheel, {
+    //   passive: false,
+    // });
+    // return () => {
+    //   document.removeEventListener("mousewheel", onDocumentMouseWheel);
+    // };
   }, [camera]);
 
   useFrame(() => {

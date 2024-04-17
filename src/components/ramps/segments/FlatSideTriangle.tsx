@@ -1,19 +1,23 @@
 import type { Triplet } from "@react-three/cannon";
 import { useConvexPolyhedron } from "@react-three/cannon";
-import { useTexture } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import { BufferAttribute, BufferGeometry, DoubleSide, type Mesh } from "three";
-import { type RampSectionProps, toConvexProps } from "./SegmentHelpers";
+import {
+  type RampSectionProps,
+  toConvexProps,
+  RAMP_RATIO,
+} from "./SegmentHelpers";
 
 function FlatSideTriangle({
+  // parentRef,
   position,
   rotation,
   size = [1, 1, 1],
 }: RampSectionProps) {
-  // const texture = useTexture("./textures/bg.jpeg");
+  // const meshRef = useRef<Group>(null!);
   const geometry = getScaledGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
-  const [ref] = useConvexPolyhedron(
+  const [ref, _] = useConvexPolyhedron(
     () => ({
       material: "ground",
       type: "Static",
@@ -24,13 +28,23 @@ function FlatSideTriangle({
     useRef<Mesh>(null)
   );
 
+  console.log(ref);
+  // // api.quaternion.copy(ref.current!.quaternion);
+  // // api.quaternion.set(1, 0, 0, Math.PI / 4);
+  // api.rotation.set(0, 0, Math.PI / 2);
+  // ref.current?.rotation.set(0, 0, Math.PI / 2);
+
+  // ref.current?.applyQuaternion;
+  // ref.current?.getWorldQuaternion;
+  // ref.current?.getWorldPosition;
+  // body.quaternion.copy(mesh.quaternion);
+
   function getScaledGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
     const baseHeight: number = 0.2;
-    const rampRatio: number = 544 / 512;
     // Width of the sloped section of the ramp
-    const slopeWidth: number = (1 - baseHeight) / rampRatio / 2;
+    const slopeWidth: number = (1 - baseHeight) / RAMP_RATIO / 2;
 
     const vertices = new Float32Array([
       // Front face points
@@ -94,10 +108,9 @@ function FlatSideTriangle({
 
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
-      {/* <meshStandardMaterial wireframe color="blue" /> */}
+      <meshStandardMaterial wireframe color="blue" />
       {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
-      {/* <meshBasicMaterial map={texture} /> */}
-      <meshNormalMaterial />
+      {/* <meshNormalMaterial side={DoubleSide} /> */}
     </mesh>
   );
 }

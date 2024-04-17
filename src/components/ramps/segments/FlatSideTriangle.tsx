@@ -108,9 +108,9 @@ function FlatSideTriangle({
 
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
-      <meshStandardMaterial wireframe color="blue" />
-      {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
-      {/* <meshNormalMaterial side={DoubleSide} /> */}
+      {/* <meshStandardMaterial wireframe color="blue" /> */}
+      {/* <meshStandardMaterial color={"blue"} /> */}
+      <meshNormalMaterial />
     </mesh>
   );
 }

@@ -28,17 +28,6 @@ function FlatSideTriangle({
     useRef<Mesh>(null)
   );
 
-  console.log(ref);
-  // // api.quaternion.copy(ref.current!.quaternion);
-  // // api.quaternion.set(1, 0, 0, Math.PI / 4);
-  // api.rotation.set(0, 0, Math.PI / 2);
-  // ref.current?.rotation.set(0, 0, Math.PI / 2);
-
-  // ref.current?.applyQuaternion;
-  // ref.current?.getWorldQuaternion;
-  // ref.current?.getWorldPosition;
-  // body.quaternion.copy(mesh.quaternion);
-
   function getScaledGeometry(size: Triplet): BufferGeometry {
     const geometry = new BufferGeometry();
 
@@ -48,18 +37,18 @@ function FlatSideTriangle({
 
     const vertices = new Float32Array([
       // Front face points
+      ...[-slopeWidth, baseHeight, -1],
+      ...[0, 1, -1],
+      ...[+slopeWidth, baseHeight, -1],
+      // Back face points
       ...[-slopeWidth, baseHeight, 0],
       ...[0, 1, 0],
       ...[+slopeWidth, baseHeight, 0],
-      // Back face points
-      ...[-slopeWidth, baseHeight, 1],
-      ...[0, 1, 1],
-      ...[+slopeWidth, baseHeight, 1],
       // Extra bottom points for base
+      ...[-slopeWidth, 0, -1],
+      ...[+slopeWidth, 0, -1],
       ...[-slopeWidth, 0, 0],
       ...[+slopeWidth, 0, 0],
-      ...[-slopeWidth, 0, 1],
-      ...[+slopeWidth, 0, 1],
     ]);
 
     const indices = [

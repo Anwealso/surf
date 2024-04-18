@@ -34,13 +34,13 @@ function PerfectTriangle({
 
     const vertices = new Float32Array([
       // Front face points
+      ...[-slopeWidth, 0, -1],
+      ...[0, 1, -1],
+      ...[+slopeWidth, 0, -1],
+      // Back face points
       ...[-slopeWidth, 0, 0],
       ...[0, 1, 0],
       ...[+slopeWidth, 0, 0],
-      // Back face points
-      ...[-slopeWidth, 0, 1],
-      ...[0, 1, 1],
-      ...[+slopeWidth, 0, 1],
     ]);
 
     const indices = [

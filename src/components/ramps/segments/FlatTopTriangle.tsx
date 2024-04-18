@@ -38,21 +38,21 @@ function FlatTopTriangle({
 
     const vertices = new Float32Array([
       // Front face points
-      ...[-slopeWidth, baseHeight, 0],
-      ...[-topCutWidth / 2, 1, 0], // 1
-      ...[+slopeWidth, baseHeight, 0],
+      ...[-slopeWidth, baseHeight, -1],
+      ...[-topCutWidth / 2, 1, -1], // 1
+      ...[+slopeWidth, baseHeight, -1],
       // Back face points
-      ...[-slopeWidth, baseHeight, 1],
-      ...[-topCutWidth / 2, 1, 1], // 4
-      ...[+slopeWidth, baseHeight, 1],
+      ...[-slopeWidth, baseHeight, 0],
+      ...[-topCutWidth / 2, 1, 0], // 4
+      ...[+slopeWidth, baseHeight, 0],
       // Extra bottom points for base
+      ...[-slopeWidth, 0, -1],
+      ...[+slopeWidth, 0, -1],
       ...[-slopeWidth, 0, 0],
       ...[+slopeWidth, 0, 0],
-      ...[-slopeWidth, 0, 1],
-      ...[+slopeWidth, 0, 1],
       // Extra top-right point for front and back faces
-      ...[+topCutWidth / 2, 1, 0], // 10
-      ...[+topCutWidth / 2, 1, 1], // 11
+      ...[+topCutWidth / 2, 1, -1], // 10
+      ...[+topCutWidth / 2, 1, 0], // 11
     ]);
 
     const indices = [

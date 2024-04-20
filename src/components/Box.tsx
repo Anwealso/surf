@@ -1,25 +1,25 @@
-import * as THREE from "three";
-import { useRef, useState } from "react";
-import * as R3F from "@react-three/fiber";
+import type { Mesh } from "three";
+import { useRef } from "react";
+import type { BoxProps } from "@react-three/cannon";
+import { useBox } from "@react-three/cannon";
+import { useTexture } from "@react-three/drei";
 
-function Box(props: R3F.ThreeElements["mesh"]) {
-  const meshRef = useRef<THREE.Mesh>(null!);
-  const [hovered, setHover] = useState(false);
-  const [active, setActive] = useState(false);
+function Box({ ...props }: BoxProps) {
+  const [ref] = useBox(
+    () => ({
+      material: "ground",
+      type: "Static",
+      ...props,
+    }),
+    useRef<Mesh>(null)
+  );
 
-  R3F.useFrame((_, delta) => (meshRef.current.rotation.x += delta));
-  R3F.useFrame((_, delta) => (meshRef.current.rotation.y += delta));
+  const texture = useTexture("textures/square_tiles_diff_4k.jpg");
+
   return (
-    <mesh
-      {...props}
-      ref={meshRef}
-      scale={active ? 1.5 : 1}
-      onClick={() => setActive(!active)}
-      onPointerOver={() => setHover(true)}
-      onPointerOut={() => setHover(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? "hotpink" : "orange"} />
+    <mesh ref={ref} castShadow>
+      <boxGeometry {...props} />
+      <meshBasicMaterial map={texture} />
     </mesh>
   );
 }

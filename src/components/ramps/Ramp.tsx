@@ -26,6 +26,8 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   setRotation?: (rotation: Triplet) => void;
 };
 
+const CROSS_SECTION_SCALE: number = 6;
+
 function Ramp({
   position,
   rotation,
@@ -38,7 +40,6 @@ function Ramp({
 
   const r = twist.w == 0 ? twist.v : twist.v / twist.w;
   const numSections = Math.floor(Math.abs(twist.v) / segmentLegth);
-  const crossSectionScale: number = 4;
 
   function getRampSections(): RampSectionProps[] {
     let rampSections: RampSectionProps[] = [];
@@ -63,8 +64,6 @@ function Ramp({
         0
       );
 
-      console.log(bodyFrameCoords.position);
-
       // Rotate those coordinates according to the parents orientation to get the world position
       const worldFrameCoords = bodyFrameCoords.copy(bodyFrameCoords);
       const alpha: number = rotation![0]; // rotation about the world x axis
@@ -72,7 +71,7 @@ function Ramp({
       const gamma: number = rotation![2]; // rotation about the world z axis
 
       // Compute homogeneous transformation matrix
-      // Using extrinsic rotation matrix ()
+      // Using extrinsic rotation matrix
       worldFrameCoords.applyMatrix4(
         new Matrix4(
           ...[
@@ -136,7 +135,7 @@ function Ramp({
               <PerfectTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[crossSectionScale, crossSectionScale, segmentLegth]}
+                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
                 material={material}
                 key={i}
                 {...props}
@@ -147,7 +146,7 @@ function Ramp({
               <FlatSideTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[crossSectionScale, crossSectionScale, segmentLegth]}
+                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
                 material={material}
                 key={i}
                 {...props}
@@ -158,7 +157,7 @@ function Ramp({
               <FlatTopTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[crossSectionScale, crossSectionScale, segmentLegth]}
+                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
                 material={material}
                 key={i}
                 {...props}

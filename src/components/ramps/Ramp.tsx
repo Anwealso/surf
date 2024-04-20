@@ -1,11 +1,10 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
 import { useMemo, useRef } from "react";
-import { Group, Matrix4, Object3D, Vector3 } from "three";
+import { Group, Matrix4, Object3D } from "three";
 import { RampSectionProps } from "./segments/SegmentHelpers";
 import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
 import FlatTopTriangle from "./segments/FlatTopTriangle";
-import { useTexture } from "@react-three/drei";
 
 export enum TwistAxis {
   x,

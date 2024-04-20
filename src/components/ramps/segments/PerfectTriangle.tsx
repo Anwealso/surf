@@ -7,7 +7,6 @@ import {
   toConvexProps,
   RAMP_RATIO,
 } from "./SegmentHelpers";
-import { useTexture } from "@react-three/drei";
 
 function PerfectTriangle({
   position,

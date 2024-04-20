@@ -1,9 +1,7 @@
-import { Debug, Physics } from "@react-three/cannon";
+import { Physics } from "@react-three/cannon";
 import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import { useToggledControl } from "./components/useToggledControl";
-import Plane from "./components/Plane";
 import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
@@ -22,7 +20,7 @@ const WORLDBOX_DIMS_Y: number = 80;
 const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
-  const ToggledDebug = useToggledControl(Debug, "?");
+  // const ToggledDebug = useToggledControl(Debug, "?");
 
   return (
     <>
@@ -59,12 +57,12 @@ function App() {
             args={[WORLDBOX_DIMS_X, 20, 1]}
           />
 
-          <Plane
+          {/* <Plane
             position={[0, -100, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
             userData={{ id: "floor" }}
             args={[500, 500]}
-          />
+          /> */}
 
           <Ramp
             position={[0, -15, -5]}

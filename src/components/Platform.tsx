@@ -14,17 +14,11 @@ function Platform({ ...props }: BoxProps) {
     useRef<Mesh>(null)
   );
 
-  // const texture = useTexture("textures/bg.jpeg");
-  // const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
-  // const texture = useTexture("textures/long_white_tiles_diff_4k.jpg");
-  // const texture = useTexture("textures/rubber_tiles_diff_4k.jpg");
   const texture = useTexture("textures/square_tiles_diff_4k.jpg");
-  // const texture = useTexture("textures/bg.jpg");
 
   return (
     <mesh ref={ref} castShadow>
       <boxGeometry {...props} />
-      {/* <meshPhongMaterial color="grey" /> */}
       <meshBasicMaterial map={texture} />
     </mesh>
   );

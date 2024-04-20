@@ -14,6 +14,7 @@ function PerfectTriangle({
   rotation,
   material,
   size = [1, 1, 1],
+  ...props
 }: RampSectionProps & { material: any }): JSX.Element {
   const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
@@ -24,6 +25,7 @@ function PerfectTriangle({
       args,
       position,
       rotation,
+      ...props,
     }),
     useRef<Mesh>(null)
   );

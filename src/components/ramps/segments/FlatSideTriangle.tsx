@@ -13,6 +13,7 @@ function FlatSideTriangle({
   rotation,
   material,
   size = [1, 1, 1],
+  ...props
 }: RampSectionProps & { material: any }): JSX.Element {
   // const meshRef = useRef<Group>(null!);
   const geometry = getScaledGeometry(size);
@@ -24,6 +25,7 @@ function FlatSideTriangle({
       args,
       position,
       rotation,
+      ...props,
     }),
     useRef<Mesh>(null)
   );

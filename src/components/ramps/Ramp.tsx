@@ -32,12 +32,11 @@ function Ramp({
   crossSection,
   twist,
   segmentLegth,
+  ...props
 }: RampProps): JSX.Element {
   const ref = useRef<Group>(null!);
 
-  const r = twist.v / twist.w;
-
-  // const numSections = Math.ceil(twist.v / segmentLegth);
+  const r = twist.w == 0 ? twist.v : twist.v / twist.w;
   const numSections = Math.floor(twist.v / segmentLegth);
   const crossSectionScale: number = 4;
 
@@ -54,7 +53,9 @@ function Ramp({
         twist.axis == TwistAxis.x
           ? r * (1 - Math.cos(i * (twist.w / numSections)))
           : 0,
-        -r * Math.sin(i * (twist.w / numSections))
+        twist.w == 0
+          ? -r * (i / numSections)
+          : -r * Math.sin(i * (twist.w / numSections))
       );
       bodyFrameCoords.rotation.set(
         twist.axis == TwistAxis.x ? twist.w * (i / numSections) : 0,
@@ -62,16 +63,24 @@ function Ramp({
         0
       );
 
+      console.log(bodyFrameCoords.position);
+
       // Rotate those coordinates according to the parents orientation to get the world position
       const worldFrameCoords = bodyFrameCoords.copy(bodyFrameCoords);
       const positionVector: Vector3 = new Vector3(...position!);
       const rotationVector: Vector3 = new Vector3(...rotation!);
       const theta: number = rotationVector.length();
+      rotationVector.normalize();
       const x: number = rotationVector.x;
       const y: number = rotationVector.y;
       const z: number = rotationVector.z;
 
       // console.log(positionVector);
+      // console.log(`theta: ${theta / Math.PI} * PI`);
+      // console.log(`x: ${x}`);
+      // console.log(`y: ${y}`);
+      // console.log(`z: ${z}`);
+      // console.log("===============================");
 
       worldFrameCoords.applyMatrix4(
         new Matrix4(
@@ -135,6 +144,7 @@ function Ramp({
                 size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
+                {...props}
               />
             ));
           case CrossSection.FlatSideTriangle:
@@ -145,6 +155,7 @@ function Ramp({
                 size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
+                {...props}
               />
             ));
           case CrossSection.FlatTopTriangle:
@@ -155,6 +166,7 @@ function Ramp({
                 size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
+                {...props}
               />
             ));
         }

@@ -42,7 +42,11 @@ function App() {
           />
 
           <Platform
-            position={[0, 30, 0]}
+            position={[
+              0,
+              (50 * Math.sin(Math.PI / 2) * 2) / Math.PI,
+              -5 + (-(50 * Math.sin(Math.PI / 2)) * 2) / Math.PI,
+            ]}
             rotation={[-Math.PI / 2, 0, 0]}
             userData={{ id: "floor" }}
             args={[10, 10, 2]}
@@ -66,8 +70,9 @@ function App() {
           <Ramp
             position={[0, 0, 0]}
             rotation={[0, 0, 0]}
+            // rotation={[0, Math.PI, 0]}
             // rotation={[Math.PI / 2, 0, 0]}
-            twist={{ axis: TwistAxis.x, w: Math.PI * (2 / 3), v: 50 }}
+            twist={{ axis: TwistAxis.x, w: Math.PI / 2, v: 50 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={2}
           />

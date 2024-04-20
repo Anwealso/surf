@@ -37,7 +37,7 @@ function Ramp({
   const ref = useRef<Group>(null!);
 
   const r = twist.w == 0 ? twist.v : twist.v / twist.w;
-  const numSections = Math.floor(twist.v / segmentLegth);
+  const numSections = Math.floor(Math.abs(twist.v) / segmentLegth);
   const crossSectionScale: number = 4;
 
   function getRampSections(): RampSectionProps[] {
@@ -67,40 +67,35 @@ function Ramp({
 
       // Rotate those coordinates according to the parents orientation to get the world position
       const worldFrameCoords = bodyFrameCoords.copy(bodyFrameCoords);
-      const positionVector: Vector3 = new Vector3(...position!);
-      const rotationVector: Vector3 = new Vector3(...rotation!);
-      const theta: number = rotationVector.length();
-      rotationVector.normalize();
-      const x: number = rotationVector.x;
-      const y: number = rotationVector.y;
-      const z: number = rotationVector.z;
+      const alpha: number = rotation![0]; // rotation about the world x axis
+      const beta: number = rotation![1]; // rotation about the world y axis
+      const gamma: number = rotation![2]; // rotation about the world z axis
 
-      // console.log(positionVector);
-      // console.log(`theta: ${theta / Math.PI} * PI`);
-      // console.log(`x: ${x}`);
-      // console.log(`y: ${y}`);
-      // console.log(`z: ${z}`);
-      // console.log("===============================");
-
+      // Compute homogeneous transformation matrix
+      // Using extrinsic rotation matrix ()
       worldFrameCoords.applyMatrix4(
         new Matrix4(
           ...[
-            x * x * (1 - Math.cos(theta)) + Math.cos(theta),
-            y * x * (1 - Math.cos(theta)) - z * Math.sin(theta),
-            z * x * (1 - Math.cos(theta)) + y * Math.sin(theta),
-            positionVector.x,
+            Math.cos(beta) * Math.cos(gamma),
+            Math.sin(alpha) * Math.sin(beta) * Math.cos(gamma) -
+              Math.cos(alpha) * Math.sin(gamma),
+            Math.cos(alpha) * Math.sin(beta) * Math.cos(gamma) +
+              Math.sin(alpha) * Math.sin(gamma),
+            position![0],
           ],
           ...[
-            x * y * (1 - Math.cos(theta)) + z * Math.sin(theta),
-            y * y * (1 - Math.cos(theta)) + Math.cos(theta),
-            z * y * (1 - Math.cos(theta)) - x * Math.sin(theta),
-            positionVector.y,
+            Math.cos(beta) * Math.sin(gamma),
+            Math.sin(alpha) * Math.sin(beta) * Math.sin(gamma) +
+              Math.cos(alpha) * Math.cos(gamma),
+            Math.cos(alpha) * Math.sin(beta) * Math.sin(gamma) -
+              Math.sin(alpha) * Math.cos(gamma),
+            position![1],
           ],
           ...[
-            x * z * (1 - Math.cos(theta)) - y * Math.sin(theta),
-            y * z * (1 - Math.cos(theta)) + x * Math.sin(theta),
-            z * z * (1 - Math.cos(theta)) + Math.cos(theta),
-            positionVector.z,
+            -Math.sin(beta),
+            Math.sin(alpha) * Math.cos(beta),
+            Math.cos(alpha) * Math.cos(beta),
+            position![2],
           ],
           ...[0, 0, 0, 1]
         )

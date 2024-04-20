@@ -35,18 +35,14 @@ function App() {
           allowSleep
         >
           <Player
-            position={[0, 2, 5]}
+            position={[0, 2, 20]}
             rotation={[0, 0, 0]}
             mass={60}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
           />
 
           <Platform
-            position={[
-              0,
-              (50 * Math.sin(Math.PI / 2) * 2) / Math.PI,
-              -5 + (-(50 * Math.sin(Math.PI / 2)) * 2) / Math.PI,
-            ]}
+            position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
             userData={{ id: "start_zone" }}
             args={[10, 10, 2]}
@@ -68,15 +64,13 @@ function App() {
           /> */}
 
           <Ramp
-            position={[0, 20, -30]}
+            position={[0, 0, 0]}
             // rotation={[0, 0, 0]}
-
-            // rotation={[0, 0, 0]}
-            // rotation={[Math.PI / 2, 0, 0]}
-            rotation={[0, -Math.PI / 2, 0]}
-            // rotation={[Math.PI / 2, -Math.PI / 2, 0]}
-            twist={{ axis: TwistAxis.y, w: -Math.PI, v: 50 }}
-            crossSection={CrossSection.PerfectTriangle}
+            // rotation={[-Math.PI / 2, 0, 0]}
+            // rotation={[0, -Math.PI / 2, 0]}
+            rotation={[-Math.PI / 2, -Math.PI / 2, 0]}
+            twist={{ axis: TwistAxis.y, w: 0, v: -50 }}
+            crossSection={CrossSection.FlatSideTriangle}
             segmentLegth={2}
           />
 

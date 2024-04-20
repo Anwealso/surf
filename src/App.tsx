@@ -35,27 +35,27 @@ function App() {
         >
           <Debug>
             <Plane
-              position={[0, 0, 16]}
+              position={[0, 0, 0]}
               rotation={[-Math.PI / 2, 0, 0]}
               userData={{ id: "floor" }}
               args={[500, 500]}
             />
 
-            <Ramp
-              position={[0, 0, 0]}
-              // rotation={[0, Math.PI / 4, 0]}
-              rotation={[0, 0, 0]}
-              twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 50 }}
-              // twist={{ axis: TwistAxis.y, w: 0, v: 50 }}
-              rampDensity={0.5}
-            />
+            {/* <Ramp
+            position={[0, 0, 0]}
+            // rotation={[0, Math.PI / 4, 0]}
+            rotation={[0, 0, 0]}
+            twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 50 }}
+            // twist={{ axis: TwistAxis.y, w: 0, v: 50 }}
+            rampDensity={0.5}
+          /> */}
 
             <Ramp
-              position={[0, 0, 0]}
-              // rotation={[0, Math.PI / 4, 0]}
-              rotation={[0, Math.PI / 2, 0]}
-              twist={{ axis: TwistAxis.x, w: Math.PI / 2, v: 50 }}
-              rampDensity={0.5}
+              position={[0, 0, 2]}
+              rotation={[0, 0, Math.PI / 2]}
+              // rotation={[Math.PI / 2, 0, 0]}
+              twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 20 }}
+              rampDensity={0.25}
             />
 
             <Player
@@ -64,16 +64,6 @@ function App() {
               mass={60}
               args={[0.5, PLAYER_HEIGHT, 8, 8]}
             />
-
-            {/* <Pillar
-              position={[0, 0, 0]}
-              rotation={[Math.PI / 2, 0, 0]}
-              userData={{ id: "pillar-1" }}
-              mass={0}
-            /> */}
-            {/* <Pillar position={[-5, 5, -5]} userData={{ id: "pillar-1" }} />
-            <Pillar position={[0, 5, -5]} userData={{ id: "pillar-2" }} />
-            <Pillar position={[5, 5, -5]} userData={{ id: "pillar-3" }} /> */}
           </Debug>
         </Physics>
         <Suspense fallback={null}>

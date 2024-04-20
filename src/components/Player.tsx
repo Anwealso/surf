@@ -46,18 +46,19 @@ function Player({
   const playerDirection: Vector3 = useMemo(() => new Vector3(), []);
   const playerAngularVelocity: Vector3 = useMemo(() => new Vector3(), []);
 
-  const [playerOnFloor, _]: [boolean, any] = useState(true);
-
-  // const [ref, api] = useSphere(
-  //   () => ({ args: [1], mass: 1, position: [2, 2, 2] }),
-  //   useRef<Mesh>(null)
-  // );
+  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(true);
 
   const [ref, api] = useCompoundBody(
     () => ({
       mass: 60,
       position: position,
       fixedRotation: true,
+      onCollideBegin: () => {
+        setPlayerOnFloor(true);
+      },
+      onCollideEnd: () => {
+        // setPlayerOnFloor(false);
+      },
       ...props,
       shapes: [
         {

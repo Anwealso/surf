@@ -37,6 +37,7 @@ function Player({
   mass,
   args,
   position,
+  rotation,
   ...props
 }: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
@@ -178,7 +179,7 @@ function Player({
 
     if (reset) {
       api.position.set(...position!);
-      api.rotation.set(0, 0, 0);
+      api.rotation.set(...rotation!);
       api.velocity.set(0, 0, 0);
     }
   }

@@ -9,11 +9,11 @@ import {
 } from "./SegmentHelpers";
 
 function FlatSideTriangle({
-  // parentRef,
   position,
   rotation,
+  material,
   size = [1, 1, 1],
-}: RampSectionProps) {
+}: RampSectionProps & { material: any }): JSX.Element {
   // const meshRef = useRef<Group>(null!);
   const geometry = getScaledGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
@@ -97,9 +97,7 @@ function FlatSideTriangle({
 
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
-      {/* <meshStandardMaterial wireframe color="blue" /> */}
-      {/* <meshStandardMaterial color={"blue"} /> */}
-      <meshNormalMaterial />
+      {material}
     </mesh>
   );
 }

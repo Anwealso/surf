@@ -7,12 +7,14 @@ import {
   toConvexProps,
   RAMP_RATIO,
 } from "./SegmentHelpers";
+import { useTexture } from "@react-three/drei";
 
 function PerfectTriangle({
   position,
   rotation,
+  material,
   size = [1, 1, 1],
-}: RampSectionProps) {
+}: RampSectionProps & { material: any }): JSX.Element {
   const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
@@ -75,9 +77,7 @@ function PerfectTriangle({
 
   return (
     <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
-      <meshStandardMaterial wireframe color="blue" />
-      {/* <meshStandardMaterial color={"blue"} side={DoubleSide} /> */}
-      {/* <meshNormalMaterial side={DoubleSide} /> */}
+      {material}
     </mesh>
   );
 }

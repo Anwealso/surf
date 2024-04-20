@@ -10,7 +10,8 @@ import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
-import { TwistAxis } from "./components/ramps/Ramp";
+import { TwistAxis, CrossSection } from "./components/ramps/Ramp";
+import Platform from "./components/Platform";
 
 const PLAYER_HEIGHT: number = 2;
 
@@ -33,38 +34,52 @@ function App() {
           gravity={[0, -20, 0]}
           allowSleep
         >
-          <Debug>
-            <Plane
-              position={[0, 0, 0]}
-              rotation={[-Math.PI / 2, 0, 0]}
-              userData={{ id: "floor" }}
-              args={[500, 500]}
-            />
-
-            {/* <Ramp
-            position={[0, 0, 0]}
-            // rotation={[0, Math.PI / 4, 0]}
+          <Player
+            position={[0, 35, 0]}
             rotation={[0, 0, 0]}
-            twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 50 }}
-            // twist={{ axis: TwistAxis.y, w: 0, v: 50 }}
-            rampDensity={0.5}
+            mass={60}
+            args={[0.5, PLAYER_HEIGHT, 8, 8]}
+          />
+
+          <Platform
+            position={[0, 30, 0]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            userData={{ id: "floor" }}
+            args={[10, 10, 2]}
+          />
+
+          <Plane
+            position={[0, 0, 0]}
+            rotation={[-Math.PI / 2, 0, 0]}
+            userData={{ id: "floor" }}
+            args={[500, 500]}
+          />
+
+          {/* Reference plane */}
+          {/* <Plane
+            position={[2, 0, 0]}
+            rotation={[0, -Math.PI / 2, 0]}
+            userData={{ id: "floor" }}
+            args={[500, 500]}
           /> */}
 
-            <Ramp
-              position={[0, 0, 2]}
-              rotation={[0, 0, Math.PI / 2]}
-              // rotation={[Math.PI / 2, 0, 0]}
-              twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 20 }}
-              rampDensity={0.25}
-            />
+          <Ramp
+            position={[0, 0, 0]}
+            rotation={[0, 0, 0]}
+            // rotation={[Math.PI / 2, 0, 0]}
+            twist={{ axis: TwistAxis.x, w: Math.PI * (2 / 3), v: 50 }}
+            crosssection={CrossSection.PerfectTriangle}
+            rampDensity={2}
+          />
 
-            <Player
-              position={[6, 10, 8]}
-              rotation={[0, 0, 0]}
-              mass={60}
-              args={[0.5, PLAYER_HEIGHT, 8, 8]}
-            />
-          </Debug>
+          {/* <Ramp
+            position={[0, 0, 2]}
+            rotation={[0, 0, Math.PI / 2]}
+            // rotation={[Math.PI / 2, 0, 0]}
+            twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 10 }}
+            crosssection={CrossSection.PerfectTriangle}
+            rampDensity={2}
+          /> */}
         </Physics>
         <Suspense fallback={null}>
           <Environment preset="night" />

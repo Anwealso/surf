@@ -1,23 +1,27 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
-import {
-  useMemo,
-  // useMemo,
-  useRef,
-} from "react";
+import { useMemo, useRef } from "react";
 import { Group, Matrix4, Object3D, Vector3 } from "three";
 import { RampSectionProps } from "./segments/SegmentHelpers";
-// import PerfectTriangle from "./segments/PerfectTriangle";
+import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
-// import FlatTopTriangle from "./segments/FlatTopTriangle";
+import FlatTopTriangle from "./segments/FlatTopTriangle";
+import { useTexture } from "@react-three/drei";
 
 export enum TwistAxis {
   x,
   y,
 }
 
+export enum CrossSection {
+  PerfectTriangle,
+  FlatSideTriangle,
+  FlatTopTriangle,
+}
+
 type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   twist: { axis: TwistAxis; w: number; v: number };
   rampDensity: number;
+  crosssection: CrossSection;
   setPosition?: (position: Triplet) => void;
   setRotation?: (rotation: Triplet) => void;
 };
@@ -25,6 +29,7 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
 function Ramp({
   position,
   rotation,
+  crosssection,
   twist,
   rampDensity,
 }: RampProps): JSX.Element {
@@ -109,20 +114,59 @@ function Ramp({
 
   const rampSections = useMemo(() => getRampSections(), []);
 
+  // const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
+  const material = <meshStandardMaterial wireframe color="blue" />;
+  // const material = <meshStandardMaterial color={"blue"} />;
+  // const material = <meshBasicMaterial map={texture} />;
+  // const material = <meshNormalMaterial />;
   return (
     <group ref={ref}>
-      {rampSections.map((rampSectionArgs: RampSectionProps, i) => (
-        <FlatSideTriangle
-          position={rampSectionArgs.position}
-          rotation={rampSectionArgs.rotation}
-          size={[
-            crossSectionScale,
-            crossSectionScale,
-            crossSectionScale * rampDensity,
-          ]}
-          key={i}
-        />
-      ))}
+      {(() => {
+        switch (crosssection) {
+          case CrossSection.PerfectTriangle:
+            return rampSections.map((rampSectionArgs: RampSectionProps, i) => (
+              <PerfectTriangle
+                position={rampSectionArgs.position}
+                rotation={rampSectionArgs.rotation}
+                size={[
+                  crossSectionScale,
+                  crossSectionScale,
+                  crossSectionScale * rampDensity,
+                ]}
+                material={material}
+                key={i}
+              />
+            ));
+          case CrossSection.FlatSideTriangle:
+            return rampSections.map((rampSectionArgs: RampSectionProps, i) => (
+              <FlatSideTriangle
+                position={rampSectionArgs.position}
+                rotation={rampSectionArgs.rotation}
+                size={[
+                  crossSectionScale,
+                  crossSectionScale,
+                  crossSectionScale * rampDensity,
+                ]}
+                material={material}
+                key={i}
+              />
+            ));
+          case CrossSection.FlatTopTriangle:
+            return rampSections.map((rampSectionArgs: RampSectionProps, i) => (
+              <FlatTopTriangle
+                position={rampSectionArgs.position}
+                rotation={rampSectionArgs.rotation}
+                size={[
+                  crossSectionScale,
+                  crossSectionScale,
+                  crossSectionScale * rampDensity,
+                ]}
+                material={material}
+                key={i}
+              />
+            ));
+        }
+      })()}
     </group>
   );
 }

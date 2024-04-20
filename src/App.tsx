@@ -35,7 +35,7 @@ function App() {
           allowSleep
         >
           <Player
-            position={[0, 35, 0]}
+            position={[5, 2, 0]}
             rotation={[0, 0, 0]}
             mass={60}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
@@ -68,8 +68,8 @@ function App() {
             rotation={[0, 0, 0]}
             // rotation={[Math.PI / 2, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (2 / 3), v: 50 }}
-            crosssection={CrossSection.PerfectTriangle}
-            rampDensity={2}
+            crossSection={CrossSection.PerfectTriangle}
+            segmentLegth={2}
           />
 
           {/* <Ramp
@@ -78,7 +78,7 @@ function App() {
             // rotation={[Math.PI / 2, 0, 0]}
             twist={{ axis: TwistAxis.y, w: Math.PI / 2, v: 10 }}
             crosssection={CrossSection.PerfectTriangle}
-            rampDensity={2}
+            segmentLegth={2}
           /> */}
         </Physics>
         <Suspense fallback={null}>

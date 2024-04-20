@@ -19,9 +19,9 @@ export enum CrossSection {
 }
 
 type RampProps = Pick<BodyProps, "position" | "rotation"> & {
+  crossSection: CrossSection;
   twist: { axis: TwistAxis; w: number; v: number };
-  rampDensity: number;
-  crosssection: CrossSection;
+  segmentLegth: number;
   setPosition?: (position: Triplet) => void;
   setRotation?: (rotation: Triplet) => void;
 };
@@ -29,12 +29,16 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
 function Ramp({
   position,
   rotation,
-  crosssection,
+  crossSection,
   twist,
-  rampDensity,
+  segmentLegth,
 }: RampProps): JSX.Element {
   const ref = useRef<Group>(null!);
-  const numSections = Math.max(twist.v / rampDensity);
+
+  const r = twist.v / twist.w;
+
+  // const numSections = Math.ceil(twist.v / segmentLegth);
+  const numSections = Math.floor(twist.v / segmentLegth);
   const crossSectionScale: number = 4;
 
   function getRampSections(): RampSectionProps[] {
@@ -45,12 +49,12 @@ function Ramp({
       const bodyFrameCoords = new Object3D();
       bodyFrameCoords.position.set(
         twist.axis == TwistAxis.y
-          ? twist.v * (1 - Math.cos((i / numSections) * twist.w))
+          ? r * (1 - Math.cos(i * (twist.w / numSections)))
           : 0,
         twist.axis == TwistAxis.x
-          ? twist.v * (1 - Math.cos((i / numSections) * twist.w))
+          ? r * (1 - Math.cos(i * (twist.w / numSections)))
           : 0,
-        -twist.v * Math.sin(twist.w * (i / numSections))
+        -r * Math.sin(i * (twist.w / numSections))
       );
       bodyFrameCoords.rotation.set(
         twist.axis == TwistAxis.x ? twist.w * (i / numSections) : 0,
@@ -122,17 +126,13 @@ function Ramp({
   return (
     <group ref={ref}>
       {(() => {
-        switch (crosssection) {
+        switch (crossSection) {
           case CrossSection.PerfectTriangle:
             return rampSections.map((rampSectionArgs: RampSectionProps, i) => (
               <PerfectTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[
-                  crossSectionScale,
-                  crossSectionScale,
-                  crossSectionScale * rampDensity,
-                ]}
+                size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
               />
@@ -142,11 +142,7 @@ function Ramp({
               <FlatSideTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[
-                  crossSectionScale,
-                  crossSectionScale,
-                  crossSectionScale * rampDensity,
-                ]}
+                size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
               />
@@ -156,11 +152,7 @@ function Ramp({
               <FlatTopTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[
-                  crossSectionScale,
-                  crossSectionScale,
-                  crossSectionScale * rampDensity,
-                ]}
+                size={[crossSectionScale, crossSectionScale, segmentLegth]}
                 material={material}
                 key={i}
               />

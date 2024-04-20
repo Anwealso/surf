@@ -14,7 +14,7 @@ function FlatSideTriangle({
   material,
   size = [1, 1, 1],
   ...props
-}: RampSectionProps & { material: any }): JSX.Element {
+}: RampSectionProps & { material: JSX.Element }): JSX.Element {
   // const meshRef = useRef<Group>(null!);
   const geometry = getScaledGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
@@ -98,7 +98,14 @@ function FlatSideTriangle({
   }
 
   return (
-    <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={geometry}
+      ref={ref}
+      position={position}
+      rotation={rotation}
+    >
       {material}
     </mesh>
   );

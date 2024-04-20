@@ -1,4 +1,4 @@
-import type { Mesh } from "three";
+import { RepeatWrapping, Vector2, type Mesh } from "three";
 import { useRef } from "react";
 import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
@@ -15,9 +15,13 @@ function Box({ ...props }: BoxProps) {
   );
 
   const texture = useTexture("textures/square_tiles_diff_4k.jpg");
+  const textureScale: number = 0.4;
+
+  texture.wrapS = texture.wrapT = RepeatWrapping;
+  texture.repeat = new Vector2(60 / 20 / textureScale, 20 / 20 / textureScale);
 
   return (
-    <mesh ref={ref} castShadow>
+    <mesh ref={ref}>
       <boxGeometry {...props} />
       <meshBasicMaterial map={texture} />
     </mesh>

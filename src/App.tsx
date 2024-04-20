@@ -4,7 +4,6 @@ import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
 import { useToggledControl } from "./components/useToggledControl";
 import Plane from "./components/Plane";
-import Pillar from "./components/Pillar";
 import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
@@ -12,14 +11,15 @@ import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
 import { TwistAxis, CrossSection } from "./components/ramps/Ramp";
 import Box from "./components/Box";
+import WorldBox from "./components/WorldBox";
 
 const PLAYER_HEIGHT: number = 2;
-const END_BOX_Z: number = -150;
 const END_BOX_Y: number = -45;
+const END_BOX_Z: number = -155;
 
-const MAP_LENGTH: number = 160;
-const MAP_WIDTH: number = 40;
-const MAP_HEIGHT: number = 60;
+const WORLDBOX_DIMS_X: number = 60;
+const WORLDBOX_DIMS_Y: number = 80;
+const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
   const ToggledDebug = useToggledControl(Debug, "?");
@@ -47,30 +47,16 @@ function App() {
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
           />
 
+          <WorldBox
+            position={[0, 20, 10]}
+            dims={[WORLDBOX_DIMS_X, WORLDBOX_DIMS_Y, WORLDBOX_DIMS_Z]}
+          />
+
           <Box
             position={[0, 0, 0]}
             rotation={[-Math.PI / 2, 0, 0]}
             userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-
-          <Box
-            position={[0, 5, 5]}
-            rotation={[0, 0, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-          <Box
-            position={[-5, 5, 0]}
-            rotation={[0, Math.PI / 2, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-          <Box
-            position={[5, 5, 0]}
-            rotation={[0, Math.PI / 2, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
+            args={[WORLDBOX_DIMS_X, 20, 1]}
           />
 
           <Plane
@@ -81,11 +67,11 @@ function App() {
           />
 
           <Ramp
-            position={[0, -15, -10]}
+            position={[0, -15, -5]}
             rotation={[-(Math.PI / 2) + Math.PI / 6, 0, 0]}
             // rotation={[0, Math.PI, 0]}
             // rotation={[Math.PI / 2, 0, 0]}
-            twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.5), v: 80 }}
+            twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.3), v: 90 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={2}
           />
@@ -101,28 +87,10 @@ function App() {
           />
 
           <Box
-            position={[0, END_BOX_Y - 5, END_BOX_Z]}
+            position={[0, END_BOX_Y, END_BOX_Z - 20 / 2]}
             rotation={[-Math.PI / 2, 0, 0]}
             userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-          <Box
-            position={[0, END_BOX_Y, END_BOX_Z - 5]}
-            rotation={[0, 0, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-          <Box
-            position={[-5, END_BOX_Y, END_BOX_Z]}
-            rotation={[0, Math.PI / 2, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
-          />
-          <Box
-            position={[5, END_BOX_Y, END_BOX_Z]}
-            rotation={[0, Math.PI / 2, 0]}
-            userData={{ id: "floor" }}
-            args={[10, 10, 1]}
+            args={[WORLDBOX_DIMS_X, 20, 1]}
           />
         </Physics>
         <Suspense fallback={null}>

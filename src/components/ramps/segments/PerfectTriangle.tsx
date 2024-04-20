@@ -15,7 +15,7 @@ function PerfectTriangle({
   material,
   size = [1, 1, 1],
   ...props
-}: RampSectionProps & { material: any }): JSX.Element {
+}: RampSectionProps & { material: JSX.Element }): JSX.Element {
   const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
@@ -78,7 +78,14 @@ function PerfectTriangle({
   }
 
   return (
-    <mesh castShadow receiveShadow {...{ geometry, position, ref, rotation }}>
+    <mesh
+      castShadow
+      receiveShadow
+      geometry={geometry}
+      ref={ref}
+      position={position}
+      rotation={rotation}
+    >
       {material}
     </mesh>
   );

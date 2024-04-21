@@ -1,8 +1,8 @@
 import { useBox, type Triplet } from "@react-three/cannon";
 import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
-import { BackSide, DoubleSide, Mesh } from "three";
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
+import { BackSide, FrontSide, Mesh } from "three";
+// import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 interface WorldBoxProps {
   position: Triplet; // [x,y,z] position (world box origin at middle of back-top edge
@@ -21,7 +21,7 @@ function WorldBox({ position, dims }: WorldBoxProps) {
       position[1] - dims[1] / 2,
       position[2] - dims[2] / 2,
     ], // left face
-    [position[0], position[1], position[2] - dims[2] / 2], // top face
+    // [position[0], position[1], position[2] - dims[2] / 2], // top face
     [position[0], position[1] - dims[1], position[2] - dims[2] / 2], // bottom face
     [position[0], position[1] - dims[1] / 2, position[2] - dims[2]], // back face
     [position[0], position[1] - dims[1] / 2, position[2]], // front face
@@ -29,7 +29,7 @@ function WorldBox({ position, dims }: WorldBoxProps) {
   const wallDims: Triplet[] = [
     [1, dims[1], dims[2]], // right face
     [1, dims[1], dims[2]], // left face
-    [dims[0], 1, dims[2]], // top face
+    // [dims[0], 1, dims[2]], // top face
     [dims[0], 1, dims[2]], // bottom face
     [dims[0], dims[1], 1], // back face
     [dims[0], dims[1], 1], // front face
@@ -49,29 +49,35 @@ function WorldBox({ position, dims }: WorldBoxProps) {
 
   // Load Image Texture
   const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
-  // const texture = useTexture("textures/uv.png");
-  // const texture = useTexture("textures/crate.png");
   // Load HDR Texture
   // const texture = new RGBELoader().load(
   //   "textures/rustig_koppie_puresky_1k.hdr"
   // );
 
   return (
+    // <mesh
+    //   receiveShadow
+    //   position={[
+    //     position[0],
+    //     position[1] - dims[1] / 2,
+    //     position[2] - dims[2] / 2,
+    //   ]}
+    // >
+    //   {/* <boxGeometry args={dims} />
+    //   <meshBasicMaterial map={texture} side={BackSide} /> */}
+    // </mesh>
+
     <group>
-      <mesh
-        receiveShadow
-        position={[
-          position[0],
-          position[1] - dims[1] / 2,
-          position[2] - dims[2] / 2,
-        ]}
-      >
-        <boxGeometry args={dims} />
-        <meshBasicMaterial map={texture} side={BackSide} />
-        {/* <meshBasicMaterial color={"white"} /> */}
-        {/* <meshStandardMaterial color={"white"} /> */}
-        {/* <meshPhongMaterial color={"white"} /> */}
-      </mesh>
+      {(() => {
+        return wallPositions.map((_, i) => {
+          return (
+            <mesh receiveShadow position={wallPositions[i]}>
+              <boxGeometry args={wallDims[i]} />
+              <meshBasicMaterial map={texture} side={FrontSide} />
+            </mesh>
+          );
+        });
+      })()}
     </group>
   );
 }

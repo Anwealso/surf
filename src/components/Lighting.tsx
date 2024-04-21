@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 
 function Lighting() {
-  const [degraded, degrade] = useState(false);
+  // const [degraded, degrade] = useState(false);
 
   return (
     <>

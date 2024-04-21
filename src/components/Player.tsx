@@ -1,27 +1,16 @@
 import { useEffect, useRef, useMemo, useState } from "react";
-import {
-  // CapsuleGeometry,
-  // DoubleSide,
-  Group,
-  Vector3,
-} from "three";
+import { Group, Vector3 } from "three";
 import { useFrame, Camera } from "@react-three/fiber";
-import {
-  CompoundBodyProps,
-  // Triplet,
-  useCompoundBody,
-  // useSphere,
-} from "@react-three/cannon";
+import { CompoundBodyProps, useCompoundBody } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
-// import { Capsule } from "@react-three/drei";
 
 // const STEPS_PER_FRAME = 5;
-const GROUND_SPEED = 5;
+const GROUND_SPEED = 12;
+const JUMP_SPEED = 7;
 const AIR_SPEED = GROUND_SPEED / 10;
-const MAX_SPEED = 15;
-const JUMP_SPEED = 5;
-const SPEED_RAMP = 4;
+// const MAX_SPEED = 15;
+const RISE_SPEED = 1;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
   mass: number; // mass of player
@@ -30,7 +19,7 @@ type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
     length: number,
     capSegments: number,
     radialSegments: number
-  ]; // shape of the capsule
+  ]; // shape of the player capsule
 };
 
 function Player({
@@ -41,7 +30,6 @@ function Player({
   ...props
 }: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
-  // const playerOnFloor = useRef(true);
   const playerPosition: Vector3 = useMemo(() => new Vector3(), []);
   const playerVelocity: Vector3 = useMemo(() => new Vector3(), []);
   const playerDirection: Vector3 = useMemo(() => new Vector3(), []);
@@ -144,37 +132,65 @@ function Player({
     playerDirection: Vector3
   ) {
     const { backward, jump, forward, left, reset, right } = controls.current;
-    const speedDelta =
-      SPEED_RAMP * delta * (playerOnFloor ? GROUND_SPEED : AIR_SPEED);
+    // const speedDelta = RISE_SPEED * delta * (playerOnFloor ? GROUND_SPEED : AIR_SPEED);
 
     left &&
-      playerVelocity.add(
-        getSideVector(camera, playerDirection).multiplyScalar(-speedDelta)
+      playerVelocity.set(
+        getSideVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).x,
+        getSideVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).y,
+        getSideVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).z
       );
     right &&
-      playerVelocity.add(
-        getSideVector(camera, playerDirection).multiplyScalar(speedDelta)
+      playerVelocity.set(
+        getSideVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).x,
+        getSideVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).y,
+        getSideVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).z
       );
     forward &&
-      playerVelocity.add(
-        getForwardVector(camera, playerDirection).multiplyScalar(speedDelta)
+      playerVelocity.set(
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).x,
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).y,
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          playerOnFloor ? GROUND_SPEED : AIR_SPEED
+        ).z
       );
     backward &&
-      playerVelocity.add(
-        getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta)
+      playerVelocity.set(
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).x,
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).y,
+        getForwardVector(camera, playerDirection).multiplyScalar(
+          -(playerOnFloor ? GROUND_SPEED : AIR_SPEED)
+        ).z
       );
-    playerVelocity.clamp(
-      new Vector3(-MAX_SPEED, -Number.MAX_VALUE, -MAX_SPEED),
-      new Vector3(MAX_SPEED, Number.MAX_VALUE, MAX_SPEED)
-    );
 
-    if (playerOnFloor) {
-      if (jump) {
-        playerVelocity.y = JUMP_SPEED;
-      }
+    // if (playerOnFloor) {
+    if (jump) {
+      playerVelocity.y = JUMP_SPEED;
     }
+    // }
     api.velocity.set(playerVelocity.x, playerVelocity.y, playerVelocity.z);
 
+    // Reset the players rotation back to forwards on respawn
     // api.rotation.set(0, 0, 0);
 
     if (reset) {

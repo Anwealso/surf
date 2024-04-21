@@ -20,8 +20,6 @@ const WORLDBOX_DIMS_Y: number = 80;
 const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
-  // const ToggledDebug = useToggledControl(Debug, "?");
-
   return (
     <>
       <CustomNavbar></CustomNavbar>
@@ -33,15 +31,15 @@ function App() {
           broadphase="SAP"
           defaultContactMaterial={{
             contactEquationRelaxation: 4,
-            friction: 2e-3,
+            friction: 40e-3,
           }}
-          gravity={[0, -20, 0]}
+          gravity={[0, -10, 0]}
           allowSleep
         >
           <Player
             position={[0, 5, 0]}
             rotation={[0, 0, 0]}
-            mass={60}
+            mass={100}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
           />
 
@@ -57,18 +55,9 @@ function App() {
             args={[WORLDBOX_DIMS_X, 20, 1]}
           />
 
-          {/* <Plane
-            position={[0, -100, 0]}
-            rotation={[-Math.PI / 2, 0, 0]}
-            userData={{ id: "floor" }}
-            args={[500, 500]}
-          /> */}
-
           <Ramp
             position={[0, -15, -5]}
             rotation={[-(Math.PI / 2) + Math.PI / 6, 0, 0]}
-            // rotation={[0, Math.PI, 0]}
-            // rotation={[Math.PI / 2, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.3), v: 90 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={2}
@@ -77,8 +66,6 @@ function App() {
           <Ramp
             position={[0, -45, -95]}
             rotation={[-Math.PI / 16, 0, 0]}
-            // rotation={[0, Math.PI, 0]}
-            // rotation={[Math.PI / 2, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 8), v: 30 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={2}
@@ -90,7 +77,11 @@ function App() {
             userData={{ id: "floor" }}
             args={[WORLDBOX_DIMS_X, 20, 1]}
           />
+
+          {/* Test Box */}
+          <Box position={[-1, 2, -5]} args={[2, 2, 2]} />
         </Physics>
+
         <Suspense fallback={null}>
           <Environment preset="night" />
         </Suspense>

@@ -21,7 +21,7 @@ function Box({ ...props }: BoxProps) {
   texture.repeat = new Vector2(60 / 20 / textureScale, 20 / 20 / textureScale);
 
   return (
-    <mesh ref={ref}>
+    <mesh ref={ref} castShadow receiveShadow>
       <boxGeometry {...props} />
       <meshBasicMaterial map={texture} />
     </mesh>

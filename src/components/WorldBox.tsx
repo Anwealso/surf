@@ -1,7 +1,8 @@
 import { useBox, type Triplet } from "@react-three/cannon";
 import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
-import { Mesh } from "three";
+import { BackSide, DoubleSide, Mesh } from "three";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 interface WorldBoxProps {
   position: Triplet; // [x,y,z] position (world box origin at middle of back-top edge
@@ -46,23 +47,31 @@ function WorldBox({ position, dims }: WorldBoxProps) {
     )
   );
 
+  // Load Image Texture
+  const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
+  // const texture = useTexture("textures/uv.png");
+  // const texture = useTexture("textures/crate.png");
+  // Load HDR Texture
+  // const texture = new RGBELoader().load(
+  //   "textures/rustig_koppie_puresky_1k.hdr"
+  // );
+
   return (
     <group>
-      {(() => {
-        return wallPositions.map((_, i) => {
-          return (
-            <mesh receiveShadow position={wallPositions[i]}>
-              <boxGeometry args={wallDims[i]} />
-              <meshBasicMaterial
-                map={useTexture("textures/long_white_tiles_ao_4k.jpg")}
-              />
-              {/* <meshBasicMaterial color={"white"} /> */}
-              {/* <meshStandardMaterial color={"white"} /> */}
-              {/* <meshPhongMaterial color={"white"} /> */}
-            </mesh>
-          );
-        });
-      })()}
+      <mesh
+        receiveShadow
+        position={[
+          position[0],
+          position[1] - dims[1] / 2,
+          position[2] - dims[2] / 2,
+        ]}
+      >
+        <boxGeometry args={dims} />
+        <meshBasicMaterial map={texture} side={BackSide} />
+        {/* <meshBasicMaterial color={"white"} /> */}
+        {/* <meshStandardMaterial color={"white"} /> */}
+        {/* <meshPhongMaterial color={"white"} /> */}
+      </mesh>
     </group>
   );
 }

@@ -5,6 +5,7 @@ import { RampSectionProps } from "./segments/SegmentHelpers";
 import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
 import FlatTopTriangle from "./segments/FlatTopTriangle";
+import { useTexture } from "@react-three/drei";
 
 export enum TwistAxis {
   x,
@@ -44,7 +45,7 @@ function Ramp({
     let rampSections: RampSectionProps[] = [];
 
     for (let i: number = 0; i <= numSections; i++) {
-      // Create the ramp section in the original "relative to our local origin" format
+      // Create the ramp section in the body frame coords format
       const bodyFrameCoords = new Object3D();
       bodyFrameCoords.position.set(
         twist.axis == TwistAxis.y
@@ -120,10 +121,10 @@ function Ramp({
 
   const rampSections = useMemo(() => getRampSections(), []);
 
-  // const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
-  const material = <meshStandardMaterial wireframe color="blue" />;
+  const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
+  // const material = <meshStandardMaterial wireframe color="blue" />;
   // const material = <meshStandardMaterial color={"blue"} />;
-  // const material = <meshBasicMaterial map={texture} />;
+  const material = <meshBasicMaterial map={texture} />;
   // const material = <meshNormalMaterial />;
   return (
     <group ref={ref}>

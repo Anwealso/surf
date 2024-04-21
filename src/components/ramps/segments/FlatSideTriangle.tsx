@@ -83,9 +83,12 @@ function FlatSideTriangle({
       ...[6, 7, 9],
     ];
 
+    var uvs = new Float32Array([0.0, 0.0, 1.0, 0.0, 1.0, 1.0]);
+
     // Add the indices and vertices
-    geometry.setIndex(indices);
     geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+    geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
+    geometry.setIndex(indices);
 
     // Compute and normalise normals
     geometry.computeVertexNormals();

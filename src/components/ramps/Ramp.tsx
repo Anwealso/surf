@@ -1,6 +1,22 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
 import { useMemo, useRef } from "react";
-import { Group, Matrix4, Object3D } from "three";
+import {
+  DoubleSide,
+  Group,
+  Matrix4,
+  Object3D,
+  RepeatWrapping,
+  Vector2,
+  TextureLoader,
+  MirroredRepeatWrapping,
+  ClampToEdgeWrapping,
+  UVMapping,
+  CubeReflectionMapping,
+  CubeRefractionMapping,
+  EquirectangularReflectionMapping,
+  EquirectangularRefractionMapping,
+  CubeUVReflectionMapping,
+} from "three";
 import { RampSectionProps } from "./segments/SegmentHelpers";
 import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
@@ -26,7 +42,7 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   setRotation?: (rotation: Triplet) => void;
 };
 
-const CROSS_SECTION_SCALE: number = 8;
+const CROSS_SECTION_SCALE: number = 4;
 
 function Ramp({
   position,
@@ -39,12 +55,12 @@ function Ramp({
   const ref = useRef<Group>(null!);
 
   const r = twist.w == 0 ? twist.v : twist.v / twist.w;
-  const numSections = Math.floor(Math.abs(twist.v) / segmentLegth);
+  const numSections = Math.ceil(Math.abs(twist.v) / segmentLegth);
 
   function getRampSections(): RampSectionProps[] {
     let rampSections: RampSectionProps[] = [];
 
-    for (let i: number = 0; i <= numSections; i++) {
+    for (let i: number = 0; i < numSections; i++) {
       // Create the ramp section in the body frame coords format
       const bodyFrameCoords = new Object3D();
       bodyFrameCoords.position.set(
@@ -122,10 +138,15 @@ function Ramp({
   const rampSections = useMemo(() => getRampSections(), []);
 
   const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
-  // const material = <meshStandardMaterial wireframe color="blue" />;
-  // const material = <meshStandardMaterial color={"blue"} />;
+  // const texture = useTexture("textures/crate.jpeg");
+
+  // const texture = useTexture("textures/uv.png");
+  // const texture = new TextureLoader().load(
+  //   "textures/land_ocean_ice_cloud_2048.jpg"
+  // );
+
   const material = <meshBasicMaterial map={texture} />;
-  // const material = <meshNormalMaterial />;
+
   return (
     <group ref={ref}>
       {(() => {

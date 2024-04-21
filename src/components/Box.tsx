@@ -14,11 +14,12 @@ function Box({ ...props }: BoxProps) {
     useRef<Mesh>(null)
   );
 
-  const texture = useTexture("textures/square_tiles_diff_4k.jpg");
-  const textureScale: number = 0.4;
+  // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
+  const texture = useTexture("textures/uv.png");
+  // const textureScale: number = 0.4;
 
-  texture.wrapS = texture.wrapT = RepeatWrapping;
-  texture.repeat = new Vector2(60 / 20 / textureScale, 20 / 20 / textureScale);
+  // texture.wrapS = texture.wrapT = RepeatWrapping;
+  // texture.repeat = new Vector2(60 / 20 / textureScale, 20 / 20 / textureScale);
 
   return (
     <mesh ref={ref} castShadow receiveShadow>

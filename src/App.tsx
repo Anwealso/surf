@@ -79,7 +79,15 @@ function App() {
           />
 
           {/* Test Box */}
-          <Box position={[-1, 2, -5]} args={[2, 2, 2]} />
+          <Box position={[-5, 2, -5]} args={[2, 2, 2]} />
+
+          <Ramp
+            position={[0, 4, -6]}
+            rotation={[0, Math.PI / 4, 0]}
+            twist={{ axis: TwistAxis.x, w: 0, v: 4 }}
+            crossSection={CrossSection.PerfectTriangle}
+            segmentLegth={4}
+          />
         </Physics>
 
         <Suspense fallback={null}>

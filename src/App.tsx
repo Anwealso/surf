@@ -31,7 +31,7 @@ function App() {
           broadphase="SAP"
           defaultContactMaterial={{
             contactEquationRelaxation: 4,
-            friction: 40e-3,
+            friction: 2e-3,
           }}
           gravity={[0, -10, 0]}
           allowSleep
@@ -60,7 +60,7 @@ function App() {
             rotation={[-(Math.PI / 2) + Math.PI / 6, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.3), v: 90 }}
             crossSection={CrossSection.PerfectTriangle}
-            segmentLegth={2}
+            segmentLegth={4}
           />
 
           <Ramp
@@ -68,7 +68,7 @@ function App() {
             rotation={[-Math.PI / 16, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 8), v: 30 }}
             crossSection={CrossSection.PerfectTriangle}
-            segmentLegth={2}
+            segmentLegth={4}
           />
 
           <Box
@@ -79,15 +79,14 @@ function App() {
           />
 
           {/* Test Box */}
-          <Box position={[-5, 2, -5]} args={[2, 2, 2]} />
-
-          <Ramp
+          {/* <Box position={[-5, 2, -5]} args={[2, 2, 2]} /> */}
+          {/* <Ramp
             position={[0, 4, -6]}
             rotation={[0, Math.PI / 4, 0]}
             twist={{ axis: TwistAxis.x, w: 0, v: 4 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={4}
-          />
+          /> */}
         </Physics>
 
         <Suspense fallback={null}>

@@ -137,8 +137,13 @@ function Ramp({
 
   const rampSections = useMemo(() => getRampSections(), []);
 
-  const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
+  // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
+  const texture = useTexture("textures/ramp_basic.jpg");
   // const texture = useTexture("textures/crate.jpeg");
+  // const texture = useTexture("textures/ashen_dunes.png");
+
+  // const texture = useTexture("textures/ashen_dunes.png");
+  // texture.offset = new Vector2(0, 2);
 
   // const texture = useTexture("textures/uv.png");
   // const texture = new TextureLoader().load(

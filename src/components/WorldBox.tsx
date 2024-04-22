@@ -1,7 +1,7 @@
 import { useBox, type Triplet } from "@react-three/cannon";
 import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
-import { BackSide, FrontSide, Mesh } from "three";
+import { BackSide, FrontSide, Mesh, RepeatWrapping, Vector2 } from "three";
 // import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 interface WorldBoxProps {
@@ -21,7 +21,7 @@ function WorldBox({ position, dims }: WorldBoxProps) {
       position[1] - dims[1] / 2,
       position[2] - dims[2] / 2,
     ], // left face
-    // [position[0], position[1], position[2] - dims[2] / 2], // top face
+    [position[0], position[1], position[2] - dims[2] / 2], // top face
     [position[0], position[1] - dims[1], position[2] - dims[2] / 2], // bottom face
     [position[0], position[1] - dims[1] / 2, position[2] - dims[2]], // back face
     [position[0], position[1] - dims[1] / 2, position[2]], // front face
@@ -29,7 +29,7 @@ function WorldBox({ position, dims }: WorldBoxProps) {
   const wallDims: Triplet[] = [
     [1, dims[1], dims[2]], // right face
     [1, dims[1], dims[2]], // left face
-    // [dims[0], 1, dims[2]], // top face
+    [dims[0], 1, dims[2]], // top face
     [dims[0], 1, dims[2]], // bottom face
     [dims[0], dims[1], 1], // back face
     [dims[0], dims[1], 1], // front face
@@ -48,11 +48,19 @@ function WorldBox({ position, dims }: WorldBoxProps) {
   );
 
   // Load Image Texture
-  const texture = useTexture("textures/long_white_tiles_ao_4k.jpg");
+  // const texture = useTexture("textures/granular_concrete_diff_4k.jpg");
+  // const texture = useTexture("textures/metal_plate_rough_4k.jpg");
+  // const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
+  const texture = useTexture("textures/ashen_dunes.png");
+  // const texture = useTexture("textures/macro_flour_diff_4k.jpg");
   // Load HDR Texture
   // const texture = new RGBELoader().load(
   //   "textures/rustig_koppie_puresky_1k.hdr"
   // );
+
+  const textureScale: number = 20;
+  texture.wrapS = texture.wrapT = RepeatWrapping;
+  texture.repeat = new Vector2(dims[1] / textureScale, dims[1] / textureScale);
 
   return (
     // <mesh
@@ -73,7 +81,12 @@ function WorldBox({ position, dims }: WorldBoxProps) {
           return (
             <mesh receiveShadow position={wallPositions[i]}>
               <boxGeometry args={wallDims[i]} />
-              <meshBasicMaterial map={texture} side={FrontSide} />
+              <meshPhongMaterial
+                map={texture}
+                side={FrontSide}
+                shininess={10}
+              />
+              {/* <meshPhongMaterial color={"white"} side={FrontSide} /> */}
             </mesh>
           );
         });

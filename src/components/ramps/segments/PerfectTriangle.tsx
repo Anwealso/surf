@@ -41,16 +41,20 @@ function PerfectTriangle({
 
     const vertices = new Float32Array([
       // Front face points
-      ...[-slopeWidth, 0, -0.5], // front-left
-      ...[0, 1, -0.5], // front-top
-      ...[+slopeWidth, 0, -0.5], // front-right
+      ...[-slopeWidth, 0, 0.5], // front-left
+      ...[0, 1, 0.5], // front-top
+      ...[+slopeWidth, 0, 0.5], // front-right
       // Back face points
-      ...[-slopeWidth, 0, 0.5], // back-left
-      ...[0, 1, 0.5], // back-top
-      ...[+slopeWidth, 0, 0.5], // back-right
-      ...[0, 1, -(0.5 - wrapFixerPointDepth)], // mid-front-top
+      ...[-slopeWidth, 0, -0.5], // back-left
+      ...[0, 1, -0.5], // back-top
+      ...[+slopeWidth, 0, -0.5], // back-right
+      // // Mid (spine) points
+      ...[0, 1, 0.5 - wrapFixerPointDepth], // mid-front-top
       ...[0, 1, 0.0], // mid-top
-      ...[0, 1, 0.5 - wrapFixerPointDepth], // mid-back-top
+      ...[0, 1, -(0.5 - wrapFixerPointDepth)], // mid-back-top
+      ...[0, 1, 0.5 - wrapFixerPointDepth], // mid-front-top 2
+      ...[0, 1, 0.0], // mid-top 2
+      ...[0, 1, -(0.5 - wrapFixerPointDepth)], // mid-back-top 2
     ]);
 
     const uvs = new Float32Array([
@@ -62,32 +66,36 @@ function PerfectTriangle({
       ...[1 - Math.sqrt(3) / 6, 1 / 3], // back left
       ...[1.0, 0.5], // back top
       ...[1 - Math.sqrt(3) / 6, 2 / 3], // back right
-
+      // new spine points - bottom of texture (v=1)
       ...[0 + (Math.sqrt(3) / 6 - 0.001), 0], // mid-front-top
       ...[0.5, 0], // mid-top
       ...[1 - (Math.sqrt(3) / 6 - 0.001), 0], // mid-back-top
+      // new spine points - top of texture (v=1)
+      ...[0 + (Math.sqrt(3) / 6 - 0.001), 1], // mid-front-top 2
+      ...[0.5, 1], // mid-top 2
+      ...[1 - (Math.sqrt(3) / 6 - 0.001), 1], // mid-back-top 2
     ]);
 
     const indices = [
       // Front face
-      ...[0, 1, 2],
+      ...[0, 2, 1],
       // Back face
-      ...[3, 5, 4],
+      ...[3, 4, 5],
       // Left face
-      ...[0, 6, 1],
-      ...[0, 7, 6],
-      ...[0, 3, 7],
-      ...[3, 4, 8],
-      ...[3, 8, 7],
+      ...[0, 1, 6],
+      ...[0, 6, 7],
+      ...[0, 7, 3],
+      ...[3, 8, 4],
+      ...[3, 7, 8],
       // Right face
-      ...[2, 1, 6],
-      ...[2, 6, 7],
-      ...[2, 7, 5],
-      ...[5, 8, 4],
-      ...[5, 7, 8],
+      ...[2, 9, 1],
+      ...[2, 10, 9],
+      ...[2, 5, 10],
+      ...[5, 11, 10],
+      ...[5, 4, 11],
       // Bottom face
-      ...[0, 2, 5],
-      ...[0, 5, 3],
+      ...[0, 5, 2],
+      ...[0, 3, 5],
     ];
 
     // Add the indices and vertices

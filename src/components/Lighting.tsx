@@ -17,17 +17,17 @@ function Lighting() {
   return (
     <>
       {/* Alex's Custom Lighting Setup (Key Light, Fill Light, Back Light)*/}
-      {/* <Environment preset="sunset" /> */}
-      {/* <ambientLight intensity={0.5} /> */}
+      <Environment preset="sunset" />
+      <ambientLight intensity={0.8} />
       {/* Key Light */}
-      {/* <directionalLight position={[-2, 2, 2]} intensity={1} /> */}
+      <directionalLight position={[-2, 2, 2]} intensity={1} />
       {/* Fill Light */}
-      {/* <directionalLight position={[-2, 0, -2]} intensity={0.5} /> */}
+      <directionalLight position={[-2, 0, -2]} intensity={0.5} />
       {/* Back Light */}
-      {/* <directionalLight position={[2, 0, 2]} intensity={0.2} /> */}
+      <directionalLight position={[2, 0, 2]} intensity={0.2} />
 
       {/* Pro Lighting Setup (lighting chained to camera) */}
-      <Environment files="./textures/rustig_koppie_puresky_1k.hdr" background />
+      {/* <Environment files="./textures/rustig_koppie_puresky_1k.hdr" background />
       <ambientLight intensity={0.5} />
       <directionalLight
         intensity={1}
@@ -41,7 +41,7 @@ function Lighting() {
         shadow-camera-right={30}
         shadow-camera-top={30}
         shadow-camera-bottom={-30}
-      />
+      /> */}
 
       {/* Pro Lighting Setup */}
       {/* <spotLight

@@ -1,7 +1,14 @@
 import { useBox, type Triplet } from "@react-three/cannon";
 import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
-import { BackSide, FrontSide, Mesh, RepeatWrapping, Vector2 } from "three";
+import {
+  BackSide,
+  FrontSide,
+  Mesh,
+  RepeatWrapping,
+  TextureLoader,
+  Vector2,
+} from "three";
 // import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 interface WorldBoxProps {
@@ -51,16 +58,42 @@ function WorldBox({ position, dims }: WorldBoxProps) {
   // const texture = useTexture("textures/granular_concrete_diff_4k.jpg");
   // const texture = useTexture("textures/metal_plate_rough_4k.jpg");
   // const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
-  const texture = useTexture("textures/ashen_dunes.png");
+  // const texture = useTexture("textures/ashen_dunes.png");
   // const texture = useTexture("textures/macro_flour_diff_4k.jpg");
   // Load HDR Texture
   // const texture = new RGBELoader().load(
   //   "textures/rustig_koppie_puresky_1k.hdr"
   // );
 
-  const textureScale: number = 20;
-  texture.wrapS = texture.wrapT = RepeatWrapping;
-  texture.repeat = new Vector2(dims[1] / textureScale, dims[1] / textureScale);
+  const brickTexture = new TextureLoader().load(
+    // "textures/seamlessTextures/IMGP5505_seamless.jpg"
+    "textures/wests_textures/stone wall 6.png"
+  );
+  const brickTextureScale: number = 2;
+  brickTexture.wrapS = brickTexture.wrapT = RepeatWrapping;
+  brickTexture.repeat = new Vector2(
+    dims[1] / brickTextureScale,
+    dims[1] / brickTextureScale
+  );
+
+  const grassTexture = new TextureLoader().load(
+    "textures/seamlessTextures/clover.jpg"
+  );
+  const grassTextureScale: number = 5;
+  grassTexture.wrapS = grassTexture.wrapT = RepeatWrapping;
+  grassTexture.repeat = new Vector2(
+    dims[1] / grassTextureScale,
+    dims[1] / grassTextureScale
+  );
+
+  const textures = [
+    brickTexture, // right
+    brickTexture, // left
+    null, // top
+    grassTexture, // bottom
+    brickTexture, // back
+    brickTexture, // front
+  ];
 
   return (
     // <mesh
@@ -79,14 +112,18 @@ function WorldBox({ position, dims }: WorldBoxProps) {
       {(() => {
         return wallPositions.map((_, i) => {
           return (
-            <mesh receiveShadow position={wallPositions[i]}>
-              <boxGeometry args={wallDims[i]} />
-              <meshPhongMaterial
-                map={texture}
-                side={FrontSide}
-                shininess={10}
-              />
+            <mesh receiveShadow position={wallPositions[i]} key={i}>
               {/* <meshPhongMaterial color={"white"} side={FrontSide} /> */}
+              {(() => {
+                if (textures[i]) {
+                  return (
+                    <>
+                      <boxGeometry args={wallDims[i]} />
+                      <meshPhongMaterial map={textures[i]} side={FrontSide} />
+                    </>
+                  );
+                }
+              })()}
             </mesh>
           );
         });

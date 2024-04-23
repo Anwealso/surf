@@ -16,13 +16,15 @@ function Box({ ...props }: BoxProps) {
 
   // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
   // const texture = useTexture("textures/ashen_dunes.png");
-  const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
   // const texture = useTexture("textures/rubber_tiles_diff_4k.jpg");
+
+  const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
+  // const texture = useTexture("textures/wests_textures/paving 5.png");
 
   // const texture = useTexture("textures/uv.png");
   // const texture = useTexture("textures/ashen_dunes.png");
 
-  const textureScale: number = 0.4;
+  const textureScale: number = 0.2;
   texture.wrapS = texture.wrapT = RepeatWrapping;
   texture.repeat = new Vector2(60 / 20 / textureScale, 20 / 20 / textureScale);
 

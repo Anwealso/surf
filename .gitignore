@@ -25,4 +25,5 @@ dist-ssr
 
 # Assets
 public/models
+public/textures
 archive

@@ -1,22 +1,6 @@
 import type { BodyProps, Triplet } from "@react-three/cannon";
 import { useMemo, useRef } from "react";
-import {
-  DoubleSide,
-  Group,
-  Matrix4,
-  Object3D,
-  RepeatWrapping,
-  Vector2,
-  TextureLoader,
-  MirroredRepeatWrapping,
-  ClampToEdgeWrapping,
-  UVMapping,
-  CubeReflectionMapping,
-  CubeRefractionMapping,
-  EquirectangularReflectionMapping,
-  EquirectangularRefractionMapping,
-  CubeUVReflectionMapping,
-} from "three";
+import { Group, Matrix4, Object3D } from "three";
 import { RampSectionProps } from "./segments/SegmentHelpers";
 import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
@@ -58,7 +42,7 @@ function Ramp({
   const numSections = Math.ceil(Math.abs(twist.v) / segmentLegth);
 
   function getRampSections(): RampSectionProps[] {
-    let rampSections: RampSectionProps[] = [];
+    const rampSections: RampSectionProps[] = [];
 
     for (let i: number = 0; i < numSections; i++) {
       // Create the ramp section in the body frame coords format
@@ -135,12 +119,15 @@ function Ramp({
     return rampSections;
   }
 
-  const rampSections = useMemo(() => getRampSections(), []);
+  const rampSections = useMemo(() => getRampSections(), [segmentLegth]);
+
+  const texture = useTexture("textures/ramp_basic.jpg");
 
   // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
-  const texture = useTexture("textures/ramp_basic.jpg");
   // const texture = useTexture("textures/crate.jpeg");
   // const texture = useTexture("textures/ashen_dunes.png");
+
+  // const texture = useTexture("textures/seamlessTextures/100_1449_seamless.JPG");
 
   // const texture = useTexture("textures/ashen_dunes.png");
   // texture.offset = new Vector2(0, 2);

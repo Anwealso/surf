@@ -1,7 +1,7 @@
 import { Physics } from "@react-three/cannon";
 import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import CustomNavbar from "./components/CustomNavbar";
 import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
@@ -12,14 +12,17 @@ import Box from "./components/Box";
 import WorldBox from "./components/WorldBox";
 
 const PLAYER_HEIGHT: number = 2;
+const RAMP_LENGTH: number = 10;
 const END_BOX_Y: number = -45;
 const END_BOX_Z: number = -155;
 
-const WORLDBOX_DIMS_X: number = 60;
+const WORLDBOX_DIMS_X: number = 100;
 const WORLDBOX_DIMS_Y: number = 80;
 const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
+  const [playerSpeed, setPlayerSpeed] = useState(0);
+
   return (
     <>
       <CustomNavbar></CustomNavbar>
@@ -33,14 +36,15 @@ function App() {
             contactEquationRelaxation: 4,
             friction: 2e-3,
           }}
-          gravity={[0, -10, 0]}
+          gravity={[0, -20, 0]}
           allowSleep
         >
           <Player
             position={[0, 5, 0]}
             rotation={[0, 0, 0]}
-            mass={100}
+            mass={80}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
+            setPlayerSpeed={setPlayerSpeed}
           />
 
           <WorldBox
@@ -60,7 +64,7 @@ function App() {
             rotation={[-(Math.PI / 2) + Math.PI / 6, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.3), v: 90 }}
             crossSection={CrossSection.PerfectTriangle}
-            segmentLegth={4}
+            segmentLegth={RAMP_LENGTH}
           />
 
           <Ramp
@@ -68,7 +72,7 @@ function App() {
             rotation={[-Math.PI / 16, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 8), v: 30 }}
             crossSection={CrossSection.PerfectTriangle}
-            segmentLegth={4}
+            segmentLegth={RAMP_LENGTH}
           />
 
           <Box
@@ -97,7 +101,7 @@ function App() {
         <Stats />
       </Canvas>
 
-      <Overlay />
+      <Overlay playerSpeed={playerSpeed} />
     </>
   );
 }

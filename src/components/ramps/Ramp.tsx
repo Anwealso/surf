@@ -122,7 +122,10 @@ function Ramp({
 
   const rampSections = useMemo(() => getRampSections(), [segmentLegth]);
 
-  const texture = useTexture("textures/ramp_basic.jpg");
+  // const texture = useTexture("textures/ramp_basic.jpg");
+  const texture = useTexture(
+    "textures/PrototypeTextures_kenney/PNG/Orange/texture_02.png"
+  );
 
   // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
   // const texture = useTexture("textures/crate.jpeg");

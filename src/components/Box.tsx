@@ -19,7 +19,10 @@ function Box({ ...props }: BoxProps) {
   // const texture = useTexture("textures/ashen_dunes.png");
   // const texture = useTexture("textures/rubber_tiles_diff_4k.jpg");
 
-  const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
+  // const texture = useTexture("textures/asphalt_04_diff_4k.jpg");
+  const texture = useTexture(
+    "textures/PrototypeTextures_kenney/PNG/Light/texture_02.png"
+  );
   // const texture = useTexture("textures/wests_textures/paving 5.png");
 
   // const texture = useTexture("textures/uv.png");

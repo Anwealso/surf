@@ -66,34 +66,35 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
   //   "textures/rustig_koppie_puresky_1k.hdr"
   // );
 
-  const brickTexture = new TextureLoader().load(
-    // "textures/seamlessTextures/IMGP5505_seamless.jpg"
-    "textures/wests_textures/stone wall 6.png"
+  const wallTexture = new TextureLoader().load(
+    // "textures/wests_textures/stone wall 6.png"
+    "textures/PrototypeTextures_kenney/PNG/Dark/texture_01.png"
   );
-  const brickTextureScale: number = 2;
-  brickTexture.wrapS = brickTexture.wrapT = RepeatWrapping;
-  brickTexture.repeat = new Vector2(
-    dims[1] / brickTextureScale,
-    dims[1] / brickTextureScale
+  const wallTextureScale: number = 4;
+  wallTexture.wrapS = wallTexture.wrapT = RepeatWrapping;
+  wallTexture.repeat = new Vector2(
+    dims[1] / wallTextureScale,
+    dims[1] / wallTextureScale
   );
 
-  const grassTexture = new TextureLoader().load(
-    "textures/seamlessTextures/clover.jpg"
+  const floorTexture = new TextureLoader().load(
+    // "textures/seamlessTextures/clover.jpg"
+    "textures/PrototypeTextures_kenney/PNG/Red/texture_13.png"
   );
-  const grassTextureScale: number = 5;
-  grassTexture.wrapS = grassTexture.wrapT = RepeatWrapping;
-  grassTexture.repeat = new Vector2(
-    dims[1] / grassTextureScale,
-    dims[1] / grassTextureScale
+  const floorTextureScale: number = 3;
+  floorTexture.wrapS = floorTexture.wrapT = RepeatWrapping;
+  floorTexture.repeat = new Vector2(
+    dims[0] / floorTextureScale,
+    dims[2] / floorTextureScale
   );
 
   const textures = [
-    brickTexture, // right
-    brickTexture, // left
+    wallTexture, // right
+    wallTexture, // left
     // null, // top
-    grassTexture, // bottom
-    brickTexture, // back
-    brickTexture, // front
+    floorTexture, // bottom
+    wallTexture, // back
+    wallTexture, // front
   ];
 
   return (

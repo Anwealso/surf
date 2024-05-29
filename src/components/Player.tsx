@@ -8,8 +8,11 @@ import useFollowCam from "./useFollowCam";
 const GROUND_SPEED = 14;
 const JUMP_SPEED = 6;
 const AIR_SPEED = GROUND_SPEED / 10;
-
 const SPEED_RAMP = 6;
+
+const RUN_SPEED = 14;
+// const AIR_SPEED = GROUND_SPEED / 10;
+const MAX_ACCEL = 14;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
   mass: number; // mass of player
@@ -196,6 +199,25 @@ function Player({
       api.position.set(...position!);
       api.velocity.set(0, 0, 0);
     }
+  }
+
+  function pmAccelerate(
+    vel: Vector3,
+    wishDir: Vector3,
+    frametime: number = 1 / 60
+  ) {
+    /**
+     * Calculates the new velocity of the player by applying the appropriate acceleration
+     *
+     * Args:
+     *   - vel:
+     *   - wishdir:
+     *   - frametime:
+     */
+
+    let currentSpeed: number = vel.dot(wishDir); // the current speed in the wish direction
+    let addSpeed: number = RUN_SPEED - currentSpeed; // the amount of speed to add
+    addSpeed = Math.max(Math.min(addSpeed, MAX_ACCEL * frametime), 0);
   }
 
   useFrame((_, delta) => {

@@ -26,7 +26,7 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   setRotation?: (rotation: Triplet) => void;
 };
 
-const CROSS_SECTION_SCALE: number = 4;
+const CROSS_SECTION_SCALE: number = 8;
 
 function Ramp({
   position,

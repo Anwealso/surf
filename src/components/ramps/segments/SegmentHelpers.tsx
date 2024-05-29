@@ -6,6 +6,7 @@ export const RAMP_RATIO: number = 544 / 512;
 // export const RAMP_RATIO: number = 1 / 1.2;
 
 export type RampSectionProps = ConvexPolyhedronProps & {
+  physicsMaterial?: string;
   size?: Triplet;
 };
 

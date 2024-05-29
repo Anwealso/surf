@@ -149,7 +149,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                material={material}
+                physicsMaterial={material}
+                renderMaterial={material}
                 key={i}
                 {...props}
               />
@@ -160,7 +161,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                material={material}
+                physicsMaterial={material}
+                renderMaterial={material}
                 key={i}
                 {...props}
               />
@@ -171,7 +173,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                material={material}
+                physicsMaterial={material}
+                renderMaterial={material}
                 key={i}
                 {...props}
               />

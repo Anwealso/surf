@@ -1,8 +1,9 @@
 import { useBox, type Triplet } from "@react-three/cannon";
-import { useTexture } from "@react-three/drei";
+import { groundMaterial } from "./Materials";
+// import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
 import {
-  BackSide,
+  // BackSide,
   FrontSide,
   Mesh,
   RepeatWrapping,
@@ -16,7 +17,7 @@ interface WorldBoxProps {
   dims: Triplet; // [x,y,z] wallDims of world box
 }
 
-function WorldBox({ position, dims }: WorldBoxProps) {
+function WorldBox({ position, dims, ...props }: WorldBoxProps) {
   const wallPositions: Triplet[] = [
     [
       position[0] + dims[0] / 2,
@@ -42,17 +43,17 @@ function WorldBox({ position, dims }: WorldBoxProps) {
     [dims[0], dims[1], 1], // front face
   ];
 
-  wallPositions.map((_, i) =>
+  for (let i = 0; i < wallPositions.length; i++) {
     useBox(
       () => ({
-        material: "ground",
         type: "Static",
         position: wallPositions[i],
         args: wallDims[i],
+        material: groundMaterial,
       }),
       useRef<Mesh>(null)
-    )
-  );
+    );
+  }
 
   // Load Image Texture
   // const texture = useTexture("textures/granular_concrete_diff_4k.jpg");
@@ -96,18 +97,6 @@ function WorldBox({ position, dims }: WorldBoxProps) {
   ];
 
   return (
-    // <mesh
-    //   receiveShadow
-    //   position={[
-    //     position[0],
-    //     position[1] - dims[1] / 2,
-    //     position[2] - dims[2] / 2,
-    //   ]}
-    // >
-    //   {/* <boxGeometry args={dims} />
-    //   <meshBasicMaterial map={texture} side={BackSide} /> */}
-    // </mesh>
-
     <group>
       {(() => {
         return wallPositions.map((_, i) => {

@@ -11,16 +11,17 @@ import {
 function FlatSideTriangle({
   position,
   rotation,
-  material,
+  renderMaterial,
+  physicsMaterial,
   size = [1, 1, 1],
   ...props
-}: RampSectionProps & { material: JSX.Element }): JSX.Element {
+}: RampSectionProps & { renderMaterial: JSX.Element }): JSX.Element {
   // const meshRef = useRef<Group>(null!);
   const geometry = getScaledGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref, _] = useConvexPolyhedron(
     () => ({
-      material: "ground",
+      material: physicsMaterial,
       type: "Static",
       args,
       position,
@@ -109,7 +110,7 @@ function FlatSideTriangle({
       position={position}
       rotation={rotation}
     >
-      {material}
+      {renderMaterial}
     </mesh>
   );
 }

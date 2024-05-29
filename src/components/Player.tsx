@@ -4,12 +4,14 @@ import { useFrame, Camera } from "@react-three/fiber";
 import { CompoundBodyProps, useCompoundBody } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
+import { bouncyMaterial, boxMaterial } from "./Materials";
 
-const GROUND_SPEED = 14;
-const JUMP_SPEED = 6;
-const AIR_SPEED = GROUND_SPEED / 10;
-const SPEED_RAMP = 6;
+// const GROUND_SPEED = 14;
+// const JUMP_SPEED = 6;
+// const AIR_SPEED = GROUND_SPEED / 10;
+// const SPEED_RAMP = 6;
 
+const JUMP_SPEED = 7;
 const RUN_SPEED = 14;
 // const AIR_SPEED = GROUND_SPEED / 10;
 const MAX_ACCEL = 14;
@@ -22,7 +24,7 @@ type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
     capSegments: number,
     radialSegments: number
   ]; // shape of the capsule
-  setPlayerSpeed: any; // mass of player
+  setPlayerSpeed: any; // a handle to set the player speed that will be seen on the speed monitor
 };
 
 function Player({
@@ -58,18 +60,21 @@ function Player({
           position: [0, -args[1] / 2, 0],
           rotation: [0, 0, 0],
           type: "Sphere",
+          material: boxMaterial,
         },
         {
           args: [args[0], args[0], args[1], args[3]],
           position: [0, +args[1] / 2, 0],
           rotation: [0, 0, 0],
           type: "Cylinder",
+          material: boxMaterial,
         },
         {
           args: [args[0]],
           position: [0, +args[1] / 2, 0],
           rotation: [0, 0, 0],
           type: "Sphere",
+          material: boxMaterial,
         },
       ],
     }),
@@ -131,57 +136,14 @@ function Player({
     playerDirection: Vector3
   ) {
     const { backward, jump, forward, left, reset, right } = controls.current;
-    const movespeed = playerOnFloor ? GROUND_SPEED : AIR_SPEED;
-    const speedDelta =
-      SPEED_RAMP * delta * (playerOnFloor ? GROUND_SPEED : AIR_SPEED);
 
-    if (left || right || forward || backward) {
-      const moveVector: Vector3 = new Vector3(0, 0, 0);
+    // Get the current wishdir
+    const wishdir = getWishdir(playerDirection, backward, forward, left, right);
 
-      if (left) {
-        moveVector.add(
-          getSideVector(camera, playerDirection).multiplyScalar(-speedDelta)
-        );
-      } else if (right) {
-        moveVector.add(
-          getSideVector(camera, playerDirection).multiplyScalar(speedDelta)
-        );
-      }
-      if (forward) {
-        moveVector.add(
-          getForwardVector(camera, playerDirection).multiplyScalar(speedDelta)
-        );
-      } else if (backward) {
-        moveVector.add(
-          getForwardVector(camera, playerDirection).multiplyScalar(-speedDelta)
-        );
-      }
-      console.log(
-        `moveVector F/B: [${moveVector.x}, ${moveVector.y}, ${moveVector.z}]`
-      );
+    // Accelerate the player in the xy plane
+    playerVelocity = pmAccelerate(playerVelocity, wishdir, delta);
 
-      // Clamp the moveVector x/z values to be
-      //   - at most the difference between the playerVelocity speed and the +1 * movespeed, and
-      //   - at minimum the difference between the playerVelocity speed and the -1 * movespeed
-      // i.e. If we are under, the moveVector will be non-zero and we will add this to our playerVelocity
-      // and make us go faster, and if we are over, we will not add anything to the existing playerVelocity.
-      moveVector.clamp(
-        new Vector3(
-          -movespeed - playerVelocity.x,
-          -Number.MAX_VALUE,
-          -movespeed - playerVelocity.z
-        ),
-        new Vector3(
-          movespeed - playerVelocity.x,
-          Number.MAX_VALUE,
-          movespeed - playerVelocity.z
-        )
-      );
-
-      // And the clamped moveVector to the playerVelocity
-      playerVelocity.add(moveVector);
-    }
-
+    // Handle Z physics (gravity model)
     if (playerOnFloor) {
       if (jump) {
         playerVelocity.y = JUMP_SPEED;
@@ -204,20 +166,53 @@ function Player({
   function pmAccelerate(
     vel: Vector3,
     wishDir: Vector3,
-    frametime: number = 1 / 60
+    frametime: number = 1 / 120
   ) {
     /**
      * Calculates the new velocity of the player by applying the appropriate acceleration
      *
      * Args:
-     *   - vel:
-     *   - wishdir:
-     *   - frametime:
+     *   - vel: Players current velocity
+     *   - wishdir: Unit vector direction we want to go
+     *   - frametime: The delta time between frames
      */
 
-    let currentSpeed: number = vel.dot(wishDir); // the current speed in the wish direction
+    const currentSpeed: number = vel.dot(wishDir); // the current speed in the wish direction
     let addSpeed: number = RUN_SPEED - currentSpeed; // the amount of speed to add
-    addSpeed = Math.max(Math.min(addSpeed, MAX_ACCEL * frametime), 0);
+    addSpeed = Math.max(Math.min(addSpeed, MAX_ACCEL * frametime), 0); // clamp the addspeed based on the frametime
+
+    return vel.add(wishDir.multiplyScalar(addSpeed));
+  }
+
+  function getWishdir(
+    playerDirection: Vector3,
+    backward: boolean,
+    forward: boolean,
+    left: boolean,
+    right: boolean
+  ) {
+    /**
+     * Calculates the desired movement direction (unit vector) of the player
+     * based on te control inputs
+     *
+     * Args:
+     *   - cnotrols: control inputs
+     */
+
+    const wishdir: Vector3 = new Vector3(0, 0, 0);
+
+    if (left) {
+      wishdir.add(getSideVector(camera, playerDirection).multiplyScalar(-1));
+    } else if (right) {
+      wishdir.add(getSideVector(camera, playerDirection));
+    }
+    if (forward) {
+      wishdir.add(getForwardVector(camera, playerDirection));
+    } else if (backward) {
+      wishdir.add(getForwardVector(camera, playerDirection).multiplyScalar(-1));
+    }
+
+    return wishdir.normalize();
   }
 
   useFrame((_, delta) => {

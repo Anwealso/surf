@@ -11,10 +11,11 @@ import {
 function PerfectTriangle({
   position,
   rotation,
-  material,
+  renderMaterial,
+  physicsMaterial,
   size = [1, 1, 1],
   ...props
-}: RampSectionProps & { material: JSX.Element }): JSX.Element {
+}: RampSectionProps & { renderMaterial: JSX.Element }): JSX.Element {
   const geometry = getGeometry(size);
   const args = useMemo(
     () => toConvexProps(geometry),
@@ -22,7 +23,7 @@ function PerfectTriangle({
   );
   const [ref] = useConvexPolyhedron(
     () => ({
-      material: "ground",
+      material: physicsMaterial,
       type: "Static",
       args,
       position,
@@ -123,7 +124,7 @@ function PerfectTriangle({
       position={position}
       rotation={rotation}
     >
-      {material}
+      {renderMaterial}
     </mesh>
   );
 }

@@ -11,15 +11,16 @@ import {
 function FlatTopTriangle({
   position,
   rotation,
-  material,
+  renderMaterial,
+  physicsMaterial,
   size = [1, 1, 1],
   ...props
-}: RampSectionProps & { material: JSX.Element }): JSX.Element {
+}: RampSectionProps & { renderMaterial: JSX.Element }): JSX.Element {
   const geometry = getGeometry(size);
   const args = useMemo(() => toConvexProps(geometry), [geometry]);
   const [ref] = useConvexPolyhedron(
     () => ({
-      material: "ground",
+      material: physicsMaterial,
       type: "Static",
       args,
       position,
@@ -116,7 +117,7 @@ function FlatTopTriangle({
       position={position}
       rotation={rotation}
     >
-      {material}
+      {renderMaterial}
     </mesh>
   );
 }

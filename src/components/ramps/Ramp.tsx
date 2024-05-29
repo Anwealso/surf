@@ -6,6 +6,7 @@ import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
 import FlatTopTriangle from "./segments/FlatTopTriangle";
 import { useTexture } from "@react-three/drei";
+import { slipperyMaterial } from "../Materials";
 
 export enum TwistAxis {
   x,
@@ -26,7 +27,7 @@ type RampProps = Pick<BodyProps, "position" | "rotation"> & {
   setRotation?: (rotation: Triplet) => void;
 };
 
-const CROSS_SECTION_SCALE: number = 8;
+const CROSS_SECTION_SCALE: number = 10;
 
 function Ramp({
   position,
@@ -137,7 +138,8 @@ function Ramp({
   //   "textures/land_ocean_ice_cloud_2048.jpg"
   // );
 
-  const material = <meshBasicMaterial map={texture} />;
+  const renderMaterial = <meshBasicMaterial map={texture} />;
+  const physicsMaterial = slipperyMaterial;
 
   return (
     <group ref={ref}>
@@ -149,8 +151,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={material}
-                renderMaterial={material}
+                physicsMaterial={physicsMaterial}
+                renderMaterial={renderMaterial}
                 key={i}
                 {...props}
               />
@@ -161,8 +163,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={material}
-                renderMaterial={material}
+                physicsMaterial={physicsMaterial}
+                renderMaterial={renderMaterial}
                 key={i}
                 {...props}
               />
@@ -173,8 +175,8 @@ function Ramp({
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
                 size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={material}
-                renderMaterial={material}
+                physicsMaterial={physicsMaterial}
+                renderMaterial={renderMaterial}
                 key={i}
                 {...props}
               />

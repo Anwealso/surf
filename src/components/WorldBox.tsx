@@ -13,7 +13,7 @@ import {
 // import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 interface WorldBoxProps {
-  position: Triplet; // [x,y,z] position (world box origin at middle of back-top edge
+  position: Triplet; // [x,y,z] position (world box origin is at middle of back-top edge)
   dims: Triplet; // [x,y,z] wallDims of world box
 }
 
@@ -29,7 +29,7 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
       position[1] - dims[1] / 2,
       position[2] - dims[2] / 2,
     ], // left face
-    [position[0], position[1], position[2] - dims[2] / 2], // top face
+    // [position[0], position[1], position[2] - dims[2] / 2], // top face
     [position[0], position[1] - dims[1], position[2] - dims[2] / 2], // bottom face
     [position[0], position[1] - dims[1] / 2, position[2] - dims[2]], // back face
     [position[0], position[1] - dims[1] / 2, position[2]], // front face
@@ -37,7 +37,7 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
   const wallDims: Triplet[] = [
     [1, dims[1], dims[2]], // right face
     [1, dims[1], dims[2]], // left face
-    [dims[0], 1, dims[2]], // top face
+    // [dims[0], 1, dims[2]], // top face
     [dims[0], 1, dims[2]], // bottom face
     [dims[0], dims[1], 1], // back face
     [dims[0], dims[1], 1], // front face
@@ -90,7 +90,7 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
   const textures = [
     brickTexture, // right
     brickTexture, // left
-    null, // top
+    // null, // top
     grassTexture, // bottom
     brickTexture, // back
     brickTexture, // front

@@ -4,7 +4,7 @@ import { useFrame, Camera } from "@react-three/fiber";
 import { CompoundBodyProps, useCompoundBody } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
-import { bouncyMaterial, boxMaterial } from "./Materials";
+import { boxMaterial } from "./Materials";
 
 // const GROUND_SPEED = 14;
 // const JUMP_SPEED = 6;

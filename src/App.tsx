@@ -47,6 +47,15 @@ function App() {
             setPlayerSpeed={setPlayerSpeed}
           />
 
+          {/* Test Ramp */}
+          <Ramp
+            position={[-40, 0, 7]}
+            rotation={[0, -Math.PI / 2, 0]}
+            twist={{ axis: TwistAxis.x, w: 0, v: 80 }}
+            crossSection={CrossSection.PerfectTriangle}
+            segmentLegth={RAMP_LENGTH}
+          />
+
           <WorldBox
             position={[0, 20, 10]}
             dims={[WORLDBOX_DIMS_X, WORLDBOX_DIMS_Y, WORLDBOX_DIMS_Z]}
@@ -60,7 +69,7 @@ function App() {
           />
 
           <Ramp
-            position={[0, -15, -5]}
+            position={[0, -20, -10]}
             rotation={[-(Math.PI / 2) + Math.PI / 6, 0, 0]}
             twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 2.3), v: 90 }}
             crossSection={CrossSection.PerfectTriangle}
@@ -68,9 +77,9 @@ function App() {
           />
 
           <Ramp
-            position={[0, -45, -95]}
+            position={[0, -50, -100]}
             rotation={[-Math.PI / 16, 0, 0]}
-            twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 8), v: 30 }}
+            twist={{ axis: TwistAxis.x, w: Math.PI * (1 / 8), v: 40 }}
             crossSection={CrossSection.PerfectTriangle}
             segmentLegth={RAMP_LENGTH}
           />

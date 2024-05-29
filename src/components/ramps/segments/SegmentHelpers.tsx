@@ -2,12 +2,18 @@ import type { ConvexPolyhedronProps, Triplet } from "@react-three/cannon";
 import { BufferGeometry } from "three";
 import { Geometry } from "three-stdlib";
 
-export const RAMP_RATIO: number = 544 / 512;
-// export const RAMP_RATIO: number = 1 / 1.2;
+// export const RAMP_RATIO: number = 544 / 512; // height/width
+export const RAMP_RATIO: number = 1 / 1.2;
 
 export type RampSectionProps = ConvexPolyhedronProps & {
-  physicsMaterial?: string;
-  size?: Triplet;
+  physicsMaterial:
+    | string
+    | {
+        friction?: number | undefined;
+        restitution?: number | undefined;
+      }
+    | undefined;
+  size: Triplet;
 };
 
 export function toConvexProps(

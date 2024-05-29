@@ -11,10 +11,10 @@ import { boxMaterial } from "./Materials";
 // const AIR_SPEED = GROUND_SPEED / 10;
 // const SPEED_RAMP = 6;
 
-const JUMP_SPEED = 7;
+const JUMP_SPEED = 6;
 const RUN_SPEED = 14;
 // const AIR_SPEED = GROUND_SPEED / 10;
-const MAX_ACCEL = 14;
+const MAX_ACCEL = 20; //14;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
   mass: number; // mass of player

@@ -34,9 +34,10 @@ function App() {
           broadphase="SAP"
           defaultContactMaterial={{
             contactEquationRelaxation: 4,
-            friction: 2e-3,
+            friction: 2e-2,
           }}
-          gravity={[0, -20, 0]}
+          // gravity={[0, -20, 0]}
+          gravity={[0, -9.8, 0]}
           allowSleep
         >
           <Player

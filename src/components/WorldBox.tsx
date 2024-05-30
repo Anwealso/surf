@@ -7,6 +7,7 @@ import {
   FrontSide,
   Mesh,
   RepeatWrapping,
+  Texture,
   TextureLoader,
   Vector2,
 } from "three";
@@ -43,6 +44,15 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
     [dims[0], dims[1], 1], // front face
   ];
 
+  const textureMappings = [
+    "wall", // right
+    "wall", // left
+    // null, // top
+    "deathMaterial", // bottom
+    "wall", // back
+    "wall", // front
+  ];
+
   for (let i = 0; i < wallPositions.length; i++) {
     useBox(
       () => ({
@@ -50,6 +60,8 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
         position: wallPositions[i],
         args: wallDims[i],
         material: groundMaterial,
+        userData: { id: textureMappings[i] },
+        ...props,
       }),
       useRef<Mesh>(null)
     );
@@ -66,36 +78,54 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
   //   "textures/rustig_koppie_puresky_1k.hdr"
   // );
 
-  const wallTexture = new TextureLoader().load(
-    // "textures/wests_textures/stone wall 6.png"
-    "textures/PrototypeTextures_kenney/PNG/Dark/texture_01.png"
-  );
-  const wallTextureScale: number = 4;
-  wallTexture.wrapS = wallTexture.wrapT = RepeatWrapping;
-  wallTexture.repeat = new Vector2(
-    dims[1] / wallTextureScale,
-    dims[1] / wallTextureScale
-  );
+  const textureInfo = {
+    wall: {
+      textureImage:
+        // "textures/seamlessTextures/clover.jpg"
+        "textures/PrototypeTextures_kenney/PNG/Dark/texture_01.png",
+      textureScale: 3,
+    },
+    deathMaterial: {
+      textureImage:
+        // "textures/wests_textures/stone wall 6.png"
+        "textures/PrototypeTextures_kenney/PNG/Red/texture_13.png",
+      textureScale: 4,
+    },
+  };
 
-  const floorTexture = new TextureLoader().load(
-    // "textures/seamlessTextures/clover.jpg"
-    "textures/PrototypeTextures_kenney/PNG/Red/texture_13.png"
-  );
-  const floorTextureScale: number = 3;
-  floorTexture.wrapS = floorTexture.wrapT = RepeatWrapping;
-  floorTexture.repeat = new Vector2(
-    dims[0] / floorTextureScale,
-    dims[2] / floorTextureScale
-  );
+  const textures: Texture[] = [];
+  wallDims.forEach((wallDim, i) => {
+    const texture = new TextureLoader().load(
+      textureInfo[textureMappings[i]].textureImage
+    );
+    texture.wrapS = texture.wrapT = RepeatWrapping;
 
-  const textures = [
-    wallTexture, // right
-    wallTexture, // left
-    // null, // top
-    floorTexture, // bottom
-    wallTexture, // back
-    wallTexture, // front
-  ];
+    switch (i) {
+      case 0: // right
+      case 1: // left
+        texture.repeat = new Vector2(
+          wallDim[2] / textureInfo[textureMappings[i]].textureScale,
+          wallDim[1] / textureInfo[textureMappings[i]].textureScale
+        );
+        break;
+
+      case 2: // bottom
+        texture.repeat = new Vector2(
+          wallDim[0] / textureInfo[textureMappings[i]].textureScale, // 0
+          wallDim[2] / textureInfo[textureMappings[i]].textureScale // 2
+        );
+        break;
+
+      case 3: // back
+      case 4: // front
+        texture.repeat = new Vector2(
+          wallDim[0] / textureInfo[textureMappings[i]].textureScale,
+          wallDim[1] / textureInfo[textureMappings[i]].textureScale
+        );
+        break;
+    }
+    textures.push(texture);
+  });
 
   return (
     <group>

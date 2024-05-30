@@ -1,7 +1,11 @@
 import { useEffect, useRef, useMemo, useState } from "react";
 import { Group, Vector3 } from "three";
 import { useFrame, Camera } from "@react-three/fiber";
-import { CompoundBodyProps, useCompoundBody } from "@react-three/cannon";
+import {
+  CompoundBodyProps,
+  Triplet,
+  useCompoundBody,
+} from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 import { boxMaterial } from "./Materials";
@@ -45,10 +49,15 @@ function Player({
   const [ref, api] = useCompoundBody(
     () => ({
       mass: mass,
-      position: position,
+      position: position!,
       fixedRotation: true,
-      onCollideBegin: () => {
-        setPlayerOnFloor(true);
+      onCollideBegin: (e) => {
+        console.log("bonk", e.body.userData);
+        if (e.body.userData.id == "deathMaterial") {
+          resetPlayerPosition();
+        } else {
+          setPlayerOnFloor(true);
+        }
       },
       onCollideEnd: () => {
         setPlayerOnFloor(false);
@@ -157,10 +166,12 @@ function Player({
     //   Math.round((playerVelocity.length() + Number.EPSILON) * 10) / 10
     // );
 
-    if (reset) {
-      api.position.set(...position!);
-      api.velocity.set(0, 0, 0);
-    }
+    reset ? resetPlayerPosition() : null;
+  }
+
+  function resetPlayerPosition() {
+    api.position.set(...position!);
+    api.velocity.set(0, 0, 0);
   }
 
   function pmAccelerate(

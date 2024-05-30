@@ -10,6 +10,7 @@ function Box({ ...props }: BoxProps) {
     () => ({
       material: groundMaterial,
       type: "Static",
+      userData: { id: "box" },
       ...props,
     }),
     useRef<Mesh>(null)

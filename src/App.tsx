@@ -16,7 +16,7 @@ const RAMP_LENGTH: number = 10;
 const END_BOX_Y: number = -45;
 const END_BOX_Z: number = -155;
 
-const WORLDBOX_DIMS_X: number = 100;
+const WORLDBOX_DIMS_X: number = 200;
 const WORLDBOX_DIMS_Y: number = 80;
 const WORLDBOX_DIMS_Z: number = 180;
 
@@ -41,7 +41,7 @@ function App() {
           allowSleep
         >
           <Player
-            position={[0, 5, 0]}
+            position={[0, 5, -5]}
             rotation={[0, 0, 0]}
             mass={80}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
@@ -50,7 +50,7 @@ function App() {
 
           {/* Test Ramp */}
           <Ramp
-            position={[-40, 0, 7]}
+            position={[-40, 0, 17]}
             rotation={[0, -Math.PI / 2, 0]}
             twist={{ axis: TwistAxis.x, w: 0, v: 80 }}
             crossSection={CrossSection.PerfectTriangle}
@@ -58,15 +58,14 @@ function App() {
           />
 
           <WorldBox
-            position={[0, 20, 10]}
-            dims={[WORLDBOX_DIMS_X, WORLDBOX_DIMS_Y, WORLDBOX_DIMS_Z]}
+            position={[0, 20, 20]}
+            dims={[WORLDBOX_DIMS_X, WORLDBOX_DIMS_Y, WORLDBOX_DIMS_Z + 10]}
           />
 
           <Box
-            position={[0, 0, 0]}
+            position={[0, 0, 5]}
             rotation={[-Math.PI / 2, 0, 0]}
-            userData={{ id: "floor" }}
-            args={[WORLDBOX_DIMS_X, 20, 1]}
+            args={[WORLDBOX_DIMS_X, 30, 1]}
           />
 
           <Ramp
@@ -88,7 +87,6 @@ function App() {
           <Box
             position={[0, END_BOX_Y, END_BOX_Z - 20 / 2]}
             rotation={[-Math.PI / 2, 0, 0]}
-            userData={{ id: "floor" }}
             args={[WORLDBOX_DIMS_X, 20, 1]}
           />
 

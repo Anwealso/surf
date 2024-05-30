@@ -157,6 +157,7 @@ function Ramp({
                 physicsMaterial={physicsMaterial}
                 renderMaterial={renderMaterial}
                 key={i}
+                userData={{ id: "ramp" }}
                 {...props}
               />
             ));
@@ -169,6 +170,7 @@ function Ramp({
                 physicsMaterial={physicsMaterial}
                 renderMaterial={renderMaterial}
                 key={i}
+                userData={{ id: "ramp" }}
                 {...props}
               />
             ));
@@ -181,6 +183,7 @@ function Ramp({
                 physicsMaterial={physicsMaterial}
                 renderMaterial={renderMaterial}
                 key={i}
+                userData={{ id: "ramp" }}
                 {...props}
               />
             ));

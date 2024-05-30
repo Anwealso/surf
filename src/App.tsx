@@ -1,9 +1,12 @@
 import { Physics } from "@react-three/cannon";
 import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useState } from "react";
+import {
+  Suspense,
+  // useState
+} from "react";
 import CustomNavbar from "./components/CustomNavbar";
-import Overlay from "./components/Overlay";
+// import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";
@@ -21,7 +24,7 @@ const WORLDBOX_DIMS_Y: number = 80;
 const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
-  const [playerSpeed, setPlayerSpeed] = useState(0);
+  // const [playerSpeed, setPlayerSpeed] = useState(0);
 
   return (
     <>
@@ -45,7 +48,7 @@ function App() {
             rotation={[0, 0, 0]}
             mass={80}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
-            setPlayerSpeed={setPlayerSpeed}
+            // setPlayerSpeed={setPlayerSpeed}
           />
 
           {/* Test Ramp */}
@@ -109,7 +112,7 @@ function App() {
         <Stats />
       </Canvas>
 
-      <Overlay playerSpeed={playerSpeed} />
+      {/* <Overlay playerSpeed={playerSpeed} /> */}
     </>
   );
 }

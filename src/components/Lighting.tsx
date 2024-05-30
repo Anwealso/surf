@@ -1,15 +1,15 @@
 // import { Environment } from "@react-three/drei";
 
 import {
-  PerformanceMonitor,
-  AccumulativeShadows,
-  RandomizedLight,
+  // PerformanceMonitor,
+  // AccumulativeShadows,
+  // RandomizedLight,
   Environment,
-  Lightformer,
+  // Lightformer,
   // Float,
   // useGLTF,
 } from "@react-three/drei";
-import { useState } from "react";
+// import { useState } from "react";
 
 function Lighting() {
   // const [degraded, degrade] = useState(false);

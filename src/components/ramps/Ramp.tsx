@@ -45,6 +45,27 @@ function Ramp({
   function getRampSections(): RampSectionProps[] {
     const rampSections: RampSectionProps[] = [];
 
+    // const texture = useTexture("textures/ramp_basic.jpg");
+    const texture = useTexture(
+      "textures/PrototypeTextures_kenney/PNG/Orange/texture_02.png"
+    );
+
+    // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
+    // const texture = useTexture("textures/crate.jpeg");
+    // const texture = useTexture("textures/ashen_dunes.png");
+
+    // const texture = useTexture("textures/seamlessTextures/100_1449_seamless.JPG");
+
+    // const texture = useTexture("textures/ashen_dunes.png");
+    // texture.offset = new Vector2(0, 2);
+
+    // const texture = useTexture("textures/uv.png");
+    // const texture = new TextureLoader().load(
+    //   "textures/land_ocean_ice_cloud_2048.jpg"
+    // );
+    const renderMaterial = <meshBasicMaterial map={texture} />;
+    const physicsMaterial = slipperyMaterial;
+
     for (let i: number = 0; i < numSections; i++) {
       // Create the ramp section in the body frame coords format
       const bodyFrameCoords = new Object3D();
@@ -112,6 +133,9 @@ function Ramp({
           worldFrameCoords.rotation.y,
           worldFrameCoords.rotation.z,
         ],
+        physicsMaterial: physicsMaterial,
+        renderMaterial: renderMaterial,
+        size: [CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth],
       };
 
       rampSections.push(sectionPosition);
@@ -122,28 +146,6 @@ function Ramp({
 
   const rampSections = useMemo(() => getRampSections(), [segmentLegth]);
 
-  // const texture = useTexture("textures/ramp_basic.jpg");
-  const texture = useTexture(
-    "textures/PrototypeTextures_kenney/PNG/Orange/texture_02.png"
-  );
-
-  // const texture = useTexture("textures/square_tiles_diff_4k.jpg");
-  // const texture = useTexture("textures/crate.jpeg");
-  // const texture = useTexture("textures/ashen_dunes.png");
-
-  // const texture = useTexture("textures/seamlessTextures/100_1449_seamless.JPG");
-
-  // const texture = useTexture("textures/ashen_dunes.png");
-  // texture.offset = new Vector2(0, 2);
-
-  // const texture = useTexture("textures/uv.png");
-  // const texture = new TextureLoader().load(
-  //   "textures/land_ocean_ice_cloud_2048.jpg"
-  // );
-
-  const renderMaterial = <meshBasicMaterial map={texture} />;
-  const physicsMaterial = slipperyMaterial;
-
   return (
     <group ref={ref}>
       {(() => {
@@ -153,9 +155,9 @@ function Ramp({
               <PerfectTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={physicsMaterial}
-                renderMaterial={renderMaterial}
+                size={rampSectionArgs.size}
+                physicsMaterial={rampSectionArgs.physicsMaterial}
+                renderMaterial={rampSectionArgs.renderMaterial}
                 key={i}
                 userData={{ id: "ramp" }}
                 {...props}
@@ -166,9 +168,9 @@ function Ramp({
               <FlatSideTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={physicsMaterial}
-                renderMaterial={renderMaterial}
+                size={rampSectionArgs.size}
+                physicsMaterial={rampSectionArgs.physicsMaterial}
+                renderMaterial={rampSectionArgs.renderMaterial}
                 key={i}
                 userData={{ id: "ramp" }}
                 {...props}
@@ -179,9 +181,9 @@ function Ramp({
               <FlatTopTriangle
                 position={rampSectionArgs.position}
                 rotation={rampSectionArgs.rotation}
-                size={[CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth]}
-                physicsMaterial={physicsMaterial}
-                renderMaterial={renderMaterial}
+                size={rampSectionArgs.size}
+                physicsMaterial={rampSectionArgs.physicsMaterial}
+                renderMaterial={rampSectionArgs.renderMaterial}
                 key={i}
                 userData={{ id: "ramp" }}
                 {...props}

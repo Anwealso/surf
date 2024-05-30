@@ -95,32 +95,37 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
 
   const textures: Texture[] = [];
   wallDims.forEach((wallDim, i) => {
-    const texture = new TextureLoader().load(
-      textureInfo[textureMappings[i]].textureImage
-    );
+    let thisTextureInfo: { textureImage: string; textureScale: number };
+    if (textureMappings[i] == "deathMaterial") {
+      thisTextureInfo = textureInfo.deathMaterial;
+    } else {
+      thisTextureInfo = textureInfo.wall;
+    }
+
+    const texture = new TextureLoader().load(thisTextureInfo.textureImage);
     texture.wrapS = texture.wrapT = RepeatWrapping;
 
     switch (i) {
       case 0: // right
       case 1: // left
         texture.repeat = new Vector2(
-          wallDim[2] / textureInfo[textureMappings[i]].textureScale,
-          wallDim[1] / textureInfo[textureMappings[i]].textureScale
+          wallDim[2] / thisTextureInfo.textureScale,
+          wallDim[1] / thisTextureInfo.textureScale
         );
         break;
 
       case 2: // bottom
         texture.repeat = new Vector2(
-          wallDim[0] / textureInfo[textureMappings[i]].textureScale, // 0
-          wallDim[2] / textureInfo[textureMappings[i]].textureScale // 2
+          wallDim[0] / thisTextureInfo.textureScale, // 0
+          wallDim[2] / thisTextureInfo.textureScale // 2
         );
         break;
 
       case 3: // back
       case 4: // front
         texture.repeat = new Vector2(
-          wallDim[0] / textureInfo[textureMappings[i]].textureScale,
-          wallDim[1] / textureInfo[textureMappings[i]].textureScale
+          wallDim[0] / thisTextureInfo.textureScale,
+          wallDim[1] / thisTextureInfo.textureScale
         );
         break;
     }

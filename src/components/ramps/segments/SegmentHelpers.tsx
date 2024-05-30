@@ -13,6 +13,7 @@ export type RampSectionProps = ConvexPolyhedronProps & {
         restitution?: number | undefined;
       }
     | undefined;
+  renderMaterial: JSX.Element;
   size: Triplet;
 };
 

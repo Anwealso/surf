@@ -3,7 +3,7 @@ import { Group, Vector3 } from "three";
 import { useFrame, Camera } from "@react-three/fiber";
 import {
   CompoundBodyProps,
-  Triplet,
+  // Triplet,
   useCompoundBody,
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
@@ -28,14 +28,14 @@ type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
     capSegments: number,
     radialSegments: number
   ]; // shape of the capsule
-  setPlayerSpeed: any; // a handle to set the player speed that will be seen on the speed monitor
+  // setPlayerSpeed: any; // a handle to set the player speed that will be seen on the speed monitor
 };
 
 function Player({
   mass,
   args,
   position,
-  setPlayerSpeed,
+  // setPlayerSpeed,
   ...props
 }: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
@@ -138,7 +138,7 @@ function Player({
   }
 
   function handleControls(
-    camera: Camera,
+    // camera: Camera,
     delta: number,
     playerVelocity: Vector3,
     playerOnFloor: boolean,
@@ -228,7 +228,7 @@ function Player({
 
   useFrame((_, delta) => {
     handleControls(
-      camera,
+      // camera,
       delta,
       playerVelocity,
       playerOnFloor,

@@ -39,7 +39,7 @@ export const slipperyMaterial = {
   name: "slippery",
 };
 
-const useContactMaterials = () => {
+export const useContactMaterials = () => {
   useContactMaterial(groundMaterial, groundMaterial, {
     contactEquationRelaxation: 3,
     contactEquationStiffness: 1e8,
@@ -51,13 +51,14 @@ const useContactMaterials = () => {
   useContactMaterial(boxMaterial, groundMaterial, {
     contactEquationRelaxation: 3,
     contactEquationStiffness: 1e8,
-    friction: 0.4,
+    // friction: 0.4,
+    friction: 2e-2,
     frictionEquationStiffness: 1e8,
-    restitution: 0.3,
+    restitution: 0,
   });
   useContactMaterial(boxMaterial, slipperyMaterial, {
     friction: 0,
-    restitution: 0.3,
+    restitution: 0,
   });
 
   useContactMaterial(groundMaterial, slipperyMaterial, {

@@ -6,7 +6,7 @@ import PerfectTriangle from "./segments/PerfectTriangle";
 import FlatSideTriangle from "./segments/FlatSideTriangle";
 import FlatTopTriangle from "./segments/FlatTopTriangle";
 import { useTexture } from "@react-three/drei";
-import { slipperyMaterial } from "../Materials";
+import { useContactMaterials, slipperyMaterial } from "../Materials";
 
 export enum TwistAxis {
   x,
@@ -38,6 +38,7 @@ function Ramp({
   ...props
 }: RampProps): JSX.Element {
   const ref = useRef<Group>(null!);
+  useContactMaterials();
 
   const r = twist.w == 0 ? twist.v : twist.v / twist.w;
   const numSections = Math.ceil(Math.abs(twist.v) / segmentLegth);
@@ -63,8 +64,6 @@ function Ramp({
     // const texture = new TextureLoader().load(
     //   "textures/land_ocean_ice_cloud_2048.jpg"
     // );
-    const renderMaterial = <meshBasicMaterial map={texture} />;
-    const physicsMaterial = slipperyMaterial;
 
     for (let i: number = 0; i < numSections; i++) {
       // Create the ramp section in the body frame coords format
@@ -133,8 +132,8 @@ function Ramp({
           worldFrameCoords.rotation.y,
           worldFrameCoords.rotation.z,
         ],
-        physicsMaterial: physicsMaterial,
-        renderMaterial: renderMaterial,
+        renderMaterial: <meshBasicMaterial map={texture} />,
+        physicsMaterial: slipperyMaterial,
         size: [CROSS_SECTION_SCALE, CROSS_SECTION_SCALE, segmentLegth],
       };
 

@@ -8,7 +8,7 @@ import {
 } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
-import { boxMaterial } from "./Materials";
+import { useContactMaterials, boxMaterial } from "./Materials";
 
 // const GROUND_SPEED = 14;
 // const JUMP_SPEED = 6;
@@ -43,6 +43,7 @@ function Player({
   const playerVelocity: Vector3 = useMemo(() => new Vector3(), []);
   const playerDirection: Vector3 = useMemo(() => new Vector3(), []);
   const playerAngularVelocity: Vector3 = useMemo(() => new Vector3(), []);
+  useContactMaterials();
 
   const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(true);
 

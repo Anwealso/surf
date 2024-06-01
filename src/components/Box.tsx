@@ -3,9 +3,11 @@ import { useRef } from "react";
 import type { BoxProps } from "@react-three/cannon";
 import { useBox } from "@react-three/cannon";
 import { useTexture } from "@react-three/drei";
-import { groundMaterial } from "./Materials";
+import { useContactMaterials, groundMaterial } from "./Materials";
 
 function Box({ ...props }: BoxProps) {
+  useContactMaterials();
+
   const [ref] = useBox(
     () => ({
       material: groundMaterial,

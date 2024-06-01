@@ -1,5 +1,5 @@
 import { useBox, type Triplet } from "@react-three/cannon";
-import { groundMaterial } from "./Materials";
+import { useContactMaterials, groundMaterial } from "./Materials";
 // import { useTexture } from "@react-three/drei";
 import { useRef } from "react";
 import {
@@ -19,6 +19,8 @@ interface WorldBoxProps {
 }
 
 function WorldBox({ position, dims, ...props }: WorldBoxProps) {
+  useContactMaterials();
+
   const wallPositions: Triplet[] = [
     [
       position[0] + dims[0] / 2,

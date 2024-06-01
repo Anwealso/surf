@@ -3,12 +3,13 @@ import { BufferGeometry } from "three";
 import { Geometry } from "three-stdlib";
 
 // export const RAMP_RATIO: number = 544 / 512; // height/width
-export const RAMP_RATIO: number = 1 / 1.2;
+export const RAMP_RATIO: number = 1 / 1;
 
 export type RampSectionProps = ConvexPolyhedronProps & {
   physicsMaterial:
     | string
     | {
+        name: string | undefined;
         friction?: number | undefined;
         restitution?: number | undefined;
       }

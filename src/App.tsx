@@ -25,7 +25,6 @@ const WORLDBOX_DIMS_Z: number = 180;
 
 function App() {
   // const [playerSpeed, setPlayerSpeed] = useState(0);
-
   return (
     <>
       <CustomNavbar></CustomNavbar>
@@ -38,6 +37,7 @@ function App() {
           defaultContactMaterial={{
             contactEquationRelaxation: 4,
             friction: 2e-2,
+            // friction: 0,
           }}
           // gravity={[0, -20, 0]}
           gravity={[0, -9.8, 0]}

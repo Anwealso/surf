@@ -1,41 +1,31 @@
 import { useEffect, useRef, useMemo, useState } from "react";
 import { Group, Vector3 } from "three";
 import { useFrame, Camera } from "@react-three/fiber";
-import {
-  CompoundBodyProps,
-  // Triplet,
-  useCompoundBody,
-} from "@react-three/cannon";
+import { CompoundBodyProps, useCompoundBody } from "@react-three/cannon";
 import { useControls } from "./useControls";
 import useFollowCam from "./useFollowCam";
 import { useContactMaterials, boxMaterial } from "./Materials";
 
-// const GROUND_SPEED = 14;
-// const JUMP_SPEED = 6;
-// const AIR_SPEED = GROUND_SPEED / 10;
-// const SPEED_RAMP = 6;
-
+const GROUND_SPEED = 14;
 const JUMP_SPEED = 6;
 const RUN_SPEED = 14;
-// const AIR_SPEED = GROUND_SPEED / 10;
-const MAX_ACCEL = 20; //14;
+const AIR_SPEED = GROUND_SPEED / 10;
+const MAX_ACCEL = 50;
 
 type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
-  mass: number; // mass of player
+  mass: number;
   args: [
     radius: number,
     length: number,
     capSegments: number,
     radialSegments: number
-  ]; // shape of the capsule
-  // setPlayerSpeed: any; // a handle to set the player speed that will be seen on the speed monitor
+  ];
 };
 
 function Player({
   mass,
   args,
   position,
-  // setPlayerSpeed,
   ...props
 }: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
@@ -45,7 +35,17 @@ function Player({
   const playerAngularVelocity: Vector3 = useMemo(() => new Vector3(), []);
   useContactMaterials();
 
-  const [playerOnFloor, setPlayerOnFloor]: [boolean, any] = useState(true);
+  const [playerOnFloor, setPlayerOnFloor] = useState(true);
+  const [playerOnRamp, setPlayerOnRamp] = useState(false);
+
+  function resetPlayer() {
+    api.position.set(...position!);
+    api.velocity.set(0, 0, 0);
+    // Use applyForce to ensure velocity is zeroed out
+    api.applyForce([0, 0, 0], [0, 0, 0]);
+    setPlayerOnFloor(false);
+    setPlayerOnRamp(false);
+  }
 
   const [ref, api] = useCompoundBody(
     () => ({
@@ -54,14 +54,19 @@ function Player({
       fixedRotation: true,
       onCollideBegin: (e) => {
         console.log("bonk", e.body.userData);
-        if (e.body.userData.id == "deathMaterial") {
-          resetPlayerPosition();
+        if (e.body.userData.id === "deathMaterial") {
+          resetPlayer();
         } else {
           setPlayerOnFloor(true);
+          // if (isRampCollision(e.contact)) {
+          if (e.body.userData.id === "rampMaterial") {
+            setPlayerOnRamp(true);
+          }
         }
       },
       onCollideEnd: () => {
         setPlayerOnFloor(false);
+        setPlayerOnRamp(false);
       },
       ...props,
       shapes: [
@@ -93,35 +98,36 @@ function Player({
 
   const { camera } = useFollowCam(ref, args[1] / 2);
 
-  // function teleportPlayerIfOob(capsule, playerVelocity: Vector3) {
-  //   // if (camera.position.y <= -100) {
-  //   if (playerPosition.y <= -100) {
-  //     playerVelocity.set(0, 0, 0);
-  //     capsule.start.set(0, 10, 0);
-  //     capsule.end.set(0, 11, 0);
-  //     // camera.position.copy(capsule.end);
-  //     // camera.rotation.set(0, 0, 0);
-  //   }
-  // }
+  function teleportPlayerIfOob() {
+    if (
+      Math.abs(playerPosition.x) > 1000 ||
+      Math.abs(playerPosition.y) > 1000 ||
+      Math.abs(playerPosition.z) > 1000
+    ) {
+      resetPlayer();
+    }
+  }
 
   useEffect(() => {
     const playerVelocityUnsubscribe = api.velocity.subscribe((vel) =>
       playerVelocity.set(...vel)
     );
-    return playerVelocityUnsubscribe;
-  }, []);
+    return () => playerVelocityUnsubscribe();
+  }, [api.velocity, playerVelocity]);
+
   useEffect(() => {
     const playerPositionUnsubscribe = api.position.subscribe((pos) =>
       playerPosition.set(...pos)
     );
-    return playerPositionUnsubscribe;
-  }, []);
+    return () => playerPositionUnsubscribe();
+  }, [api.position, playerPosition]);
+
   useEffect(() => {
-    const playerAngularVelocityUnsubscribe = api.position.subscribe((angVel) =>
-      playerAngularVelocity.set(...angVel)
+    const playerAngularVelocityUnsubscribe = api.angularVelocity.subscribe(
+      (angVel) => playerAngularVelocity.set(...angVel)
     );
-    return playerAngularVelocityUnsubscribe;
-  }, []);
+    return () => playerAngularVelocityUnsubscribe();
+  }, [api.angularVelocity, playerAngularVelocity]);
 
   function getForwardVector(camera: Camera, playerDirection: Vector3): Vector3 {
     camera.getWorldDirection(playerDirection);
@@ -138,41 +144,26 @@ function Player({
     return playerDirection;
   }
 
-  function handleControls(
-    // camera: Camera,
-    delta: number,
-    playerVelocity: Vector3,
-    playerOnFloor: boolean,
-    playerDirection: Vector3
-  ) {
-    const { backward, jump, forward, left, reset, right } = controls.current;
+  function handleControls(delta: number) {
+    const { backward, jump, forward, left, right, reset } = controls.current;
 
-    // Get the current wishdir
     const wishdir = getWishdir(playerDirection, backward, forward, left, right);
 
-    // Accelerate the player in the xy plane
-    playerVelocity = pmAccelerate(playerVelocity, wishdir, delta);
+    playerVelocity.copy(pmAccelerate(playerVelocity, wishdir, delta));
 
-    // Handle Z physics (gravity model)
-    if (playerOnFloor) {
+    if (playerOnFloor || playerOnRamp) {
       if (jump) {
         playerVelocity.y = JUMP_SPEED;
       }
+    } else {
+      playerVelocity.y += -9.81 * delta; // Gravity
     }
 
     api.velocity.set(playerVelocity.x, playerVelocity.y, playerVelocity.z);
 
-    // Display player speed on overlay (lags game badly when in use)
-    // setPlayerSpeed(
-    //   Math.round((playerVelocity.length() + Number.EPSILON) * 10) / 10
-    // );
-
-    reset ? resetPlayerPosition() : null;
-  }
-
-  function resetPlayerPosition() {
-    api.position.set(...position!);
-    api.velocity.set(0, 0, 0);
+    if (reset) {
+      resetPlayer();
+    }
   }
 
   function pmAccelerate(
@@ -180,19 +171,9 @@ function Player({
     wishDir: Vector3,
     frametime: number = 1 / 120
   ) {
-    /**
-     * Calculates the new velocity of the player by applying the appropriate acceleration
-     *
-     * Args:
-     *   - vel: Players current velocity
-     *   - wishdir: Unit vector direction we want to go
-     *   - frametime: The delta time between frames
-     */
-
-    const currentSpeed: number = vel.dot(wishDir); // the current speed in the wish direction
-    let addSpeed: number = RUN_SPEED - currentSpeed; // the amount of speed to add
-    addSpeed = Math.max(Math.min(addSpeed, MAX_ACCEL * frametime), 0); // clamp the addspeed based on the frametime
-
+    const currentSpeed = vel.dot(wishDir);
+    let addSpeed = (playerOnFloor ? GROUND_SPEED : AIR_SPEED) - currentSpeed;
+    addSpeed = Math.max(Math.min(addSpeed, MAX_ACCEL * frametime), 0);
     return vel.add(wishDir.multiplyScalar(addSpeed));
   }
 
@@ -203,15 +184,7 @@ function Player({
     left: boolean,
     right: boolean
   ) {
-    /**
-     * Calculates the desired movement direction (unit vector) of the player
-     * based on te control inputs
-     *
-     * Args:
-     *   - cnotrols: control inputs
-     */
-
-    const wishdir: Vector3 = new Vector3(0, 0, 0);
+    const wishdir = new Vector3(0, 0, 0);
 
     if (left) {
       wishdir.add(getSideVector(camera, playerDirection).multiplyScalar(-1));
@@ -227,25 +200,17 @@ function Player({
     return wishdir.normalize();
   }
 
+  function isRampCollision(contact) {
+    const normal = contact.ni;
+    return normal.y < 0.9; // Assuming ramp surfaces have a normal less than this threshold
+  }
+
   useFrame((_, delta) => {
-    handleControls(
-      // camera,
-      delta,
-      playerVelocity,
-      playerOnFloor,
-      playerDirection
-    );
-    // teleportPlayerIfOob(capsule, playerVelocity)
+    handleControls(delta);
+    teleportPlayerIfOob();
   });
 
-  return (
-    <group ref={ref}>
-      {/* <mesh receiveShadow castShadow>
-        <capsuleGeometry args={args} />
-        <meshStandardMaterial wireframe color="green" />
-      </mesh> */}
-    </group>
-  );
+  return <group ref={ref}></group>;
 }
 
 export default Player;

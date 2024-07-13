@@ -8,7 +8,7 @@ import { useContactMaterials, boxMaterial } from "./Materials";
 
 const GROUND_SPEED = 14;
 const JUMP_SPEED = 6;
-const RUN_SPEED = 14;
+// const RUN_SPEED = 14;
 const AIR_SPEED = GROUND_SPEED / 10;
 const MAX_ACCEL = 50;
 
@@ -20,12 +20,14 @@ type OurCompoundBodyProps = Pick<CompoundBodyProps, "position" | "rotation"> & {
     capSegments: number,
     radialSegments: number
   ];
+  setPlayerSpeed: (velocity: number) => void;
 };
 
 function Player({
   mass,
   args,
   position,
+  setPlayerSpeed,
   ...props
 }: OurCompoundBodyProps): JSX.Element {
   const controls = useControls();
@@ -109,11 +111,16 @@ function Player({
   }
 
   useEffect(() => {
-    const playerVelocityUnsubscribe = api.velocity.subscribe((vel) =>
-      playerVelocity.set(...vel)
-    );
+    const playerVelocityUnsubscribe = api.velocity.subscribe((vel) => {
+      playerVelocity.set(...vel);
+      // setPlayerSpeed(Math.sqrt(vel[0] ** 2 + vel[1] ** 2 + vel[2] ** 2)); // Update the parent component with the player's velocity
+    });
     return () => playerVelocityUnsubscribe();
-  }, [api.velocity, playerVelocity]);
+  }, [
+    api.velocity,
+    playerVelocity,
+    // setPlayerSpeed
+  ]);
 
   useEffect(() => {
     const playerPositionUnsubscribe = api.position.subscribe((pos) =>
@@ -200,10 +207,10 @@ function Player({
     return wishdir.normalize();
   }
 
-  function isRampCollision(contact) {
-    const normal = contact.ni;
-    return normal.y < 0.9; // Assuming ramp surfaces have a normal less than this threshold
-  }
+  // function isRampCollision(contact) {
+  //   const normal = contact.ni;
+  //   return normal.y < 0.9; // Assuming ramp surfaces have a normal less than this threshold
+  // }
 
   useFrame((_, delta) => {
     handleControls(delta);

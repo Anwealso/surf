@@ -1,12 +1,9 @@
 import { Physics } from "@react-three/cannon";
 import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import {
-  Suspense,
-  // useState
-} from "react";
+import { Suspense, useState } from "react";
 import CustomNavbar from "./components/CustomNavbar";
-// import Overlay from "./components/Overlay";
+import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 import Ramp from "./components/ramps/Ramp";

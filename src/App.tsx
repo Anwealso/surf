@@ -46,7 +46,7 @@ function App() {
           allowSleep
         >
           <Player
-            position={[0, 5, -5]}
+            position={[0, 10, -5]}
             rotation={[0, 0, 0]}
             mass={80}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}

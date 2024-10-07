@@ -93,12 +93,17 @@ export function parseMap(text: string) {
   return entities;
 }
 
-export const map_json: string = `{
+export const surf_utopia_json: string = `{
   "player": {
     "position": [0, 5, -5],
     "rotation": [0, 0, 0]
   },
   "map_entities": [
+    {
+      "type": "WorldBox",
+      "position": [0, 20, 20],
+      "dims": [200, 80, 190]
+    },
     {
       "type": "Ramp",
       "position": [-40, 0, 17],
@@ -106,11 +111,6 @@ export const map_json: string = `{
       "twist": { "axis": "x", "w": 0, "v": 80 },
       "crossSection": "PerfectTriangle",
       "segmentLegth": 10
-    },
-    {
-      "type": "WorldBox",
-      "position": [0, 20, 20],
-      "dims": [200, 80, 190]
     },
     {
       "type": "Box",
@@ -139,6 +139,108 @@ export const map_json: string = `{
       "position": [0, -45, -165],
       "rotation": [-1.571, 0, 0],
       "args": [200, 20, 1]
+    }
+  ]
+}`;
+
+export const map_json: string = `{
+  "player": {
+    "position": [0, 5, -5],
+    "rotation": [0, 0, 0]
+  },
+  "map_entities": [
+    {
+      "type": "WorldBox",
+      "position": [0, 20, 20],
+      "dims": [60, 80, 270]
+      },
+    {
+      "type": "Box",
+      "position": [0, 0, 0],
+      "rotation": [0, 0, 0],
+      "args": [30, 7, 20]
+    },
+    {
+      "type": "Box",
+      "position": [0, -10, -20],
+      "rotation": [0, 0, 0],
+      "args": [30, 10, 50]
+    },
+    {
+      "type": "Box",
+      "position": [0, -20, -70],
+      "rotation": [0, 0, 0],
+      "args": [30, 10, 50]
+    },
+    {
+      "type": "Box",
+      "position": [0, -30, -120],
+      "rotation": [0, 0, 0],
+      "args": [30, 10, 50]
+    },
+    {
+      "type": "Box",
+      "position": [0, -40, -170],
+      "rotation": [0, 0, 0],
+      "args": [30, 10, 50]
+    },
+    {
+      "type": "Box",
+      "position": [0, -40, -250],
+      "rotation": [0, 0, 0],
+      "args": [60, 1, 50]
+    },
+
+    {
+      "type": "Ramp",
+      "position": [8, -8, -15],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+    {
+      "type": "Ramp",
+      "position": [-8, -8, -15],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+
+    {
+      "type": "Ramp",
+      "position": [0, -18, -65],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+
+    {
+      "type": "Ramp",
+      "position": [8, -28, -115],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+    {
+      "type": "Ramp",
+      "position": [-8, -28, -115],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+
+    {
+      "type": "Ramp",
+      "position": [0, -38, -165],
+      "rotation": [0, 0, 0],
+      "twist": { "axis": "x", "w": 0, "v": 30 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
     }
   ]
 }`;

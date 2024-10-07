@@ -1,0 +1,4 @@
+Bugs and Issues:
+
+- Resetting player to spawn does not properly reset players velocity to zero
+- Player can sometimes get "stuck in the ground" and be unable to jump any more

@@ -31,7 +31,7 @@ function Lighting() {
       <Environment files="./textures/rustig_koppie_puresky_1k.hdr" background />
       <ambientLight intensity={0.5} />
       <directionalLight
-        intensity={1}
+        intensity={2}
         castShadow={true}
         shadow-bias={-0.00015}
         shadow-radius={4}

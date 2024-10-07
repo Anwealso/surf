@@ -1,0 +1,49 @@
+{
+  "player": {
+    "position": [0, 5, -5],
+    "rotation": [0, 0, 0]
+  },
+  "map_entities": [
+    {
+      "type": "Ramp",
+      "position": [-40, 0, 17],
+      "rotation": [0, -1.571, 0],
+      "twist": { "axis": "x", "w": 0, "v": 80 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+    {
+      "type": "WorldBox",
+      "position": [0, 20, 20],
+      "dims": [200, 80, 190]
+    },
+    {
+      "type": "Box",
+      "position": [0, 0, 5],
+      "rotation": [-1.571, 0, 0],
+      "args": [200, 30, 1]
+    },
+    {
+      "type": "Ramp",
+      "position": [0, -20, -10],
+      "rotation": [-1.047, 0, 0],
+      "twist": { "axis": "x", "w": 1.366, "v": 90 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+    {
+      "type": "Ramp",
+      "position": [0, -50, -100],
+      "rotation": [-0.196, 0, 0],
+      "twist": { "axis": "x", "w": 0.392, "v": 40 },
+      "crossSection": "PerfectTriangle",
+      "segmentLegth": 10
+    },
+    {
+      "type": "Box",
+      "position": [0, -45, -165],
+      "rotation": [-1.571, 0, 0],
+      "args": [200, 20, 1]
+    }
+  ]
+}

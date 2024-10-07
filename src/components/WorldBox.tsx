@@ -84,7 +84,7 @@ function WorldBox({ position, dims, ...props }: WorldBoxProps) {
     wall: {
       textureImage:
         // "textures/seamlessTextures/clover.jpg"
-        "textures/PrototypeTextures_kenney/PNG/Dark/texture_01.png",
+        "textures/PrototypeTextures_kenney/PNG/Light/texture_02.png",
       textureScale: 3,
     },
     deathMaterial: {

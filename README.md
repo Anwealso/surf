@@ -1,6 +1,6 @@
 # surf
 
-Surf Browser Game
+CS Surfing Game for the Browser
 
 ---
 

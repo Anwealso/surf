@@ -1,6 +1,6 @@
 # surf
 
-Surf Browser Game
+3D Surfing Game in the Browser using THREE.js and cannon-es.js
 
 ---
 

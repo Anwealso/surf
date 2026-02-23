@@ -1,4 +1,4 @@
-import "./CustomNavbar.css";
+import "../styles.css";
 // import { Navbar, Container, Nav, NavDropdown} from 'react-bootstrap';
 // import headLogo from '/images/blue-triangle.svg';
 
@@ -32,8 +32,10 @@ function CustomNavbar() {
           </Container>
         </Navbar> */}
 
-        <div className="about-link">
-          <a href="/about">About</a>
+        <div className="about-link overlay-text">
+          <a href="/about" className="overlay-text">
+            About
+          </a>
         </div>
       </div>
     </>

@@ -1,9 +1,9 @@
 import { Physics } from "@react-three/cannon";
 import { Stats, Environment, PointerLockControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useMemo } from "react";
+import { Suspense, useMemo, useState } from "react";
 import CustomNavbar from "./components/CustomNavbar";
-// import Overlay from "./components/Overlay";
+import Overlay from "./components/Overlay";
 import Lighting from "./components/Lighting";
 import Player from "./components/Player";
 // import Ramp from "./components/ramps/Ramp";
@@ -26,7 +26,7 @@ function App() {
     return parseMap(map_json);
   }, []);
 
-  // const [playerSpeed, setPlayerSpeed] = useState(0);
+  const [playerSpeed, setPlayerSpeed] = useState(0);
   return (
     <>
       <CustomNavbar></CustomNavbar>
@@ -50,7 +50,7 @@ function App() {
             rotation={[0, 0, 0]}
             mass={80}
             args={[0.5, PLAYER_HEIGHT, 8, 8]}
-            // setPlayerSpeed={setPlayerSpeed}
+            setPlayerSpeed={setPlayerSpeed}
           />
 
           {map_entities}
@@ -74,7 +74,7 @@ function App() {
         <Stats />
       </Canvas>
 
-      {/* <Overlay playerSpeed={playerSpeed} /> */}
+      <Overlay playerSpeed={playerSpeed} />
     </>
   );
 }

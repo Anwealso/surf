@@ -4,14 +4,17 @@ export default function Overlay({
   playerSpeed: number;
 }): JSX.Element {
   return (
-    <div id="instructions">
-      W,A,S,D to move.
-      <br />
-      Space to jump.
-      <br />
-      Press r to reset
-      <br />
-      Speed: {playerSpeed}
-    </div>
+    <>
+      <div id="instructions" className="overlay-text">
+        W,A,S,D to move.
+        <br />
+        Space to jump.
+        <br />
+        Press r to reset
+      </div>
+      <div id="speed-overlay" className="overlay-text">
+        Speed: {playerSpeed.toFixed(2)}
+      </div>
+    </>
   );
 }

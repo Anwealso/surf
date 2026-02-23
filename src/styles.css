@@ -6,11 +6,52 @@ body,
   background: #000000;
 }
 
-#instructions {
+.overlay-text {
   color: white;
+  font-family: monospace;
+  text-shadow: 1px 1px 2px black;
+}
+
+#instructions,
+#speed-overlay {
+  pointer-events: none;
+}
+
+#instructions {
   position: absolute;
   left: 100px;
   top: 10px;
-  font-family: monospace;
-  text-shadow: 1px 1px 2px black;
+}
+
+#speed-overlay {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  text-align: left;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px black;
+}
+
+.navbar-container {
+  float: right;
+  width: 100%;
+  text-align: right;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.8;
+  /* for demo purpose  */
+  z-index: 1;
+}
+
+.about-link {
+  padding: 7px 14px;
+}
+
+.about-link a {
+  text-decoration: none;
 }

@@ -113,14 +113,13 @@ function Player({
   useEffect(() => {
     const playerVelocityUnsubscribe = api.velocity.subscribe((vel) => {
       playerVelocity.set(...vel);
-      // setPlayerSpeed(Math.sqrt(vel[0] ** 2 + vel[1] ** 2 + vel[2] ** 2)); // Update the parent component with the player's velocity
+      setPlayerSpeed(
+        Math.round(Math.sqrt(vel[0] ** 2 + vel[1] ** 2 + vel[2] ** 2) * 100) /
+          100
+      ); // Update the parent component with the player's velocity
     });
     return () => playerVelocityUnsubscribe();
-  }, [
-    api.velocity,
-    playerVelocity,
-    // setPlayerSpeed
-  ]);
+  }, [api.velocity, playerVelocity, setPlayerSpeed]);
 
   useEffect(() => {
     const playerPositionUnsubscribe = api.position.subscribe((pos) =>

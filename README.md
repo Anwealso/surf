@@ -10,7 +10,6 @@
 
 Some screenshotsof the game:
 ![Demo Screenshot 1](images/screenshot_1.png)
-
 ![Demo Screenshot 2](images/screenshot_2.png)
 
 ## Installation

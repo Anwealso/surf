@@ -1,4 +1,4 @@
-import './CustomNavbar.css'
+import "./CustomNavbar.css";
 // import { Navbar, Container, Nav, NavDropdown} from 'react-bootstrap';
 // import headLogo from '/images/blue-triangle.svg';
 
@@ -6,7 +6,6 @@ function CustomNavbar() {
   return (
     <>
       <div className="navbar-container">
-
         {/* <Navbar expand="lg" className="navbar-dark">
           <Container>
             <Navbar.Brand href="#home">
@@ -32,13 +31,10 @@ function CustomNavbar() {
             </Navbar.Collapse>
           </Container>
         </Navbar> */}
-      
-        <div className='about-link'>
-          <a href='/about'>
-            About
-          </a>
-        </div>
 
+        <div className="about-link">
+          <a href="/about">About</a>
+        </div>
       </div>
     </>
   );
